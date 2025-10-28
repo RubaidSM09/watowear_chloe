@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/about_yourself/bindings/about_yourself_binding.dart';
 import '../modules/about_yourself/views/about_yourself_view.dart';
+import '../modules/add_your_wardrobe/bindings/add_your_wardrobe_binding.dart';
+import '../modules/add_your_wardrobe/views/add_your_wardrobe_view.dart';
 import '../modules/authentication/bindings/authentication_binding.dart';
 import '../modules/authentication/views/authentication_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -43,6 +45,11 @@ class AppPages {
       name: _Paths.ABOUT_YOURSELF,
       page: () => const AboutYourselfView(),
       binding: AboutYourselfBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_YOUR_WARDROBE,
+      page: () => const AddYourWardrobeView(),
+      binding: AddYourWardrobeBinding(),
     ),
   ];
 }

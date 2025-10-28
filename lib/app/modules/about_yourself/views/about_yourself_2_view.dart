@@ -82,6 +82,7 @@ class AboutYourself2View extends GetView<AboutYourselfController> {
                             onTap: () {
                               controller.bodyShapeClicked.value = !controller.bodyShapeClicked.value;
                               controller.skinToneClicked.value = false;
+                              controller.eyesClicked.value = false;
                             },
                             child: Icon(
                               controller.bodyShapeClicked.value
@@ -418,6 +419,7 @@ class AboutYourself2View extends GetView<AboutYourselfController> {
                           GestureDetector(onTap: () {
                             controller.skinToneClicked.value = !controller.skinToneClicked.value;
                             controller.bodyShapeClicked.value = false;
+                            controller.eyesClicked.value = false;
                           },
                             child: Icon(
                               controller.skinToneClicked.value
