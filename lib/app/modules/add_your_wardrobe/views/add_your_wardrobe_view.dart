@@ -3,8 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/home/views/home_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 
+import '../../../../common/custom_button.dart';
 import '../controllers/add_your_wardrobe_controller.dart';
 
 class AddYourWardrobeView extends GetView<AddYourWardrobeController> {
@@ -12,8 +14,10 @@ class AddYourWardrobeView extends GetView<AddYourWardrobeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: SizedBox.shrink(),
+        backgroundColor: Colors.white,
         centerTitle: true,
       ),
       body: SafeArea(
@@ -78,6 +82,169 @@ class AddYourWardrobeView extends GetView<AddYourWardrobeController> {
               ),
 
               SizedBox(height: 26.h,),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Row(
+                  children: [
+                    Text(
+                      'How to take great photos',
+                      style: TextStyle(
+                        color: Color(0xFF111111),
+                        fontFamily: 'Comfortaa',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14.sp,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 4.h,),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () {  },
+                      child: Text(
+                        'Quick tips for the best results',
+                        style: TextStyle(
+                          color: AppColors.textIcons,
+                          fontFamily: 'Comfortaa',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12.sp,
+                          decoration: TextDecoration.underline
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 30.h,),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Column(
+                  spacing: 20.h,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Upload from Gallery',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Comfortaa',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16.sp,
+                          ),
+                        ),
+
+                        GestureDetector(
+                          onTap: () {  },
+                          child: Icon(
+                            Icons.navigate_next_rounded,
+                            size: 28.r,
+                            color: Color(0xFF111111),
+                          ),
+                        )
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Download your 10 favorites',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Comfortaa',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+
+                        GestureDetector(
+                          onTap: () {  },
+                          child: Icon(
+                            Icons.navigate_next_rounded,
+                            size: 28.r,
+                            color: Color(0xFF111111),
+                          ),
+                        )
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Take pictures now',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Comfortaa',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+
+                        GestureDetector(
+                          onTap: () {  },
+                          child: Icon(
+                            Icons.navigate_next_rounded,
+                            size: 28.r,
+                            color: Color(0xFF111111),
+                          ),
+                        )
+                      ],
+                    ),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Choose from our 5000 items\nfashion library',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Comfortaa',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+
+                        GestureDetector(
+                          onTap: () {  },
+                          child: Icon(
+                            Icons.navigate_next_rounded,
+                            size: 28.r,
+                            color: Color(0xFF111111),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 38.h,),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: CustomButton(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 48.w,
+                    vertical: 12.h,
+                  ),
+                  text: 'Next',
+                  textColor: AppColors.bgColor,
+                  textSize: 14.sp,
+                  color: AppColors.primary,
+                  onTap: () => Get.to(HomeView()),
+                ),
+              ),
             ],
           ),
         ),

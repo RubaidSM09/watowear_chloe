@@ -33,14 +33,26 @@ class CustomButton extends StatelessWidget {
           color: color,
           border: border,
         ),
-        child: text != null ? Text(
-          text!,
-          style: TextStyle(
-            color: textColor,
-            fontSize: textSize,
-            fontWeight: FontWeight.w600,
-            fontFamily: 'Comfortaa',
-          ),
+        child: text != null ? Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          spacing: 9.w,
+          children: [
+            if (icon != null)
+              Image.asset(
+                icon!,
+                scale: 4,
+              ),
+
+            Text(
+              text!,
+              style: TextStyle(
+                color: textColor,
+                fontSize: textSize,
+                fontWeight: FontWeight.w600,
+                fontFamily: 'Comfortaa',
+              ),
+            ),
+          ],
         ) : icon != null ? Image.asset(
           icon!,
           scale: 4,

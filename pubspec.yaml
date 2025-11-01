@@ -69,6 +69,7 @@ flutter:
   assets:
     - assets/images/onboarding/
     - assets/images/authentication/
+    - assets/images/home/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -102,5 +103,9 @@ flutter:
           weight: 500
         - asset: assets/fonts/comfortaa/Comfortaa-Bold.ttf
           weight: 700
+    - family: Black_Mango
+      fonts:
+        - asset: assets/fonts/black_mango/Black Mango Regular.ttf
+          weight: 400
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
