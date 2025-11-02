@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/library/views/library_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
 
@@ -319,7 +320,7 @@ class HomeView extends GetView<HomeController> {
                           textSize: 14.sp,
                           textColor: AppColors.bgColor,
                           color: AppColors.textIcons,
-                          onTap: () {  },
+                          onTap: () => Get.to(LibraryView()),
                         ),
                       ],
                     ),
@@ -335,7 +336,7 @@ class HomeView extends GetView<HomeController> {
                     'assets/images/home/closet_detox.png',
                     scale: 4,
                     width: double.infinity,
-                    height: 395.h,
+                    // height: 395.h,
                   ),
 
                   SizedBox(height: 26.h,),
@@ -398,7 +399,7 @@ class HomeView extends GetView<HomeController> {
                     'assets/images/home/weekend_chic.png',
                     scale: 4,
                     width: double.infinity,
-                    height: 395.h,
+                    // height: 395.h,
                   ),
 
                   SizedBox(height: 26.h,),
@@ -455,11 +456,69 @@ class HomeView extends GetView<HomeController> {
                 ],
               ),
 
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 80.66.w,
+                  vertical: 50.77.h,
+                ),
+                color: Color(0xFFF5F4F0).withAlpha(153),
+                child: Column(
+                  children: [
+                    SvgPicture.asset(
+                      'assets/images/home/your_next_mission.svg'
+                    ),
+
+                    SizedBox(height: 15.79.h,),
+
+                    Text(
+                      'Your Next Mission',
+                      style: TextStyle(
+                        color: Color(0xFF1F1F1F),
+                        fontSize: 27.08.sp,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Black_Mango',
+                      ),
+                    ),
+
+                    SizedBox(height: 90.26.h,),
+
+                    GestureDetector(
+                      onTap: () {  },
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 30.1.w, vertical: 16.67.h,),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(7.r),
+                        ),
+                        child: Text(
+                          'Upload Items',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Comfortaa',
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 29.h,),
+
               Column(
                 children: [
                   Container(
                     width: double.infinity,
-                    height: 395.h,
+                    // height: 395.h,
+                    padding: EdgeInsets.only(
+                      top: 247.72.h,
+                      bottom: 100.2.h,
+                      left: 37.w,
+                      right: 37.w,
+                    ),
                     decoration: BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(
@@ -468,6 +527,16 @@ class HomeView extends GetView<HomeController> {
                         fit: BoxFit.cover,
                         scale: 4,
                       ),
+                    ),
+                    child: Text(
+                      'Get +50 XP when you upload 3 new items from your latest shopping trip.',
+                      style: TextStyle(
+                        color: Color(0xFF1F1F1F).withAlpha(204),
+                        fontFamily: 'Comfortaa',
+                        fontWeight: FontWeight.w400,
+                        fontSize: 18.sp,
+                      ),
+                      textAlign: TextAlign.end,
                     ),
                   ),
 
@@ -478,19 +547,7 @@ class HomeView extends GetView<HomeController> {
                     child: Column(
                       children: [
                         Text(
-                          'CHLOÉ\'S PICK',
-                          style: TextStyle(
-                            color: Color(0xFF1F1F1F).withAlpha(153),
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Comfortaa',
-                          ),
-                        ),
-
-                        SizedBox(height: 8.h,),
-
-                        Text(
-                          'The Art of Layering',
+                          'Sustainable Drops',
                           style: TextStyle(
                             color: Color(0xFF1F1F1F),
                             fontSize: 30.sp,
@@ -502,7 +559,7 @@ class HomeView extends GetView<HomeController> {
                         SizedBox(height: 12.h,),
 
                         Text(
-                          'Today\'s tip: Try layering your linen blazer over a silk camisole for effortless sophistication.',
+                          'Meet the new eco-conscious labels we\'re loving right now.',
                           style: TextStyle(
                             color: Color(0xFF1F1F1F).withAlpha(204),
                             fontSize: 14.sp,
@@ -514,13 +571,20 @@ class HomeView extends GetView<HomeController> {
 
                         SizedBox(height: 29.h,),
 
-                        CustomButton(
-                          padding: EdgeInsets.symmetric(horizontal: 11.w, vertical: 17.h),
-                          text: 'Generate Today\'s Outfit',
-                          textSize: 14.sp,
-                          textColor: AppColors.bgColor,
-                          color: AppColors.textIcons,
-                          onTap: () {  },
+                        Text(
+                          'Discover Brands',
+                          style: TextStyle(
+                            color: Color(0xFF1F1F1F),
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Comfortaa',
+                          ),
+                        ),
+
+                        Container(
+                          width: 122.96.w,
+                          height: 1.13.h,
+                          color: Color(0xFF1F1F1F),
                         ),
                       ],
                     ),
