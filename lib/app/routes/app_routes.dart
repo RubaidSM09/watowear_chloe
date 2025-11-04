@@ -10,6 +10,10 @@ abstract class Routes {
   static const ABOUT_YOURSELF = _Paths.ABOUT_YOURSELF;
   static const ADD_YOUR_WARDROBE = _Paths.ADD_YOUR_WARDROBE;
   static const LIBRARY = _Paths.LIBRARY;
+  static const PROFILE = _Paths.PROFILE;
+  static const GENERATE = _Paths.GENERATE;
+  static const DASHBOARD = _Paths.DASHBOARD;
+  static const BADGES = _Paths.BADGES;
 }
 
 abstract class _Paths {
@@ -21,4 +25,8 @@ abstract class _Paths {
   static const ABOUT_YOURSELF = '/about-yourself';
   static const ADD_YOUR_WARDROBE = '/add-your-wardrobe';
   static const LIBRARY = '/library';
+  static const PROFILE = '/profile';
+  static const GENERATE = '/generate';
+  static const DASHBOARD = '/dashboard';
+  static const BADGES = '/badges';
 }

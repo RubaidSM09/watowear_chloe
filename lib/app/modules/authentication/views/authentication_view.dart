@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:watowear_chloe/app/modules/authentication/views/account_created_view.dart';
 import 'package:watowear_chloe/app/modules/authentication/views/password_recovery_view.dart';
+import 'package:watowear_chloe/app/modules/dashboard/views/dashboard_view.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
 import 'package:watowear_chloe/common/custom_text_fields.dart';
 
@@ -334,7 +335,7 @@ class AuthenticationView extends GetView<AuthenticationController> {
                   horizontal: 150.w,
                   vertical: 12.h,
                 ),
-                onTap: () { },
+                onTap: () => Get.offAll(DashboardView()),
               ),
 
               controller.isSignIn.value ? SizedBox(height: 6.h,) : SizedBox.shrink(),
