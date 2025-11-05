@@ -73,6 +73,11 @@ flutter:
     - assets/images/library/
     - assets/images/bottom_navigation_bar/
     - assets/images/profile/
+    - assets/images/profile/my_favourites/
+    - assets/images/profile/my_assistant/
+    - assets/images/profile/notifications/
+    - assets/images/profile/my_progress/
+    - assets/images/profile/settings/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

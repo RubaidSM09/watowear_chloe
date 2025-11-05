@@ -3,7 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:watowear_chloe/app/modules/authentication/views/authentication_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/help_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/my_assistant_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/my_favourites_view.dart';
 import 'package:watowear_chloe/app/modules/profile/views/my_progress_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/notifications_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/personal_details_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/settings_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 
 import '../controllers/profile_controller.dart';
@@ -120,32 +126,32 @@ class ProfileView extends GetView<ProfileController> {
 
                     ProfileRow(
                       text: 'My Favourites',
-                      onTap: () {  },
+                      onTap: () => Get.to(MyFavouritesView()),
                     ),
 
                     ProfileRow(
                       text: 'My Assistant',
-                      onTap: () {  },
+                      onTap: () => Get.to(MyAssistantView()),
                     ),
 
                     ProfileRow(
                       text: 'Notifications (5)',
-                      onTap: () {  },
+                      onTap: () => Get.to(NotificationsView()),
                     ),
 
                     ProfileRow(
                       text: 'Help',
-                      onTap: () {  },
+                      onTap: () => Get.to(HelpView()),
                     ),
 
                     ProfileRow(
                       text: 'Personal Details',
-                      onTap: () {  },
+                      onTap: () => Get.to(PersonalDetailsView()),
                     ),
 
                     ProfileRow(
                       text: 'Settings',
-                      onTap: () {  },
+                      onTap: () => Get.to(SettingsView()),
                     ),
 
                     ProfileRow(

@@ -3,6 +3,9 @@ import 'package:get/get.dart';
 class ProfileController extends GetxController {
   RxList<RxBool> selectedBadge = [false.obs, false.obs, false.obs, false.obs].obs;
 
+  RxBool isCm = true.obs;
+  RxBool isKg = true.obs;
+
   void selectBadge (int index) {
     for (int i=0; i<selectedBadge.length ; i++) {
       if (i == index && selectedBadge[i].value == false) {
