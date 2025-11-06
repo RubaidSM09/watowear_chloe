@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/add_new_item/views/add_new_item_view.dart';
 import 'package:watowear_chloe/app/modules/library/views/library_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
@@ -220,7 +221,7 @@ class HomeView extends GetView<HomeController> {
                       text: 'Add new item',
                       textColor: AppColors.bgColor,
                       textSize: 18.sp,
-                      onTap: () {  },
+                      onTap: () => Get.to(AddNewItemView()),
                     ),
                   ],
                 ),

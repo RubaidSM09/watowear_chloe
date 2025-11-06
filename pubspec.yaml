@@ -78,6 +78,7 @@ flutter:
     - assets/images/profile/notifications/
     - assets/images/profile/my_progress/
     - assets/images/profile/settings/
+    - assets/images/add_new_item/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

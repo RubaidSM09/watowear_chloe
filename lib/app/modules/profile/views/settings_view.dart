@@ -6,6 +6,7 @@ import 'package:watowear_chloe/app/modules/profile/views/change_country_view.dar
 import 'package:watowear_chloe/app/modules/profile/views/language_view.dart';
 import 'package:watowear_chloe/app/modules/profile/views/privacy_policy_view.dart';
 import 'package:watowear_chloe/app/modules/profile/views/privacy_preference_center_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/tn_c_app_features_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 
 class SettingsView extends GetView {
@@ -63,7 +64,7 @@ class SettingsView extends GetView {
 
                 SettingsRow(
                   text: 'T&C App features',
-                  onTap: () {  },
+                  onTap: () => Get.to(TnCAppFeaturesView()),
                 ),
               ],
             ),

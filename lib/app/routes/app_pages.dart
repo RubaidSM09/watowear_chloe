@@ -4,6 +4,8 @@ import '../modules/about_yourself/bindings/about_yourself_binding.dart';
 import '../modules/about_yourself/views/about_yourself_view.dart';
 import '../modules/about_yourself/views/badges/bindings/badges_binding.dart';
 import '../modules/about_yourself/views/badges/views/badges_view.dart';
+import '../modules/add_new_item/bindings/add_new_item_binding.dart';
+import '../modules/add_new_item/views/add_new_item_view.dart';
 import '../modules/add_your_wardrobe/bindings/add_your_wardrobe_binding.dart';
 import '../modules/add_your_wardrobe/views/add_your_wardrobe_view.dart';
 import '../modules/authentication/bindings/authentication_binding.dart';
@@ -58,7 +60,9 @@ class AppPages {
       children: [
         GetPage(
           name: _Paths.BADGES,
-          page: () => const BadgesView(badgeType: '',),
+          page: () => const BadgesView(
+            badgeType: '',
+          ),
           binding: BadgesBinding(),
         ),
       ],
@@ -87,6 +91,11 @@ class AppPages {
       name: _Paths.DASHBOARD,
       page: () => const DashboardView(),
       binding: DashboardBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADD_NEW_ITEM,
+      page: () => const AddNewItemView(),
+      binding: AddNewItemBinding(),
     ),
   ];
 }

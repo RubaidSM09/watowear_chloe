@@ -32,6 +32,50 @@ class SettingsController extends GetxController {
   RxBool isAnalysisCookiesActive = true.obs;
   RxBool isAdvertisingCookiesActive = true.obs;
 
+  RxInt current = 0.obs;
+
+  void nextTnC(int index) {
+    if (index == 0) {
+      current.value = 1;
+      return;
+    } else if (index == 1) {
+      current.value = 2;
+      return;
+    } else if (index == 2) {
+      current.value = 3;
+      return;
+    } else if (index == 3) {
+      current.value = 4;
+      return;
+    } else if (index == 4) {
+      current.value = 5;
+      return;
+    } else {
+      return;
+    }
+  }
+
+  void previousTnC(int index) {
+    if (index == 1) {
+      current.value = 0;
+      return;
+    } else if (index == 2) {
+      current.value = 1;
+      return;
+    } else if (index == 3) {
+      current.value = 2;
+      return;
+    } else if (index == 4) {
+      current.value = 3;
+      return;
+    } else if (index == 5) {
+      current.value = 4;
+      return;
+    } else {
+      return;
+    }
+  }
+
   final count = 0.obs;
   @override
   void onInit() {

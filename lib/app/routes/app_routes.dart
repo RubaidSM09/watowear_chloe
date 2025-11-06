@@ -14,6 +14,7 @@ abstract class Routes {
   static const GENERATE = _Paths.GENERATE;
   static const DASHBOARD = _Paths.DASHBOARD;
   static const BADGES = _Paths.BADGES;
+  static const ADD_NEW_ITEM = _Paths.ADD_NEW_ITEM;
 }
 
 abstract class _Paths {
@@ -29,4 +30,5 @@ abstract class _Paths {
   static const GENERATE = '/generate';
   static const DASHBOARD = '/dashboard';
   static const BADGES = '/badges';
+  static const ADD_NEW_ITEM = '/add-new-item';
 }
