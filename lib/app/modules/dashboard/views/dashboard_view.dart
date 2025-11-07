@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:watowear_chloe/app/modules/generate/views/generate_view.dart';
 import 'package:watowear_chloe/app/modules/library/views/library_view.dart';
+import 'package:watowear_chloe/app/modules/menu/views/menu_view.dart';
 
 import '../../../../common/widget/custom_navigation_bar.dart';
 import '../../home/views/home_view.dart';
@@ -18,6 +19,7 @@ class DashboardView extends GetView<DashboardController> {
     final List<Widget> pages = [
       HomeView(),
       GenerateView(),
+      MenuView(),
       LibraryView(),
       ProfileView(),
     ];

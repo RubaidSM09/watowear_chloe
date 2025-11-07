@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:watowear_chloe/app/modules/about_yourself/views/badges/views/badges_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/rewards_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
 
@@ -193,7 +194,7 @@ class MyProgressView extends GetView {
                         MyProgressActionRow(
                           icon: 'assets/images/profile/view_missions.svg',
                           text: 'View missions',
-                          onTap: () {  },
+                          onTap: () => Get.to(RewardsView()),
                         ),
 
                         MyProgressActionRow(

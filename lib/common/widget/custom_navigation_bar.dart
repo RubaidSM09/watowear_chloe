@@ -23,6 +23,10 @@ class CustomNavigationBar extends StatelessWidget {
         'icon': 'assets/images/bottom_navigation_bar/generate.png',
       },
       {
+        'label': 'Menu',
+        'icon': 'assets/images/bottom_navigation_bar/menu.png',
+      },
+      {
         'label': 'Library',
         'icon': 'assets/images/bottom_navigation_bar/library.png',
       },

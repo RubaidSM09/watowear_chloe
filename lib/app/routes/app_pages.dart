@@ -18,6 +18,10 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/library/bindings/library_binding.dart';
 import '../modules/library/views/library_view.dart';
+import '../modules/menu/bindings/menu_binding.dart';
+import '../modules/menu/bindings/shop_bindings.dart';
+import '../modules/menu/views/menu_view.dart';
+import '../modules/menu/views/shop_view.dart';
 import '../modules/onboarding/bindings/onboarding_binding.dart';
 import '../modules/onboarding/views/onboarding_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
@@ -96,6 +100,16 @@ class AppPages {
       name: _Paths.ADD_NEW_ITEM,
       page: () => const AddNewItemView(),
       binding: AddNewItemBinding(),
+    ),
+    GetPage(
+      name: _Paths.MENU,
+      page: () => const MenuView(),
+      binding: MenuBinding(),
+    ),
+    GetPage(
+      name: _Paths.SHOP,
+      page: () => const ShopView(),
+      binding: ShopBinding(),
     ),
   ];
 }
