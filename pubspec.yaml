@@ -38,6 +38,7 @@ dependencies:
   flutter_svg: ^2.2.1
   flutter_screenutil: ^5.9.3
   smooth_page_indicator: ^1.2.1
+  permission_handler: ^12.0.1
 
 dev_dependencies:
   flutter_test:

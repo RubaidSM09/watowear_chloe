@@ -77,7 +77,7 @@ class ShopView extends GetView<ShopController> {
                     ),
                   ),
 
-                  SizedBox(height: 21.h),
+                  SizedBox(height: 6.h),
 
                   if (controller.selectedTab[0].value)
                     ShopSectionView(),

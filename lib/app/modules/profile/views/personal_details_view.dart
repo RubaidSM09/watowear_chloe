@@ -4,6 +4,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:watowear_chloe/app/modules/profile/controllers/profile_controller.dart';
+import 'package:watowear_chloe/app/modules/profile/views/add_phone_number_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/address_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/change_my_password_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/commercial_preferences_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/modify_email_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
 
@@ -148,7 +153,7 @@ class PersonalDetailsView extends GetView<ProfileController> {
                   text: 'Modify  Email',
                   textSize: 16.sp,
                   textColor: AppColors.textIcons,
-                  onTap: () {  },
+                  onTap: () => Get.to(ModifyEmailView()),
                 ),
 
                 SizedBox(height: 21.h,),
@@ -161,7 +166,7 @@ class PersonalDetailsView extends GetView<ProfileController> {
                   text: 'Add Phone number',
                   textSize: 16.sp,
                   textColor: AppColors.textIcons,
-                  onTap: () {  },
+                  onTap: () => Get.to(AddPhoneNumberView()),
                 ),
 
                 SizedBox(height: 21.h,),
@@ -174,7 +179,7 @@ class PersonalDetailsView extends GetView<ProfileController> {
                   text: 'Change Password',
                   textSize: 16.sp,
                   textColor: AppColors.textIcons,
-                  onTap: () {  },
+                  onTap: () => Get.to(ChangeMyPasswordView()),
                 ),
 
                 SizedBox(height: 21.h,),
@@ -187,7 +192,7 @@ class PersonalDetailsView extends GetView<ProfileController> {
                   text: 'Address',
                   textSize: 16.sp,
                   textColor: AppColors.textIcons,
-                  onTap: () {  },
+                  onTap: () => Get.to(AddressView()),
                 ),
 
                 SizedBox(height: 21.h,),
@@ -200,7 +205,7 @@ class PersonalDetailsView extends GetView<ProfileController> {
                   text: 'Commercial Preferences',
                   textSize: 16.sp,
                   textColor: AppColors.textIcons,
-                  onTap: () {  },
+                  onTap: () => Get.to(CommercialPreferencesView()),
                 ),
 
                 SizedBox(height: 24.h,),

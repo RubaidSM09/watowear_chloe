@@ -63,16 +63,19 @@ class AboutYourselfView extends GetView<AboutYourselfController> {
 
               SizedBox(height: 20.h,),
 
-              Obx(() => CustomButton(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: controller.current.value == 5 ? 74 : 148.w,
-                    vertical: 12.h,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Obx(() => CustomButton(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: controller.current.value == 5 ? 74 : 148.w,
+                      vertical: 12.h,
+                    ),
+                    text: controller.current.value == 5 ? 'Start Building my closet' : 'Next',
+                    textColor: AppColors.bgColor,
+                    textSize: 14.sp,
+                    color: AppColors.primary,
+                    onTap: () => controller.next(),
                   ),
-                  text: controller.current.value == 5 ? 'Start Building my closet' : 'Next',
-                  textColor: AppColors.bgColor,
-                  textSize: 14.sp,
-                  color: AppColors.primary,
-                  onTap: () => controller.next(),
                 ),
               ),
 

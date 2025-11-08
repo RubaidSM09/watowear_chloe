@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:watowear_chloe/app/modules/add_new_item/views/add_new_item_view.dart';
 import 'package:watowear_chloe/app/modules/library/views/library_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/my_assistant_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
 
@@ -211,7 +212,7 @@ class HomeView extends GetView<HomeController> {
                       text: 'My closet',
                       textColor: AppColors.bgColor,
                       textSize: 18.sp,
-                      onTap: () {  },
+                      onTap: () => Get.to(LibraryView()),
                     ),
 
                     CustomButton(
@@ -596,6 +597,14 @@ class HomeView extends GetView<HomeController> {
               ),
             ],
           ),
+        ),
+      ),
+
+      floatingActionButton: GestureDetector(
+        onTap: () => Get.to(MyAssistantView()),
+        child: Image.asset(
+          'assets/images/onboarding/chloe_2.png',
+          scale: 10,
         ),
       ),
     );

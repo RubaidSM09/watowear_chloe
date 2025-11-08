@@ -337,8 +337,8 @@ class AddNewItemView extends GetView<AddNewItemController> {
         ),
       ),
 
-      bottomSheet: controller.selectedMethod[1].value ? Obx(() {
-        return Container(
+      bottomSheet: Obx(() {
+        return controller.selectedMethod[1].value ? Container(
           padding: EdgeInsets.symmetric(
             horizontal: 23.w,
             vertical: 30.h,
@@ -384,8 +384,8 @@ class AddNewItemView extends GetView<AddNewItemController> {
               ],
             ),
           ),
-        );
-      }) : SizedBox.shrink(),
+        ) : SizedBox.shrink();
+      }),
     );
   }
 }

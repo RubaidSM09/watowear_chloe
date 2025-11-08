@@ -26,79 +26,86 @@ class PhotoPreviewView extends GetView {
         scrolledUnderElevation: 0,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 19.w),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Image.asset(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                width: 440.w,
+                height: 588.h,
+                child: Image.asset(
                   'assets/images/add_new_item/photo_preview.png',
                   scale: 4,
-                  width: 392.w,
-                  height: 588.h,
+                  fit: BoxFit.fill,
                 ),
+              ),
 
-                SizedBox(height: 32.h,),
+              SizedBox(height: 32.h,),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 19.w),
+                child: Column(
                   children: [
-                    GestureDetector(
-                      onTap: () => Get.to(AutoTaggongView()),
-                      child: Text(
-                        'Keep and continue',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Comfortaa',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 17.sp,
-                          decoration: TextDecoration.underline,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        GestureDetector(
+                          onTap: () => Get.to(AutoTaggongView()),
+                          child: Text(
+                            'Keep and continue',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Comfortaa',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 17.sp,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
                         ),
-                      ),
+
+                        GestureDetector(
+                          onTap: () => Get.back(),
+                          child: Text(
+                            'Retake Photo',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Comfortaa',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 17.sp,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
 
-                    GestureDetector(
-                      onTap: () => Get.back(),
-                      child: Text(
-                        'Retake Photo',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Comfortaa',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 17.sp,
-                          decoration: TextDecoration.underline,
+                    SizedBox(height: 62.h,),
+
+                    Row(
+                      spacing: 10.w,
+                      children: [
+                        Image.asset(
+                          'assets/images/add_new_item/enhance.png',
+                          scale: 4,
                         ),
-                      ),
+
+                        GestureDetector(
+                          onTap: () {  },
+                          child: Text(
+                            'Enhance picture',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Comfortaa',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 17.sp,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-
-                SizedBox(height: 62.h,),
-
-                Row(
-                  spacing: 10.w,
-                  children: [
-                    Image.asset(
-                      'assets/images/add_new_item/enhance.png',
-                      scale: 4,
-                    ),
-
-                    GestureDetector(
-                      onTap: () {  },
-                      child: Text(
-                        'Enhance picture',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Comfortaa',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 17.sp,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/dashboard/views/dashboard_view.dart';
 import 'package:watowear_chloe/app/modules/home/views/home_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 
@@ -157,14 +158,30 @@ class AddYourWardrobeView extends GetView<AddYourWardrobeController> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Download your 10 favorites',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'Comfortaa',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 16.sp,
-                          ),
+                        Row(
+                          spacing: 10.w,
+                          children: [
+                            Text(
+                              'Download your 10 favorites',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Comfortaa',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 16.sp,
+                              ),
+                            ),
+
+                            GestureDetector(
+                              onTap: () {
+
+                              },
+                              child: Icon(
+                                Icons.info_outline,
+                                size: 24.r,
+                                color: AppColors.black,
+                              ),
+                            )
+                          ],
                         ),
 
                         GestureDetector(
@@ -242,7 +259,7 @@ class AddYourWardrobeView extends GetView<AddYourWardrobeController> {
                   textColor: AppColors.bgColor,
                   textSize: 14.sp,
                   color: AppColors.primary,
-                  onTap: () => Get.to(HomeView()),
+                  onTap: () => Get.offAll(DashboardView()),
                 ),
               ),
             ],

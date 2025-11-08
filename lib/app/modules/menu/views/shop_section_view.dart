@@ -14,23 +14,26 @@ class ShopSectionView extends GetView<ShopController> {
     return Column(
       children: [
         // ----------------- MARQUEE TEXT -----------------
-        SizedBox(
-          height: 30.h,
+        Container(
+          height: 45.h,
           width: double.infinity,
-          child: ClipRect(
-            child: Obx(
-                  () => Transform.translate(
-                offset: Offset(controller.xOffset.value, 0),
-                child: Text(
-                  controller.marqueeText.value,
-                  maxLines: 1,
-                  softWrap: false,
-                  overflow: TextOverflow.visible,
-                  style: TextStyle(
-                    color: AppColors.textIcons,
-                    fontSize: 13.3.sp,
-                    fontFamily: 'Comfortaa',
-                    fontWeight: FontWeight.w500,
+          color: Color(0xFFF4F1EB),
+          child: Center(
+            child: ClipRect(
+              child: Obx(
+                    () => Transform.translate(
+                  offset: Offset(controller.xOffset.value, 0),
+                  child: Text(
+                    controller.marqueeText.value,
+                    maxLines: 1,
+                    softWrap: false,
+                    overflow: TextOverflow.visible,
+                    style: TextStyle(
+                      color: AppColors.textIcons,
+                      fontSize: 13.3.sp,
+                      fontFamily: 'Comfortaa',
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ),

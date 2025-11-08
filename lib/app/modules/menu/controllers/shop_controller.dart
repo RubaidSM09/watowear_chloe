@@ -6,6 +6,7 @@ class ShopController extends GetxController with GetTickerProviderStateMixin {
     true.obs, false.obs, false.obs, false.obs, false.obs, false.obs
   ].obs;
 
+  /// Editorial filter categories
   final List<String> editorialCategories = [
     'Latest',
     'Style & Self',
@@ -15,6 +16,18 @@ class ShopController extends GetxController with GetTickerProviderStateMixin {
     'How-To & Feature Guides',
     'Trends & Analysis',
   ];
+
+  /// Whether we are showing the main magazine layout (false)
+  /// or a specific editorial article (true)
+  RxBool showEditorialArticle = false.obs;
+
+  void openEditorialArticle() {
+    showEditorialArticle.value = true;
+  }
+
+  void closeEditorialArticle() {
+    showEditorialArticle.value = false;
+  }
 
   final Map<String, List<Map<String, dynamic>>> brands = {
     'A': [
@@ -134,9 +147,10 @@ class ShopController extends GetxController with GetTickerProviderStateMixin {
     'Other Accessories',
   ];
 
-
   // Marquee text
-  final marqueeText = "Brands that complement your style. New arrivals daily. Discover fresh pieces curated for you.".obs;
+  final marqueeText =
+      "Brands that complement your style. New arrivals daily. Discover fresh pieces curated for you."
+          .obs;
 
   late AnimationController animationController;
   RxDouble xOffset = 0.0.obs;
@@ -154,17 +168,14 @@ class ShopController extends GetxController with GetTickerProviderStateMixin {
   void onInit() {
     super.onInit();
 
-    // Width of the viewport (your SizedBox width)
     containerWidth = Get.width;
 
-    // Match your text style as close as possible
     const textStyle = TextStyle(
-      fontSize: 14, // close to 13.3.sp
+      fontSize: 14,
       fontFamily: 'Comfortaa',
       fontWeight: FontWeight.w500,
     );
 
-    // Measure text width
     final textPainter = TextPainter(
       text: TextSpan(
         text: marqueeText.value,
@@ -176,21 +187,17 @@ class ShopController extends GetxController with GetTickerProviderStateMixin {
 
     textWidth = textPainter.width;
 
-    final totalDistance = containerWidth + textWidth; // full travel distance
+    final totalDistance = containerWidth + textWidth;
 
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 20), // adjust speed here
+      duration: const Duration(seconds: 20),
     )
       ..addListener(() {
-        final t = animationController.value; // 0 → 1
-
-        // 👇 Right → Left:
-        // start: x = containerWidth       (off right)
-        // end:   x = -textWidth           (off left)
+        final t = animationController.value;
         xOffset.value = containerWidth - (t * totalDistance);
       })
-      ..repeat(); // loop forever
+      ..repeat();
   }
 
   @override

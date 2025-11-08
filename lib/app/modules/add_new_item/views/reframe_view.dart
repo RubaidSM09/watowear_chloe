@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/add_new_item/views/crop_item_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
 
@@ -16,14 +17,10 @@ class ReframeView extends GetView {
         automaticallyImplyLeading: false,
         title: GestureDetector(
           onTap: () => Get.dialog(DiscardEditsDialog()),
-          child: Text(
-            'X',
-            style: TextStyle(
-              color: AppColors.black,
-              fontFamily: 'Comfortaa',
-              fontWeight: FontWeight.w500,
-              fontSize: 24.sp,
-            ),
+          child: Icon(
+            Icons.close,
+            size: 24.r,
+            color: AppColors.black,
           ),
         ),
       ),
@@ -38,7 +35,7 @@ class ReframeView extends GetView {
                   spacing: 19.w,
                   children: [
                     GestureDetector(
-                      onTap: () {  },
+                      onTap: () => Get.to(CropItemView()),
                       child: Container(
                         width: 267.w,
                         height: 329.h,
@@ -52,7 +49,7 @@ class ReframeView extends GetView {
                     ),
 
                     GestureDetector(
-                      onTap: () {  },
+                      onTap: () => Get.to(CropItemView()),
                       child: Container(
                         width: 267.w,
                         height: 329.h,
@@ -120,6 +117,34 @@ class ReframeView extends GetView {
                           ),
                         ],
                       ),
+                    ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 159.h,),
+
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 30.w,),
+                child: Column(
+                  spacing: 13.h,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomButton(
+                      padding: EdgeInsets.symmetric(horizontal: 48.w, vertical: 12.h,),
+                      color: AppColors.primary,
+                      text: 'Add to closet',
+                      textSize: 16.sp,
+                      textColor: AppColors.bgColor,
+                      onTap: () => Get.dialog(CongratulationsDialog()),
+                    ),
+
+                    CustomButton(
+                      padding: EdgeInsets.symmetric(horizontal: 48.w, vertical: 12.h,),
+                      text: 'Back',
+                      textSize: 16.sp,
+                      textColor: AppColors.primary,
+                      onTap: () => Get.back(),
                     ),
                   ],
                 ),
@@ -249,8 +274,8 @@ class CongratulationsDialog extends StatelessWidget {
 
             SizedBox(height: 31.h,),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
+              spacing: 20.h,
               children: [
                 CustomButton(
                   padding: EdgeInsets.symmetric(

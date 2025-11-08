@@ -18,9 +18,18 @@ class LibraryView extends GetView<LibraryController> {
       backgroundColor: AppColors.bgColor,
       appBar: AppBar(
         backgroundColor: AppColors.bgColor,
+        scrolledUnderElevation: 0,
         title: Row(
           children: [
-            Text('My Closet'),
+            Text(
+              'My Closet',
+              style: TextStyle(
+                color: AppColors.textIcons,
+                fontFamily: 'Comfortaa',
+                fontWeight: FontWeight.w600,
+                fontSize: 24.sp,
+              ),
+            ),
           ],
         ),
         centerTitle: true,

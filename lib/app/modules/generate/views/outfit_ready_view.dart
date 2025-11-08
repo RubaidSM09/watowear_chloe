@@ -2,12 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/generate/controllers/outfit_ready_controller.dart';
+import 'package:watowear_chloe/app/modules/generate/views/generate_view.dart';
+import 'package:watowear_chloe/app/modules/generate/views/voice_mode_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 
-class OutfitReadyView extends GetView {
+import '../../../../common/custom_button.dart';
+import '../../profile/views/my_assistant_view.dart';
+
+class OutfitReadyView extends GetView<OutfitReadyController> {
   const OutfitReadyView({super.key});
   @override
   Widget build(BuildContext context) {
+    Get.put(OutfitReadyController());
+
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: AppBar(
@@ -147,7 +155,12 @@ class OutfitReadyView extends GetView {
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w,),
                 child: GestureDetector(
-                  onTap: () {  },
+                  onTap: () => Get.dialog(
+                    EditOutfitDialog(
+                      selectedEditMode: controller.selectedEditMode,
+                      selectEditMode: controller.selectEditMode,
+                    ),
+                  ),
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 12.h,),
                     child: Row(
@@ -179,6 +192,14 @@ class OutfitReadyView extends GetView {
               SizedBox(height: 100.h,),
             ],
           ),
+        ),
+      ),
+
+      floatingActionButton: GestureDetector(
+        onTap: () => Get.to(GenerateView()),
+        child: Image.asset(
+          'assets/images/onboarding/chloe_2.png',
+          scale: 10,
         ),
       ),
     );
@@ -279,6 +300,164 @@ class LoveItDialog extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+
+class EditOutfitDialog extends StatelessWidget {
+  final RxList<RxBool> selectedEditMode;
+  final void Function(int) selectEditMode;
+
+  const EditOutfitDialog({
+    required this.selectedEditMode,
+    required this.selectEditMode,
+    super.key
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: AppColors.bgColor,
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 22.w, vertical: 61.h,),
+        child: Obx(() {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 6.h,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'A quick tweak?',
+                    style: TextStyle(
+                      color: Color(0xFF1F1F1F).withAlpha(204),
+                      fontFamily: 'Comfortaa',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 18.sp,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 62.h,),
+
+              Row(
+                spacing: 7.w,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      selectEditMode(0);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(7.5.r),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: selectedEditMode[0].value ? AppColors.textIcons : Colors.transparent,
+                          border: Border.all(
+                            color: AppColors.textIcons,
+                          )
+                      ),
+                    ),
+                  ),
+
+                  Text(
+                    'Change color combination',
+                    style: TextStyle(
+                      color: Color(0xFF1F1F1F),
+                      fontFamily: 'Comfortaa',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14.sp,
+                    ),
+                  )
+                ],
+              ),
+
+              SizedBox(height: 10.h,),
+
+              Row(
+                spacing: 7.w,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      selectEditMode(1);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(7.5.r),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: selectedEditMode[1].value ? AppColors.textIcons : Colors.transparent,
+                          border: Border.all(
+                            color: AppColors.textIcons,
+                          )
+                      ),
+                    ),
+                  ),
+
+                  Text(
+                    'Swap an item',
+                    style: TextStyle(
+                      color: Color(0xFF1F1F1F),
+                      fontFamily: 'Comfortaa',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14.sp,
+                    ),
+                  )
+                ],
+              ),
+
+              SizedBox(height: 10.h,),
+
+              Row(
+                spacing: 7.w,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      selectEditMode(2);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(7.5.r),
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: selectedEditMode[2].value ? AppColors.textIcons : Colors.transparent,
+                          border: Border.all(
+                            color: AppColors.textIcons,
+                          )
+                      ),
+                    ),
+                  ),
+
+                  Text(
+                    'Other',
+                    style: TextStyle(
+                      color: Color(0xFF1F1F1F),
+                      fontFamily: 'Comfortaa',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 14.sp,
+                    ),
+                  )
+                ],
+              ),
+
+              SizedBox(height: 61.h,),
+
+              CustomButton(
+                padding: EdgeInsets.symmetric(horizontal: 17.w, vertical: 13.h),
+                color: AppColors.primary,
+                text: 'Edit now',
+                textColor: AppColors.bgColor,
+                textSize: 16.sp,
+                onTap: () {
+
+                },
+              ),
+            ],
+          );
+        }),
       ),
     );
   }

@@ -88,7 +88,7 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
                       top: 48.h, left: 0, right: 0, // ⬅️ fill width for reliable taps
                       child: Container(
                         padding: EdgeInsets.symmetric(vertical: 19.h),
-                        color: const Color(0xFFF4F1EB),
+                        color: Colors.white,
                         child: Column(
                           spacing: 4.h,
                           children: [
@@ -99,7 +99,7 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
                                 width: double.infinity,
                                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 21.h),
                                 color: controller.selectedGender[0].value
-                                    ? AppColors.primary.withAlpha(128)
+                                    ? Color(0xFFF4F1EB)
                                     : Colors.transparent,
                                 child: Text('Male', style: TextStyle(
                                   color: Colors.black, fontFamily: 'Comfortaa',
@@ -114,7 +114,7 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
                                 width: double.infinity,
                                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 21.h),
                                 color: controller.selectedGender[1].value
-                                    ? AppColors.primary.withAlpha(128)
+                                    ? Color(0xFFF4F1EB)
                                     : Colors.transparent,
                                 child: Text('Female', style: TextStyle(
                                   color: Colors.black, fontFamily: 'Comfortaa',
@@ -129,7 +129,7 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
                                 width: double.infinity,
                                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 21.h),
                                 color: controller.selectedGender[2].value
-                                    ? AppColors.primary.withAlpha(128)
+                                    ? Color(0xFFF4F1EB)
                                     : Colors.transparent,
                                 child: Text('Non binary', style: TextStyle(
                                   color: Colors.black, fontFamily: 'Comfortaa',

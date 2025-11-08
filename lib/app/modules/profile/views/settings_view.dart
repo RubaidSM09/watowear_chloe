@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:watowear_chloe/app/modules/profile/views/change_country_view.dart';
 import 'package:watowear_chloe/app/modules/profile/views/language_view.dart';
 import 'package:watowear_chloe/app/modules/profile/views/privacy_policy_view.dart';
@@ -18,7 +19,7 @@ class SettingsView extends GetView {
       appBar: AppBar(
         backgroundColor: AppColors.bgColor,
         title: Text(
-          'SettingsView',
+          'Settings',
           style: TextStyle(
             color: Colors.black,
             fontFamily: 'Comfortaa',
@@ -39,7 +40,16 @@ class SettingsView extends GetView {
 
                 SettingsRow(
                   text: 'Device settings',
-                  onTap: () {  },
+                  onTap: () async {
+                    final success = await openAppSettings();
+                    if (!success) {
+                      Get.snackbar(
+                        'Error',
+                        'Could not open device settings',
+                        snackPosition: SnackPosition.BOTTOM,
+                      );
+                    }
+                  },
                 ),
 
                 SettingsRow(

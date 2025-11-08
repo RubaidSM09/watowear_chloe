@@ -47,6 +47,11 @@ class CategoriesSectionView extends GetView<ShopController> {
             spacing: 14.h,
             children: [
               CategoriesCard(
+                image: 'assets/images/shop/categories/exclusive_benefits.png',
+                onTap: () {  },
+              ),
+
+              CategoriesCard(
                 image: 'assets/images/shop/categories/new_in.png',
                 onTap: () {  },
               ),
