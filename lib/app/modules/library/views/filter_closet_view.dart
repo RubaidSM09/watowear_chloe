@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/common/custom_button.dart';
 
 import '../../../../common/app_colors.dart';
 import '../controllers/library_controller.dart';
@@ -15,6 +16,7 @@ class FilterClosetView extends GetView<LibraryController> {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: AppBar(
+        scrolledUnderElevation: 0,
         backgroundColor: AppColors.bgColor,
         title: Row(
           children: [
@@ -123,14 +125,32 @@ class FilterClosetView extends GetView<LibraryController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'CATEGORIES',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Comfortaa',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16.sp,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'CATEGORIES',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Comfortaa',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.sp,
+                            ),
+                          ),
+
+                          GestureDetector(
+                            onTap: () {  },
+                            child: Text(
+                              'Clear All',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Comfortaa',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
 
                       SizedBox(height: 20.h,),
@@ -610,14 +630,32 @@ class FilterClosetView extends GetView<LibraryController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'COLORS',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Comfortaa',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16.sp,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'COLORS',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Comfortaa',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.sp,
+                            ),
+                          ),
+
+                          GestureDetector(
+                            onTap: () {  },
+                            child: Text(
+                              'Clear All',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Comfortaa',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
 
                       SizedBox(height: 20.h,),
@@ -870,14 +908,32 @@ class FilterClosetView extends GetView<LibraryController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'STYLES',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Comfortaa',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16.sp,
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'STYLES',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Comfortaa',
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16.sp,
+                            ),
+                          ),
+
+                          GestureDetector(
+                            onTap: () {  },
+                            child: Text(
+                              'Clear All',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontFamily: 'Comfortaa',
+                                fontWeight: FontWeight.w600,
+                                fontSize: 14.sp,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
 
                       SizedBox(height: 20.h,),
@@ -1022,6 +1078,25 @@ class FilterClosetView extends GetView<LibraryController> {
                 Divider(
                   color: Colors.black.withAlpha(61),
                 ),
+
+                SizedBox(height: 32.h,),
+
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w,),
+                  child: CustomButton(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 48.w,
+                      vertical: 12.h,
+                    ),
+                    color: AppColors.primary,
+                    text: 'Apply',
+                    textColor: Colors.white,
+                    textSize: 16.sp,
+                    onTap: () {  },
+                  ),
+                ),
+
+                SizedBox(height: 19.h,),
               ],
             );
           }),

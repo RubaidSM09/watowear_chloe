@@ -104,7 +104,7 @@ class AboutYourself2View extends GetView<AboutYourselfController> {
                         right: 0, // ⬅️ fill width for reliable taps
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 19.h),
-                          color: const Color(0xFFF4F1EB),
+
                           child: Column(
                             spacing: 24.h,
                             children: [
@@ -441,7 +441,7 @@ class AboutYourself2View extends GetView<AboutYourselfController> {
                         right: 0, // ⬅️ fill width for reliable taps
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 19.h),
-                          color: const Color(0xFFF4F1EB),
+
                           child: Column(
                             spacing: 24.h,
                             children: [
@@ -942,6 +942,296 @@ class AboutYourself2View extends GetView<AboutYourselfController> {
                         children: [
                           Text(
                             controller.selectedEyes[0].value
+                                ? 'Black'
+                                : controller.selectedEyes[1].value
+                                ? 'Brown'
+                                : controller.selectedEyes[2].value
+                                ? 'Blue'
+                                : controller.selectedEyes[3].value
+                                ? 'Grey'
+                                : controller.selectedEyes[4].value
+                                ? 'Green'
+                                : 'Select here',
+                            style: TextStyle(
+                              color: AppColors.textIcons,
+                              fontFamily: 'Comfortaa',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14.sp,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              controller.eyesClicked.value = !controller.eyesClicked.value;
+                              controller.skinToneClicked.value = false;
+                              controller.bodyShapeClicked.value = false;
+                            },
+                            child: Icon(
+                              controller.eyesClicked.value
+                                  ? Icons.keyboard_arrow_up_outlined
+                                  : Icons.keyboard_arrow_down_outlined,
+                              size: 20.r,
+                              color: const Color(0xFF141B34),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    // Make sure the popup lives inside the Stack's hit-test area
+                    if (controller.eyesClicked.value)
+                      Positioned(
+                        top: 48.h,
+                        left: 0,
+                        right: 0, // ⬅️ fill width for reliable taps
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 19.h),
+                          child: Column(
+                            spacing: 24.h,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Black',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Comfortaa',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () {
+                                      controller.selectEyes(0);
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(6.r),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: AppColors.textIcons,
+                                        ),
+                                      ),
+                                      child: Container(
+                                        padding: EdgeInsets.all(4.r),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color:
+                                          controller.selectedEyes[0].value
+                                              ? AppColors.textIcons
+                                              : Colors.transparent,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Brown',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Comfortaa',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () {
+                                      controller.selectEyes(1);
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(6.r),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: AppColors.textIcons,
+                                        ),
+                                      ),
+                                      child: Container(
+                                        padding: EdgeInsets.all(4.r),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color:
+                                          controller.selectedEyes[1].value
+                                              ? AppColors.textIcons
+                                              : Colors.transparent,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Blue',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Comfortaa',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () {
+                                      controller.selectEyes(2);
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(6.r),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: AppColors.textIcons,
+                                        ),
+                                      ),
+                                      child: Container(
+                                        padding: EdgeInsets.all(4.r),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color:
+                                          controller.selectedEyes[2].value
+                                              ? AppColors.textIcons
+                                              : Colors.transparent,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Grey',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Comfortaa',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () {
+                                      controller.selectEyes(3);
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(6.r),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: AppColors.textIcons,
+                                        ),
+                                      ),
+                                      child: Container(
+                                        padding: EdgeInsets.all(4.r),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color:
+                                          controller.selectedEyes[3].value
+                                              ? AppColors.textIcons
+                                              : Colors.transparent,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Green',
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Comfortaa',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14.sp,
+                                    ),
+                                  ),
+
+                                  GestureDetector(
+                                    behavior: HitTestBehavior.opaque,
+                                    onTap: () {
+                                      controller.selectEyes(4);
+                                    },
+                                    child: Container(
+                                      padding: EdgeInsets.all(6.r),
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: AppColors.textIcons,
+                                        ),
+                                      ),
+                                      child: Container(
+                                        padding: EdgeInsets.all(4.r),
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color:
+                                          controller.selectedEyes[4].value
+                                              ? AppColors.textIcons
+                                              : Colors.transparent,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+
+              SizedBox(height: 12.h),
+
+              /*Text(
+                'What about your vibes',
+                style: TextStyle(
+                  color: AppColors.textIcons,
+                  fontFamily: 'Comfortaa',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14.sp,
+                ),
+              ),
+
+              SizedBox(height: 12.h),
+
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                height: controller.eyesClicked.value ? 48.h + 550.h : 48.h,
+                child: Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(12.r),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: AppColors.textIcons.withAlpha(128),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            controller.selectedEyes[0].value
                                 ? 'Classic Chic'
                                 : controller.selectedEyes[1].value
                                 ? 'Bohemian'
@@ -997,7 +1287,6 @@ class AboutYourself2View extends GetView<AboutYourselfController> {
                         right: 0, // ⬅️ fill width for reliable taps
                         child: Container(
                           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 19.h),
-                          color: const Color(0xFFF4F1EB),
                           child: Column(
                             spacing: 24.h,
                             children: [
@@ -1457,7 +1746,7 @@ class AboutYourself2View extends GetView<AboutYourselfController> {
                       ),
                   ],
                 ),
-              ),
+              ),*/
             ],
           ),
         ),

@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:watowear_chloe/app/modules/about_yourself/views/badges/views/badges_view.dart';
+import 'package:watowear_chloe/app/modules/add_new_item/views/add_new_item_view.dart';
 import 'package:watowear_chloe/app/modules/profile/views/rewards_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
@@ -182,7 +183,7 @@ class MyProgressView extends GetView {
                         MyProgressActionRow(
                           icon: 'assets/images/profile/add_new_item.svg',
                           text: 'Add a new Item',
-                          onTap: () {  },
+                          onTap: () => Get.to(AddNewItemView()),
                         ),
 
                         MyProgressActionRow(

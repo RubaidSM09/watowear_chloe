@@ -3,12 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/about_yourself/controllers/about_yourself_controller.dart';
+import 'package:watowear_chloe/app/modules/about_yourself/views/about_yourself_view.dart';
 import 'package:watowear_chloe/app/modules/profile/controllers/profile_controller.dart';
 import 'package:watowear_chloe/app/modules/profile/views/add_phone_number_view.dart';
 import 'package:watowear_chloe/app/modules/profile/views/address_view.dart';
 import 'package:watowear_chloe/app/modules/profile/views/change_my_password_view.dart';
 import 'package:watowear_chloe/app/modules/profile/views/commercial_preferences_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/help_view.dart';
 import 'package:watowear_chloe/app/modules/profile/views/modify_email_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/preference_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
 
@@ -116,6 +120,7 @@ class PersonalDetailsView extends GetView<ProfileController> {
                       ),
 
                       GestureDetector(
+                        onTap: () => Get.to(AddressView()),
                         child: Text(
                           'Edit',
                           style: TextStyle(
@@ -323,49 +328,51 @@ class PersonalDetailsView extends GetView<ProfileController> {
 
                 PersonalDetailsRow(
                   text: 'My favourite Icons',
-                  onTap: () {  },
+                  onTap: () {
+                    final aboutYourselfController = Get.put(AboutYourselfController());
+                    aboutYourselfController.current.value = 4;
+                    Get.to(PreferenceView());
+                  },
                 ),
 
                 SizedBox(height: 32.h,),
 
                 PersonalDetailsRow(
                   text: 'Colors',
-                  onTap: () {  },
+                  onTap: () {
+                    final aboutYourselfController = Get.put(AboutYourselfController());
+                    aboutYourselfController.current.value = 3;
+                    Get.to(PreferenceView());
+                  },
                 ),
 
                 SizedBox(height: 32.h,),
 
                 PersonalDetailsRow(
                   text: 'My comfort Zone',
-                  onTap: () {  },
+                  onTap: () {
+                    final aboutYourselfController = Get.put(AboutYourselfController());
+                    aboutYourselfController.current.value = 2;
+                    Get.to(PreferenceView());
+                  },
                 ),
 
                 SizedBox(height: 32.h,),
 
                 PersonalDetailsRow(
-                  text: 'Skin color',
-                  onTap: () {  },
-                ),
-
-                SizedBox(height: 32.h,),
-
-                PersonalDetailsRow(
-                  text: 'Body shape',
-                  onTap: () {  },
-                ),
-
-                SizedBox(height: 32.h,),
-
-                PersonalDetailsRow(
-                  text: 'Hair color',
-                  onTap: () {  },
+                  text: 'Body information',
+                  onTap: () {
+                    final aboutYourselfController = Get.put(AboutYourselfController());
+                    aboutYourselfController.current.value = 1;
+                    Get.to(PreferenceView());
+                  },
                 ),
 
                 SizedBox(height: 32.h,),
 
                 PersonalDetailsRow(
                   text: 'Any suggestions? ',
-                  onTap: () {  },
+                  onTap: () => Get.to(HelpView()),
                 ),
 
                 SizedBox(height: 88.h,),

@@ -2,11 +2,13 @@ import 'package:flutter/material.dart' hide MenuController;
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/authentication/views/authentication_view.dart';
 import 'package:watowear_chloe/app/modules/menu/views/faq_view.dart';
 import 'package:watowear_chloe/app/modules/menu/views/shop_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 
 import '../controllers/menu_controller.dart';
+import '../controllers/shop_controller.dart';
 
 class MenuView extends GetView<MenuController> {
   const MenuView({super.key});
@@ -16,14 +18,14 @@ class MenuView extends GetView<MenuController> {
       backgroundColor: AppColors.bgColor,
       appBar: AppBar(
         backgroundColor: AppColors.bgColor,
-        title: GestureDetector(
-          onTap: () {  },
+        /*title: GestureDetector(
+          onTap: () => Get.to(AuthenticationView()),
           child: Icon(
             Icons.arrow_back,
             size: 25.r,
             color: AppColors.black,
           ),
-        ),
+        ),*/
       ),
       body: SafeArea(
         child: Padding(
@@ -54,7 +56,11 @@ class MenuView extends GetView<MenuController> {
 
                 MenuRow(
                   text: 'Editorial content',
-                  onTap: () {  },
+                  onTap: () {
+                    final shopController = Get.put(ShopController());
+                    shopController.selectTab(4);
+                    Get.to(ShopView());
+                  },
                 ),
 
                 MenuRow(

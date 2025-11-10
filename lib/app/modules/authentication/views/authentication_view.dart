@@ -237,14 +237,14 @@ class AuthenticationView extends GetView<AuthenticationController> {
                   ?!controller.isSignIn.value ? Row(
                     spacing: 7.w,
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(7.205.r),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(2.r),
-                          border: Border.all(
-                            color: AppColors.black,
-                            width: 0.36.r,
-                          )
+                      GestureDetector(
+                        onTap: () {
+                          controller.isSelected2.value = !controller.isSelected2.value;
+                        },
+                        child: Icon(
+                          controller.isSelected2.value ? Icons.check_box_rounded : Icons.check_box_outline_blank_outlined,
+                          size: 20.r,
+                          color: AppColors.black,
                         ),
                       ),
 
@@ -263,14 +263,14 @@ class AuthenticationView extends GetView<AuthenticationController> {
                   ?!controller.isSignIn.value ? Row(
                     spacing: 7.w,
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(7.205.r),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2.r),
-                            border: Border.all(
-                              color: AppColors.black,
-                              width: 0.36.r,
-                            )
+                      GestureDetector(
+                        onTap: () {
+                          controller.isSelected3.value = !controller.isSelected3.value;
+                        },
+                        child: Icon(
+                          controller.isSelected3.value ? Icons.check_box_rounded : Icons.check_box_outline_blank_outlined,
+                          size: 20.r,
+                          color: AppColors.black,
                         ),
                       ),
 
@@ -289,14 +289,14 @@ class AuthenticationView extends GetView<AuthenticationController> {
                   ?controller.isSignIn.value ? Row(
                     spacing: 7.w,
                     children: [
-                      Container(
-                        padding: EdgeInsets.all(7.205.r),
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(2.r),
-                            border: Border.all(
-                              color: AppColors.black,
-                              width: 0.36.r,
-                            )
+                      GestureDetector(
+                        onTap: () {
+                          controller.isSelected1.value = !controller.isSelected1.value;
+                        },
+                        child: Icon(
+                          controller.isSelected1.value ? Icons.check_box_rounded : Icons.check_box_outline_blank_outlined,
+                          size: 20.r,
+                          color: AppColors.black,
                         ),
                       ),
 

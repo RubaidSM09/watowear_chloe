@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:video_player/video_player.dart';
 import 'package:watowear_chloe/app/modules/menu/controllers/shop_controller.dart';
 
 import '../../../../common/app_colors.dart';
@@ -51,6 +52,24 @@ class ShopSectionView extends GetView<ShopController> {
                 color: AppColors.primary,
               )
           ),
+          /*child: Obx(() {
+            final VideoPlayerController? vp = controller.player.value;
+            if (vp == null || !vp.value.isInitialized) {
+              return SizedBox(
+                height: 420.h,
+                child: const Center(child: CircularProgressIndicator()),
+              );
+            }
+            return PhoneFrame(
+              child: AspectRatio(
+                aspectRatio: vp.value.aspectRatio == 0 ? 9 / 19.5 : vp.value.aspectRatio,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(28.r),
+                  child: VideoPlayer(vp),
+                ),
+              ),
+            );
+          }),*/
         ),
 
         SizedBox(height: 13.h),
@@ -140,14 +159,19 @@ class ShopSectionView extends GetView<ShopController> {
               textAlign: TextAlign.center,
             ),
 
-            Text(
-              'Browse Brands',
-              style: TextStyle(
-                color: Color(0xFF1F1F1F),
-                fontFamily: 'Comfortaa',
-                fontWeight: FontWeight.w400,
-                fontSize: 13.sp,
-                decoration: TextDecoration.underline,
+            GestureDetector(
+              onTap: () {
+                controller.selectTab(3);
+              },
+              child: Text(
+                'Browse Brands',
+                style: TextStyle(
+                  color: Color(0xFF1F1F1F),
+                  fontFamily: 'Comfortaa',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 13.sp,
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ),
           ],
@@ -189,14 +213,19 @@ class ShopSectionView extends GetView<ShopController> {
               textAlign: TextAlign.center,
             ),
 
-            Text(
-              'Read More',
-              style: TextStyle(
-                color: Color(0xFF1F1F1F),
-                fontFamily: 'Comfortaa',
-                fontWeight: FontWeight.w400,
-                fontSize: 13.sp,
-                decoration: TextDecoration.underline,
+            GestureDetector(
+              onTap: () {
+                controller.selectTab(4);
+              },
+              child: Text(
+                'Read More',
+                style: TextStyle(
+                  color: Color(0xFF1F1F1F),
+                  fontFamily: 'Comfortaa',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 13.sp,
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ),
           ],
@@ -594,6 +623,54 @@ class ShopSectionView extends GetView<ShopController> {
 
         SizedBox(height: 40.h),
       ],
+    );
+  }
+}
+
+
+class PhoneFrame extends StatelessWidget {
+  final Widget child;
+  const PhoneFrame({super.key, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        width: 230.w,
+        padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 16.h),
+        decoration: BoxDecoration(
+          color: const Color(0xFF0E1B25),
+          borderRadius: BorderRadius.circular(36.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.35),
+              blurRadius: 24,
+              offset: const Offset(0, 12),
+            ),
+          ],
+          border: Border.all(color: Colors.black.withOpacity(0.5), width: 2),
+        ),
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 18.h),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(28.r),
+                child: Container(color: Colors.black, child: child),
+              ),
+            ),
+            Container(
+              width: 80.w,
+              height: 18.h,
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

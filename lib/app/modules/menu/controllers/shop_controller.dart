@@ -1,7 +1,56 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
+import 'package:video_player/video_player.dart';
 
 class ShopController extends GetxController with GetTickerProviderStateMixin {
+  final currentStep = 0.obs;
+  final Rxn<VideoPlayerController> player = Rxn<VideoPlayerController>();
+
+  final List<String> _videos = const [
+    'assets/videos/video1.mp4', // Step 1 : Choose a category
+  ];
+
+  Future<void> _loadStep(int index) async {
+    // Dispose previous controller safely
+    final old = player.value;
+    if (old != null) {
+      old.removeListener(_onTick);
+      await old.pause();
+      await old.dispose();
+    }
+
+    final c = VideoPlayerController.asset(_videos[index]);
+    player.value = c; // set early so UI can show skeleton while initializing
+
+    await c.initialize();
+    c.setLooping(false);
+    c.addListener(_onTick);
+    await c.play();
+
+    // Nudge listeners (Obx) to rebuild
+    player.refresh();
+    currentStep.refresh();
+  }
+
+  void _onTick() {
+    final p = player.value;
+    if (p == null) return;
+    final v = p.value;
+    if (v.isInitialized && !v.isPlaying && v.position >= v.duration) {
+      nextStep();
+    }
+  }
+
+  Future<void> nextStep() async {
+    if (currentStep.value < _videos.length - 1) {
+      currentStep.value++;
+      await _loadStep(currentStep.value);
+    } else {
+      // Finished all steps; optionally navigate or loop
+      // await restart(); // if you want to loop
+    }
+  }
+
   RxList<RxBool> selectedTab = [
     true.obs, false.obs, false.obs, false.obs, false.obs, false.obs
   ].obs;

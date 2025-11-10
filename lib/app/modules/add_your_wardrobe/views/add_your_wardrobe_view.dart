@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/add_new_item/controllers/add_new_item_controller.dart';
+import 'package:watowear_chloe/app/modules/add_new_item/views/add_new_item_view.dart';
 import 'package:watowear_chloe/app/modules/dashboard/views/dashboard_view.dart';
 import 'package:watowear_chloe/app/modules/home/views/home_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
@@ -145,7 +147,11 @@ class AddYourWardrobeView extends GetView<AddYourWardrobeController> {
                         ),
 
                         GestureDetector(
-                          onTap: () {  },
+                          onTap: () {
+                            final addNewItemController = Get.put(AddNewItemController());
+                            addNewItemController.selectMethod(1);
+                            Get.to(AddNewItemView());
+                          },
                           child: Icon(
                             Icons.navigate_next_rounded,
                             size: 28.r,
@@ -173,7 +179,6 @@ class AddYourWardrobeView extends GetView<AddYourWardrobeController> {
 
                             GestureDetector(
                               onTap: () {
-
                               },
                               child: Icon(
                                 Icons.info_outline,
@@ -185,7 +190,11 @@ class AddYourWardrobeView extends GetView<AddYourWardrobeController> {
                         ),
 
                         GestureDetector(
-                          onTap: () {  },
+                          onTap: () {
+                            final addNewItemController = Get.put(AddNewItemController());
+                            addNewItemController.selectMethod(0);
+                            Get.to(AddNewItemView());
+                          },
                           child: Icon(
                             Icons.navigate_next_rounded,
                             size: 28.r,
@@ -209,7 +218,11 @@ class AddYourWardrobeView extends GetView<AddYourWardrobeController> {
                         ),
 
                         GestureDetector(
-                          onTap: () {  },
+                          onTap: () {
+                            final addNewItemController = Get.put(AddNewItemController());
+                            addNewItemController.selectMethod(0);
+                            Get.to(AddNewItemView());
+                          },
                           child: Icon(
                             Icons.navigate_next_rounded,
                             size: 28.r,

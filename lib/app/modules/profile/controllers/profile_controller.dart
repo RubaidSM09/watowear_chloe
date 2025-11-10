@@ -15,6 +15,9 @@ class ProfileController extends GetxController {
   RxBool obscureText4 = true.obs;
   RxBool obscureText5 = true.obs;
 
+  RxBool isMen = true.obs;
+  RxBool isAgreed = false.obs;
+
   // List of country codes (extend as you need)
   final List<String> countryCodes = [
     '+33',

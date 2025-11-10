@@ -109,7 +109,7 @@ class AutoTaggongView extends GetView {
                   text: 'Cancel',
                   textSize: 16.sp,
                   textColor: AppColors.textIcons,
-                  onTap: () => Get.dialog(DeleteItemView()),
+                  onTap: () => Get.back(),
                 ),
               ],
             ),

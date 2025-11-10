@@ -16,6 +16,7 @@ class GenerateView extends GetView<GenerateController> {
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: AppColors.bgColor,
         title: GestureDetector(
           onTap: () => Get.back(),

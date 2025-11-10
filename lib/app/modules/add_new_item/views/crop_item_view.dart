@@ -17,14 +17,10 @@ class CropItemView extends GetView {
         automaticallyImplyLeading: false,
         title: GestureDetector(
           onTap: () => Get.dialog(DiscardEditsDialog()),
-          child: Text(
-            'X',
-            style: TextStyle(
-              color: AppColors.black,
-              fontFamily: 'Comfortaa',
-              fontWeight: FontWeight.w500,
-              fontSize: 24.sp,
-            ),
+          child: Icon(
+            Icons.close,
+            size: 24.r,
+            color: AppColors.black,
           ),
         ),
       ),

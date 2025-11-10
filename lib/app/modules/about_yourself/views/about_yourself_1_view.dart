@@ -94,7 +94,10 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
                           children: [
                             GestureDetector(
                               behavior: HitTestBehavior.opaque,
-                              onTap: () => controller.selectGender(0),
+                              onTap: () {
+                                controller.selectGender(0);
+                                controller.genderClicked.value = false;
+                              },
                               child: Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 21.h),
@@ -109,7 +112,10 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
                             ),
                             GestureDetector(
                               behavior: HitTestBehavior.opaque,
-                              onTap: () => controller.selectGender(1),
+                              onTap: () {
+                                controller.selectGender(1);
+                                controller.genderClicked.value = false;
+                              },
                               child: Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 21.h),
@@ -124,7 +130,10 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
                             ),
                             GestureDetector(
                               behavior: HitTestBehavior.opaque,
-                              onTap: () => controller.selectGender(2),
+                              onTap: () {
+                                controller.selectGender(2);
+                                controller.genderClicked.value = false;
+                              },
                               child: Container(
                                 width: double.infinity,
                                 padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 21.h),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/dashboard/controllers/dashboard_controller.dart';
+import 'package:watowear_chloe/app/modules/dashboard/views/dashboard_view.dart';
 
 import 'package:watowear_chloe/app/modules/menu/controllers/shop_controller.dart';
 import 'package:watowear_chloe/app/modules/menu/views/brands_section_view.dart';
@@ -30,9 +32,16 @@ class ShopView extends GetView<ShopController> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Image.asset(
-              'assets/images/onboarding/watowear_word_logo.png',
-              scale: 8,
+            GestureDetector(
+              onTap: () {
+                final dashboardController = Get.put(DashboardController());
+                dashboardController.currentIndex.value = 0;
+                Get.to(DashboardView());
+              },
+              child: Image.asset(
+                'assets/images/onboarding/watowear_word_logo.png',
+                scale: 8,
+              ),
             ),
             GestureDetector(
               onTap: () {},

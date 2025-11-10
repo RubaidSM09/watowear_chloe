@@ -18,7 +18,7 @@ class SplashController extends GetxController
 
     anim = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3600),
+      duration: const Duration(milliseconds: 1800),
     );
 
     // Phase 1 (0.00–0.65): scale up then down

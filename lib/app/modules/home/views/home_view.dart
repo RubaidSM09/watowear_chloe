@@ -4,11 +4,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
 import 'package:watowear_chloe/app/modules/add_new_item/views/add_new_item_view.dart';
+import 'package:watowear_chloe/app/modules/generate/views/generate_view.dart';
 import 'package:watowear_chloe/app/modules/library/views/library_view.dart';
+import 'package:watowear_chloe/app/modules/menu/controllers/shop_controller.dart';
+import 'package:watowear_chloe/app/modules/menu/views/editorial_section_view.dart';
 import 'package:watowear_chloe/app/modules/profile/views/my_assistant_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
 
+import '../../menu/views/shop_view.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -322,7 +326,7 @@ class HomeView extends GetView<HomeController> {
                           textSize: 14.sp,
                           textColor: AppColors.bgColor,
                           color: AppColors.textIcons,
-                          onTap: () => Get.to(LibraryView()),
+                          onTap: () => Get.to(GenerateView()),
                         ),
                       ],
                     ),
@@ -372,20 +376,32 @@ class HomeView extends GetView<HomeController> {
 
                         SizedBox(height: 29.h,),
 
-                        Text(
-                          'Read The Article',
-                          style: TextStyle(
-                            color: Color(0xFF1F1F1F),
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Comfortaa',
-                          ),
-                        ),
+                        GestureDetector(
+                          onTap: () {
+                            final shopController = Get.put(ShopController());
+                            shopController.selectTab(4);
+                            shopController.openEditorialArticle;
+                            Get.to(ShopView());
+                          },
+                          child: Column(
+                            children: [
+                              Text(
+                                'Read The Article',
+                                style: TextStyle(
+                                  color: Color(0xFF1F1F1F),
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Comfortaa',
+                                ),
+                              ),
 
-                        Container(
-                          width: 124.86.w,
-                          height: 1.13.h,
-                          color: Color(0xFF1F1F1F),
+                              Container(
+                                width: 124.86.w,
+                                height: 1.13.h,
+                                color: Color(0xFF1F1F1F),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -486,7 +502,7 @@ class HomeView extends GetView<HomeController> {
                     SizedBox(height: 90.26.h,),
 
                     GestureDetector(
-                      onTap: () {  },
+                      onTap: () => Get.to(AddNewItemView()),
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 30.1.w, vertical: 16.67.h,),
                         decoration: BoxDecoration(
@@ -573,20 +589,31 @@ class HomeView extends GetView<HomeController> {
 
                         SizedBox(height: 29.h,),
 
-                        Text(
-                          'Discover Brands',
-                          style: TextStyle(
-                            color: Color(0xFF1F1F1F),
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Comfortaa',
-                          ),
-                        ),
+                        GestureDetector(
+                          onTap: () {
+                            final shopController = Get.put(ShopController());
+                            shopController.selectTab(3);
+                            Get.to(ShopView());
+                          },
+                          child: Column(
+                            children: [
+                              Text(
+                                'Discover Brands',
+                                style: TextStyle(
+                                  color: Color(0xFF1F1F1F),
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w400,
+                                  fontFamily: 'Comfortaa',
+                                ),
+                              ),
 
-                        Container(
-                          width: 122.96.w,
-                          height: 1.13.h,
-                          color: Color(0xFF1F1F1F),
+                              Container(
+                                width: 122.96.w,
+                                height: 1.13.h,
+                                color: Color(0xFF1F1F1F),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

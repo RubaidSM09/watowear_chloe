@@ -162,7 +162,7 @@ class _DiscreteWheelPainter extends CustomPainter {
           ..style = PaintingStyle.stroke
           ..strokeWidth = isSelected ? 4.0 : 1.0
           ..color = isSelected
-              ? Colors.black.withOpacity(0.7)
+              ? Colors.white
               : Colors.white.withOpacity(0.6);
         canvas.drawPath(tile, border);
 

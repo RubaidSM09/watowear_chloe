@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 import 'package:watowear_chloe/app/modules/authentication/views/authentication_view.dart';
+import 'package:watowear_chloe/app/modules/library/views/library_view.dart';
 import 'package:watowear_chloe/app/modules/profile/views/help_view.dart';
 import 'package:watowear_chloe/app/modules/profile/views/log_out_view.dart';
 import 'package:watowear_chloe/app/modules/profile/views/my_assistant_view.dart';
@@ -117,7 +118,7 @@ class ProfileView extends GetView<ProfileController> {
                   children: [
                     ProfileRow(
                       text: 'My Closet',
-                      onTap: () {  },
+                      onTap: () => Get.to(LibraryView()),
                     ),
 
                     ProfileRow(

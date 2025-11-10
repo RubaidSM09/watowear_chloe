@@ -22,7 +22,7 @@ class SplashView extends GetView<SplashController> {
                 alignment: Alignment.center,
                 children: [
                   // Phase 1: Circular logo (scale + fade out)
-                  Opacity(
+                  /*Opacity(
                     opacity: controller.circleFade.value,
                     child: Transform.scale(
                       scale: controller.circleScale.value,
@@ -32,7 +32,7 @@ class SplashView extends GetView<SplashController> {
                         height: 156.h,
                       ),
                     ),
-                  ),
+                  ),*/
 
                   // Phase 2: Wordmark (fade in)
                   Opacity(

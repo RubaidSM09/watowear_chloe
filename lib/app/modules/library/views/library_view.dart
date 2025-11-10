@@ -3,9 +3,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/add_new_item/views/add_new_item_view.dart';
+import 'package:watowear_chloe/app/modules/add_new_item/views/auto_taggong_view.dart';
 import 'package:watowear_chloe/app/modules/library/views/filter_closet_view.dart';
 
 import '../../../../common/app_colors.dart';
+import '../../about_yourself/views/badges/views/badges_view.dart';
 import '../controllers/library_controller.dart';
 
 class LibraryView extends GetView<LibraryController> {
@@ -127,7 +130,9 @@ class LibraryView extends GetView<LibraryController> {
                   SizedBox(height: 59.h,),
 
                   GestureDetector(
-                    onTap: () {  },
+                    onTap: () {
+                      Get.to(AddNewItemView());
+                    },
                     child: Row(
                       spacing: 7.w,
                       children: [
@@ -187,7 +192,7 @@ class LibraryView extends GetView<LibraryController> {
                       ),
 
                       GestureDetector(
-                        onTap: () {  },
+                        onTap: () => Get.to(BadgesView(badgeType: 'Refiner',)),
                         child: Text(
                           'Rewards Program',
                           style: TextStyle(
@@ -209,16 +214,22 @@ class LibraryView extends GetView<LibraryController> {
                     child: Row(
                       spacing: 29.w,
                       children: [
-                        ClosetCard(
-                          image: 'assets/images/library/closet_img_1.png',
-                          title: 'Board Meeting',
-                          subtitle: 'Professional and polished',
+                        GestureDetector(
+                          onTap: () => Get.to(AutoTaggongView()),
+                          child: ClosetCard(
+                            image: 'assets/images/library/closet_img_1.png',
+                            title: 'Board Meeting',
+                            subtitle: 'Professional and polished',
+                          ),
                         ),
 
-                        ClosetCard(
-                          image: 'assets/images/library/closet_img_2.png',
-                          title: 'Board Meeting',
-                          subtitle: 'Professional and polished',
+                        GestureDetector(
+                          onTap: () => Get.to(AutoTaggongView()),
+                          child: ClosetCard(
+                            image: 'assets/images/library/closet_img_2.png',
+                            title: 'Board Meeting',
+                            subtitle: 'Professional and polished',
+                          ),
                         ),
                       ],
                     ),
@@ -267,28 +278,40 @@ class LibraryView extends GetView<LibraryController> {
                     spacing: 24.w,
                     runSpacing: 39.h,
                     children: [
-                      ClosetCard(
-                        image: 'assets/images/library/closet_img_3.png',
-                        title: 'Board Meeting',
-                        subtitle: 'Professional and polished',
+                      GestureDetector(
+                        onTap: () => Get.to(AutoTaggongView()),
+                        child: ClosetCard(
+                          image: 'assets/images/library/closet_img_3.png',
+                          title: 'Board Meeting',
+                          subtitle: 'Professional and polished',
+                        ),
                       ),
 
-                      ClosetCard(
-                        image: 'assets/images/library/closet_img_4.png',
-                        title: 'Board Meeting',
-                        subtitle: 'Professional and polished',
+                      GestureDetector(
+                        onTap: () => Get.to(AutoTaggongView()),
+                        child: ClosetCard(
+                          image: 'assets/images/library/closet_img_4.png',
+                          title: 'Board Meeting',
+                          subtitle: 'Professional and polished',
+                        ),
                       ),
 
-                      ClosetCard(
-                        image: 'assets/images/library/closet_img_5.png',
-                        title: 'Board Meeting',
-                        subtitle: 'Professional and polished',
+                      GestureDetector(
+                        onTap: () => Get.to(AutoTaggongView()),
+                        child: ClosetCard(
+                          image: 'assets/images/library/closet_img_5.png',
+                          title: 'Board Meeting',
+                          subtitle: 'Professional and polished',
+                        ),
                       ),
 
-                      ClosetCard(
-                        image: 'assets/images/library/closet_img_6.png',
-                        title: 'Board Meeting',
-                        subtitle: 'Professional and polished',
+                      GestureDetector(
+                        onTap: () => Get.to(AutoTaggongView()),
+                        child: ClosetCard(
+                          image: 'assets/images/library/closet_img_6.png',
+                          title: 'Board Meeting',
+                          subtitle: 'Professional and polished',
+                        ),
                       ),
                     ],
                   ),
