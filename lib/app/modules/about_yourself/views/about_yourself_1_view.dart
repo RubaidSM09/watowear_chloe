@@ -11,6 +11,8 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(AboutYourselfController());
+
     return Obx(() => Padding(
       padding: EdgeInsets.symmetric(horizontal: 24.w),
       child: SingleChildScrollView(
@@ -163,6 +165,8 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
             )),
             SizedBox(height: 9.h),
             TextField(
+              controller: controller.ageController,
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: 'Enter your age',
                 hintStyle: TextStyle(
@@ -180,6 +184,8 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
             )),
             SizedBox(height: 9.h),
             TextField(
+              controller: controller.heightController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
                 hintText: 'Enter your height',
                 hintStyle: TextStyle(
@@ -196,7 +202,7 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.black, width: 0.3.r),
                         ),
-                        child: Text(
+                        child: Obx(() => Text(
                           controller.isCm.value ? 'cm' : 'ft',
                           style: TextStyle(
                             color: const Color(0xFF111111),
@@ -204,7 +210,7 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
                             fontWeight: FontWeight.w400,
                             fontSize: 10.sp,
                           ),
-                        ),
+                        )),
                       ),
                     ),
                   ],
@@ -220,6 +226,8 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
             )),
             SizedBox(height: 9.h),
             TextField(
+              controller: controller.weightController,
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
               decoration: InputDecoration(
                 hintText: 'Enter your weight',
                 hintStyle: TextStyle(
@@ -236,7 +244,7 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
                         decoration: BoxDecoration(
                           border: Border.all(color: Colors.black, width: 0.3.r),
                         ),
-                        child: Text(
+                        child: Obx(() => Text(
                           controller.isKg.value ? 'kg' : 'lbs',
                           style: TextStyle(
                             color: const Color(0xFF111111),
@@ -244,7 +252,7 @@ class AboutYourself1View extends GetView<AboutYourselfController> {
                             fontWeight: FontWeight.w400,
                             fontSize: 10.sp,
                           ),
-                        ),
+                        )),
                       ),
                     ),
                   ],
