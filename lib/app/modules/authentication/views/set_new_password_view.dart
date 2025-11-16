@@ -9,7 +9,15 @@ import 'package:watowear_chloe/app/modules/authentication/views/password_updated
 import '../../../../common/app_colors.dart';
 
 class SetNewPasswordView extends GetView {
-  const SetNewPasswordView({super.key});
+  final String email;
+  final String otp;
+
+  const SetNewPasswordView({
+    required this.email,
+    required this.otp,
+    super.key
+  });
+
   @override
   Widget build(BuildContext context) {
     AuthenticationController c = Get.find<AuthenticationController>();
@@ -36,6 +44,7 @@ class SetNewPasswordView extends GetView {
               SizedBox(height: 39.h,),
 
               Obx(() => TextField(
+                controller: c.newPasswordCtrl,
                   decoration: InputDecoration(
                     hintText: 'New Password:',
                     hintStyle: TextStyle(
@@ -63,6 +72,7 @@ class SetNewPasswordView extends GetView {
               SizedBox(height: 39.h,),
 
               Obx(() => TextField(
+                controller: c.confirmNewPasswordCtrl,
                   decoration: InputDecoration(
                     hintText: 'Confirm New Password:',
                     hintStyle: TextStyle(
@@ -107,8 +117,11 @@ class SetNewPasswordView extends GetView {
 
                   GestureDetector(
                     onTap: () {
-                      Get.back();
-                      Get.dialog(PasswordUpdatedView());
+                      if (c.newPasswordCtrl.text.trim() == c.confirmNewPasswordCtrl.text.trim()) {
+                        c.resetPassword(email, otp, c.newPasswordCtrl.text.trim());
+                      } else {
+                        Get.snackbar('Error', 'New Password and Confirm New Password must be same');
+                      }
                     },
                     child: Text(
                       'CONFIRM',

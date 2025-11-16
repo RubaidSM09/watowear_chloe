@@ -1,7 +1,21 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
+// adjust the paths according to your project structure
+import 'package:watowear_chloe/app/data/model/profile.dart';
+import 'package:watowear_chloe/app/data/services/api_services.dart';
+
 class ProfileController extends GetxController {
+  // ✅ NEW: API & state
+  final ApiService _apiService = ApiService();
+
+  RxBool isProfileLoading = false.obs;
+  Rx<Profile?> profile = Rx<Profile?>(null);
+
+  RxString userFullName = ''.obs;
+
   RxList<RxBool> selectedBadge = [false.obs, false.obs, false.obs, false.obs].obs;
 
   RxBool isCm = true.obs;
@@ -37,8 +51,8 @@ class ProfileController extends GetxController {
     selectedCode.value = value;
   }
 
-  void selectBadge (int index) {
-    for (int i=0; i<selectedBadge.length ; i++) {
+  void selectBadge(int index) {
+    for (int i = 0; i < selectedBadge.length; i++) {
       if (i == index && selectedBadge[i].value == false) {
         selectedBadge[i].value = true;
       } else {
@@ -47,10 +61,20 @@ class ProfileController extends GetxController {
     }
   }
 
-  final count = 0.obs;
+  Future<void> loadUserName() async {
+    final storage = FlutterSecureStorage();
+
+    String? name = await storage.read(key: 'name');
+    String? surname = await storage.read(key: 'surname');
+
+    userFullName.value = "${name ?? ''} ${surname ?? ''}".trim();
+  }
+
   @override
   void onInit() {
     super.onInit();
+    loadUserName();
+    fetchProfile();
   }
 
   @override
@@ -60,8 +84,30 @@ class ProfileController extends GetxController {
 
   @override
   void onClose() {
+    phoneController.dispose();
     super.onClose();
   }
 
-  void increment() => count.value++;
+  // ✅ NEW: Fetch profile from API and parse ALL fields
+  Future<void> fetchProfile() async {
+    try {
+      isProfileLoading.value = true;
+
+      final response = await _apiService.getProfile();
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data =
+        jsonDecode(response.body) as Map<String, dynamic>;
+
+        profile.value = Profile.fromJson(data);
+      } else {
+        debugPrint('❌ Failed to load profile: ${response.statusCode}');
+        debugPrint('Body: ${response.body}');
+      }
+    } catch (e) {
+      debugPrint('❌ Error while loading profile: $e');
+    } finally {
+      isProfileLoading.value = false;
+    }
+  }
 }

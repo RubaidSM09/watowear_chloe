@@ -9,10 +9,14 @@ import 'package:watowear_chloe/app/modules/profile/views/rewards_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
 
+import '../controllers/my_progress_controller.dart';
+
 class MyProgressView extends GetView {
   const MyProgressView({super.key});
   @override
   Widget build(BuildContext context) {
+    final myProgressController = Get.put(MyProgressController());
+
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: AppBar(
@@ -75,15 +79,21 @@ class MyProgressView extends GetView {
                           ),
                         ),
 
-                        Text(
-                          '14 Items . 2 Outfit Feedback. 0 \nInvite',
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontFamily: 'Comfortaa',
-                            fontWeight: FontWeight.w400,
-                            fontSize: 15.96.sp,
-                          ),
-                        ),
+                        Obx(() {
+                          final itemCount = myProgressController.itemCount;
+                          final outfitCount = myProgressController.outfitFeedbackCount;
+                          final inviteCount = myProgressController.inviteCount;
+
+                          return Text(
+                            '$itemCount Items . $outfitCount Outfit Feedback. $inviteCount \nInvite',
+                            style: TextStyle(
+                              color: AppColors.black,
+                              fontFamily: 'Comfortaa',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 15.96.sp,
+                            ),
+                          );
+                        }),
                       ],
                     ),
                   ],
@@ -96,69 +106,83 @@ class MyProgressView extends GetView {
                 padding: EdgeInsets.symmetric(horizontal: 23.w,),
                 child: Column(
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          spacing: 6.w,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(10.r),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFFFDF6EC),
-                                border: Border.all(
+                    Obx(() {
+                      final percentage = myProgressController.progressPercentage;
+                      final nextBadge = myProgressController.nextBadgeName;
+
+                      return Column(
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                spacing: 6.w,
+                                children: [
+                                  Container(
+                                    padding: EdgeInsets.all(10.r),
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: const Color(0xFFFDF6EC),
+                                      border: Border.all(
+                                        color: AppColors.secondaryBg,
+                                      ),
+                                    ),
+                                  ),
+                                  Text(
+                                    nextBadge,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Comfortaa',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 15.96.sp,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              Text(
+                                '$percentage%',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'Comfortaa',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14.sp,
+                                ),
+                              )
+                            ],
+                          ),
+
+                          SizedBox(height: 11.h,),
+
+                          LayoutBuilder(
+                            builder: (context, constraints) {
+                              final fullWidth = constraints.maxWidth;
+                              final filledWidth =
+                                  fullWidth * (percentage.clamp(0, 100) / 100.0);
+
+                              return Container(
+                                height: 3.h,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100.r),
                                   color: AppColors.secondaryBg,
                                 ),
-                              ),
-                            ),
-
-                            Text(
-                              'Refiner',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Comfortaa',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 15.96.sp,
-                              ),
-                            )
-                          ],
-                        ),
-
-                        Text(
-                          '60%',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'Comfortaa',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14.sp,
-                          ),
-                        )
-                      ],
-                    ),
-
-                    SizedBox(height: 11.h,),
-
-                    Container(
-                      height: 3.h,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(100.r),
-                        color: AppColors.secondaryBg,
-                      ),
-                      child: Row(
-                        children: [
-                          Container(
-                            height: 3.h,
-                            width: (393*(60/100)).w,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(100.r),
-                              color: AppColors.textIcons,
-                            ),
+                                child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    height: 3.h,
+                                    width: filledWidth,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100.r),
+                                      color: AppColors.textIcons,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ],
-                      ),
-                    ),
+                      );
+                    }),
 
                     SizedBox(height: 13.h,),
 
@@ -250,30 +274,44 @@ class MyProgressView extends GetView {
 
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 23.w,),
-                child: Column(
-                  spacing: 24.h,
-                  children: [
-                    UnlockNextBadgeRow(
-                      text: 'Refiner',
-                      onTap: () => Get.to(BadgesView(badgeType: 'Refiner',)),
-                    ),
+                child: Obx(() {
+                  final levels = myProgressController.badgeLevels;
 
-                    UnlockNextBadgeRow(
-                      text: 'Curator',
-                      onTap: () => Get.to(BadgesView(badgeType: 'Curator',)),
-                    ),
+                  if (levels.isEmpty) {
+                    return Column(
+                      spacing: 24.h,
+                      children: [
+                        UnlockNextBadgeRow(
+                          text: 'Refiner',
+                          onTap: () => Get.to(BadgesView(badgeType: 'Refiner')),
+                        ),
+                        UnlockNextBadgeRow(
+                          text: 'Curator',
+                          onTap: () => Get.to(BadgesView(badgeType: 'Curator')),
+                        ),
+                        UnlockNextBadgeRow(
+                          text: 'Connoisseur',
+                          onTap: () => Get.to(BadgesView(badgeType: 'Connoisseur')),
+                        ),
+                        UnlockNextBadgeRow(
+                          text: 'Couture Insider',
+                          onTap: () => Get.to(BadgesView(badgeType: 'Couture Insider')),
+                        ),
+                      ],
+                    );
+                  }
 
-                    UnlockNextBadgeRow(
-                      text: 'Connaisseur',
-                      onTap: () => Get.to(BadgesView(badgeType: 'Connaisseur',)),
-                    ),
-
-                    UnlockNextBadgeRow(
-                      text: 'Couture Insider',
-                      onTap: () => Get.to(BadgesView(badgeType: 'Couture Insider',)),
-                    ),
-                  ],
-                ),
+                  return Column(
+                    spacing: 24.h,
+                    children: levels.map((badge) {
+                      final name = badge.name ?? '';
+                      return UnlockNextBadgeRow(
+                        text: name,
+                        onTap: () => Get.to(BadgesView(badgeType: name)),
+                      );
+                    }).toList(),
+                  );
+                }),
               ),
             ],
           ),

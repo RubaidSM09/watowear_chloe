@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/authentication/controllers/authentication_controller.dart';
 import 'package:watowear_chloe/app/modules/authentication/views/check_your_email_view.dart';
 
 import '../../../../common/app_colors.dart';
 
-class PasswordRecoveryView extends GetView {
+class PasswordRecoveryView extends GetView<AuthenticationController> {
   const PasswordRecoveryView({super.key});
   @override
   Widget build(BuildContext context) {
@@ -32,6 +33,7 @@ class PasswordRecoveryView extends GetView {
                 SizedBox(height: 39.h,),
 
                 TextField(
+                  controller: controller.emailCtrl,
                   decoration: InputDecoration(
                     hintText: 'Email Address:',
                     hintStyle: TextStyle(
@@ -63,8 +65,9 @@ class PasswordRecoveryView extends GetView {
 
                     GestureDetector(
                       onTap: () {
-                        Get.back();
-                        Get.dialog(CheckYourEmailView());
+                        controller.sendOtpForgetPassword(
+                          controller.emailCtrl.text.trim(),
+                        );
                       },
                       child: Text(
                         'CHANGE PASSWORD',

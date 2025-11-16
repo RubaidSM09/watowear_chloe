@@ -48,6 +48,137 @@ class ApiService {
     );
   }
 
+  Future<http.Response> login(
+      String email,
+      String password,
+      ) async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/auth/login/');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    final Map<String, String> body = {
+      "email": email,
+      "password": password,
+    };
+
+    return await http.post(url, headers: headers, body: jsonEncode(body));
+  }
+
+  Future<http.Response> sendOtpForgetPassword(String email) async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/password/forgot/');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    final Map<String, String> body = {
+      "email": email,
+    };
+
+    return await http.post(url, headers: headers, body: jsonEncode(body));
+  }
+
+  Future<http.Response> verifyOtpForgetPassword(String email, String otp) async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/password/verify-otp/');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    final Map<String, String> body = {
+      "email": email,
+      "otp": otp
+    };
+
+    return await http.post(url, headers: headers, body: jsonEncode(body));
+  }
+
+  Future<http.Response> resetPassword(String email, String otp, String password) async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/password/reset/');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    final Map<String, String> body = {
+      "email": email,
+      "otp": otp,
+      "password": password
+    };
+
+    return await http.post(url, headers: headers, body: jsonEncode(body));
+  }
+
+  Future<http.Response> changePassword(String currentPassword, String newPassword) async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/profile/change-password/');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $accessToken",
+    };
+
+    final Map<String, String> body = {
+      "current_password": currentPassword,
+      "new_password": newPassword
+    };
+
+    return await http.post(url, headers: headers, body: jsonEncode(body));
+  }
+
+  Future<http.Response> modifyEmail(String currentPassword, String newEmail) async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/profile/modify-email/');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $accessToken",
+    };
+
+    final Map<String, String> body = {
+      "current_password": currentPassword,
+      "new_email": newEmail
+    };
+
+    return await http.post(url, headers: headers, body: jsonEncode(body));
+  }
+
+  Future<http.Response> verifyOtpModifyEmail(String otp) async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/profile/verify-new-email/');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $accessToken",
+    };
+
+    final Map<String, String> body = {
+      "otp": otp
+    };
+
+    return await http.post(url, headers: headers, body: jsonEncode(body));
+  }
+
+
+
+  Future<http.Response> getProfile() async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/profile/');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $accessToken",
+    };
+
+    return await http.get(url, headers: headers,);
+  }
+
   Future<http.Response> profileSetup(
     String gender,
     int age,
@@ -95,5 +226,31 @@ class ApiService {
       headers: headers,
       body: jsonEncode(body),
     );
+  }
+
+  Future<http.Response> myProgress() async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/gamification/progress/');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $accessToken",
+    };
+
+    return await http.get(url, headers: headers,);
+  }
+
+  Future<http.Response> getAllItems() async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/closet/items/');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $accessToken",
+    };
+
+    return await http.get(url, headers: headers,);
   }
 }

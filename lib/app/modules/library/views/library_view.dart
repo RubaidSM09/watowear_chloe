@@ -8,6 +8,7 @@ import 'package:watowear_chloe/app/modules/add_new_item/views/auto_taggong_view.
 import 'package:watowear_chloe/app/modules/library/views/filter_closet_view.dart';
 
 import '../../../../common/app_colors.dart';
+import '../../../data/model/closet_item.dart';
 import '../../about_yourself/views/badges/views/badges_view.dart';
 import '../controllers/library_controller.dart';
 
@@ -263,7 +264,7 @@ class LibraryView extends GetView<LibraryController> {
                   SizedBox(height: 43.h,),
 
                   Text(
-                    '127 Items in your closet',
+                    '${controller.closetItems.length} Items in your closet',
                     style: TextStyle(
                       color: Colors.black,
                       fontFamily: 'Comfortaa',
@@ -277,43 +278,12 @@ class LibraryView extends GetView<LibraryController> {
                   Wrap(
                     spacing: 24.w,
                     runSpacing: 39.h,
-                    children: [
-                      GestureDetector(
+                    children: controller.closetItems.map((item) {
+                      return GestureDetector(
                         onTap: () => Get.to(AutoTaggongView()),
-                        child: ClosetCard(
-                          image: 'assets/images/library/closet_img_3.png',
-                          title: 'Board Meeting',
-                          subtitle: 'Professional and polished',
-                        ),
-                      ),
-
-                      GestureDetector(
-                        onTap: () => Get.to(AutoTaggongView()),
-                        child: ClosetCard(
-                          image: 'assets/images/library/closet_img_4.png',
-                          title: 'Board Meeting',
-                          subtitle: 'Professional and polished',
-                        ),
-                      ),
-
-                      GestureDetector(
-                        onTap: () => Get.to(AutoTaggongView()),
-                        child: ClosetCard(
-                          image: 'assets/images/library/closet_img_5.png',
-                          title: 'Board Meeting',
-                          subtitle: 'Professional and polished',
-                        ),
-                      ),
-
-                      GestureDetector(
-                        onTap: () => Get.to(AutoTaggongView()),
-                        child: ClosetCard(
-                          image: 'assets/images/library/closet_img_6.png',
-                          title: 'Board Meeting',
-                          subtitle: 'Professional and polished',
-                        ),
-                      ),
-                    ],
+                        child: ClosetItemCard(item: item),
+                      );
+                    }).toList(),
                   ),
 
                   SizedBox(height: 91.h,),
@@ -448,6 +418,84 @@ class ClosetCard extends StatelessWidget {
         ),
 
 
+      ],
+    );
+  }
+}
+
+
+class ClosetItemCard extends StatelessWidget {
+  final ClosetItem item;
+
+  const ClosetItemCard({
+    required this.item,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final title = (item.category ?? '').isNotEmpty
+        ? item.category![0].toUpperCase() + item.category!.substring(1)
+        : 'Item';
+
+    final subtitle = item.description ?? '';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          width: 183.w,
+          height: 200.h,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(4.r),
+            child: Image.network(
+              item.imageUrl ?? '',
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  color: AppColors.secondaryBg,
+                  alignment: Alignment.center,
+                  child: Icon(
+                    Icons.broken_image,
+                    color: AppColors.textIcons,
+                  ),
+                );
+              },
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 183.w,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 6.h,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: const Color(0xFF4A4A4A),
+                    fontFamily: 'Comfortaa',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 17.73.sp,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: const Color(0xFF858585),
+                    fontFamily: 'Comfortaa',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 13.3.sp,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }

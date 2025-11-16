@@ -2,14 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/authentication/controllers/authentication_controller.dart';
 import 'package:watowear_chloe/app/modules/authentication/views/set_new_password_view.dart';
 import 'package:watowear_chloe/common/widget/otp_field/otp_controller.dart';
 import 'package:watowear_chloe/common/widget/otp_field/otp_field.dart';
 
 import '../../../../common/app_colors.dart';
 
-class CheckYourEmailView extends GetView {
-  const CheckYourEmailView({super.key});
+class CheckYourEmailView extends GetView<AuthenticationController> {
+  final String email;
+
+  const CheckYourEmailView({
+    required this.email,
+    super.key
+  });
+
   @override
   Widget build(BuildContext context) {
     final otpController = Get.put(OtpController(otpLength: 4));
@@ -62,8 +69,15 @@ class CheckYourEmailView extends GetView {
 
                   GestureDetector(
                     onTap: () {
-                      Get.back();
-                      Get.dialog(SetNewPasswordView());
+                      final code = otpController.otp; // <-- if your controller uses .code/.value, use that instead
+                      if (code == null || code.toString().length != 4) {
+                        Get.snackbar('Invalid OTP', 'Please enter the 4-digit code.');
+                        return;
+                      }
+                      controller.verifyOtpForgetPassword(
+                        email,
+                        code.toString(),
+                      );
                     },
                     child: Text(
                       'CONFIRM',

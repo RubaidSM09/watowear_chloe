@@ -348,7 +348,12 @@ class AuthenticationView extends GetView<AuthenticationController> {
                   horizontal: 150.w,
                   vertical: 12.h,
                 ),
-                onTap: () => Get.offAll(DashboardView()),
+                onTap: () {
+                  controller.login(
+                    controller.emailCtrl.text.trim(),
+                    controller.passwordCtrl.text.trim(),
+                  );
+                },
               ),
 
               controller.isSignIn.value ? SizedBox(height: 6.h,) : SizedBox.shrink(),

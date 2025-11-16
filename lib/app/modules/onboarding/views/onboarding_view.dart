@@ -61,7 +61,7 @@ class OnboardingView extends GetView<OnboardingController> {
               final idx = controller.current.value;
               final topColor = idx == 0 ? Colors.white : Colors.black87;
               return Positioned(
-                left: 25.w,
+                // left: 25.w,
                 top: 28.53.h,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
@@ -75,10 +75,13 @@ class OnboardingView extends GetView<OnboardingController> {
                         child: Row(
                           children: [
                             if (idx == 0)
-                              SvgPicture.asset(
-                                controller.selectedLanguage[0].value ? 'assets/images/onboarding/UK United Kingdom flag.svg' : 'assets/images/onboarding/FR France flag.svg',
-                                width: 20.w,
-                                height: 20.h,
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(100),
+                                child: SvgPicture.asset(
+                                  controller.selectedLanguage[0].value ? 'assets/images/onboarding/UK United Kingdom flag.svg' : 'assets/images/onboarding/FR France flag.svg',
+                                  width: 28.w,
+                                  height: 28.h,
+                                ),
                               ),
                             if (idx == 0) SizedBox(width: 9.w),
                             if (idx == 0)
@@ -107,58 +110,10 @@ class OnboardingView extends GetView<OnboardingController> {
                       if (controller.isLanguageClicked.value && idx==0)
                         Container(
                           width: 364.w,
-                          padding: EdgeInsets.symmetric(vertical: 22.h),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6.r),
-                            color: Colors.white,
-                          ),
+                          // padding: EdgeInsets.symmetric(vertical: 22.h),
+                          color: Colors.white,
                           child: Column(
                             children: [
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 11.w),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Select Language',
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.w600,
-                                        fontFamily: 'Comfortaa',
-                                      ),
-                                    ),
-
-                                    GestureDetector(
-                                      onTap: () {
-                                        controller.isLanguageClicked.value = !controller.isLanguageClicked.value;
-                                      },
-                                      child: Container(
-                                        padding: EdgeInsets.all(10.r),
-                                        decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.white,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: Colors.black.withAlpha(64),
-                                                blurRadius: 4.r,
-                                                offset: Offset(0.w, 1.h),
-                                              ),
-                                            ]
-                                        ),
-                                        child: Icon(
-                                          Icons.close,
-                                          color: Color(0xFF141B34),
-                                          size: 18.r,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-
-                              SizedBox(height: 34.h,),
-
                               Column(
                                 spacing: 4.h,
                                 children: [
@@ -240,7 +195,7 @@ class OnboardingView extends GetView<OnboardingController> {
               final idx = controller.current.value;
               final topColor = idx == 0 ? Colors.white : Colors.black87;
               return idx != 4 ? Positioned(
-                left: 370.21.w,
+                right: 24.w,
                 top: 20.445.h,
                 child: TextButton(
                   onPressed: controller.skip,
@@ -266,13 +221,13 @@ class OnboardingView extends GetView<OnboardingController> {
                   top: 784.6.h,
                   child: AnimatedSmoothIndicator(
                     activeIndex: idx,
-                    count: 5,
+                    count: 4,
                     effect: WormEffect(
                       dotHeight: 8.h,
                       dotWidth: 8.w,
                       spacing: 8.w,
-                      activeDotColor: kGreen,
-                      dotColor: Color(0xFFD9D4C9),
+                      activeDotColor: AppColors.primary,
+                      dotColor: AppColors.primary.withAlpha(102),
                     ),
                   ),
                 );
@@ -285,7 +240,7 @@ class OnboardingView extends GetView<OnboardingController> {
                       top: 836.6.h,
                       child: AnimatedSmoothIndicator(
                         activeIndex: idx,
-                        count: 5,
+                        count: 4,
                         effect: WormEffect(
                           dotHeight: 8.h,
                           dotWidth: 8.w,

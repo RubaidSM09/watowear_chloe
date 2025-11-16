@@ -35,15 +35,19 @@ class ProfileView extends GetView<ProfileController> {
                   spacing: 4.h,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Emma Johnson',
-                      style: TextStyle(
-                        color: AppColors.textIcons,
-                        fontFamily: 'Comfortaa',
-                        fontWeight: FontWeight.w400,
-                        fontSize: 20.53.sp,
-                      ),
-                    ),
+                    Obx(() {
+                      return Text(
+                        controller.userFullName.value.isNotEmpty
+                            ? controller.userFullName.value
+                            : 'Guest User',
+                        style: TextStyle(
+                          color: AppColors.textIcons,
+                          fontFamily: 'Comfortaa',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 20.53.sp,
+                        ),
+                      );
+                    }),
 
                     Row(
                       children: [
