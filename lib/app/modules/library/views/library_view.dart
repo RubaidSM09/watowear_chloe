@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/add_new_item/controllers/add_new_item_controller.dart';
 import 'package:watowear_chloe/app/modules/add_new_item/views/add_new_item_view.dart';
 import 'package:watowear_chloe/app/modules/add_new_item/views/auto_taggong_view.dart';
 import 'package:watowear_chloe/app/modules/library/views/filter_closet_view.dart';
@@ -280,7 +281,13 @@ class LibraryView extends GetView<LibraryController> {
                     runSpacing: 39.h,
                     children: controller.closetItems.map((item) {
                       return GestureDetector(
-                        onTap: () => Get.to(AutoTaggongView()),
+                        onTap: () async {
+                          if (item.id != null) {
+                            await controller.recordItemView(item.id!);
+                          }
+                          Get.put(AddNewItemController());
+                          Get.to(AutoTaggongView(item: item)); // 👈 pass item
+                        },
                         child: ClosetItemCard(item: item),
                       );
                     }).toList(),

@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -99,36 +100,33 @@ class AddNewItemView extends GetView<AddNewItemController> {
                     padding: EdgeInsets.symmetric(horizontal: 24.w,),
                     child: Column(
                     children: [
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 49.w,
-                          vertical: 133.h,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.black.withAlpha(84),
-                          ),
-                        ),
-                        child: Column(
-                          spacing: 14.h,
-                          children: [
-                            SvgPicture.asset(
-                              'assets/images/add_new_item/camera.svg',
-                            ),
-
-                            Text(
-                              'Position your item  in the frame',
-                              style: TextStyle(
-                                color: AppColors.textIcons.withAlpha(179),
-                                fontFamily: 'Comfortaa',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 17.73.sp,
+                      Obx(() {
+                        if (!controller.isCameraInitialized.value ||
+                            controller.cameraController == null) {
+                          return Container(
+                            height: 300.h,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Colors.black.withAlpha(84),
                               ),
-                              textAlign: TextAlign.center,
                             ),
-                          ],
-                        ),
-                      ),
+                            child: const CircularProgressIndicator(),
+                          );
+                        }
+
+                        return Container(
+                          height: 300.h,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.black.withAlpha(84),
+                            ),
+                          ),
+                          child: ClipRect(
+                            child: CameraPreview(controller.cameraController!),
+                          ),
+                        );
+                      }),
 
                       SizedBox(height: 26.h,),
 
@@ -189,7 +187,7 @@ class AddNewItemView extends GetView<AddNewItemController> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           GestureDetector(
-                            onTap: () {  },
+                            onTap: () => controller.switchCamera(),
                             child: Text(
                               'Switch camera',
                               style: TextStyle(
@@ -215,10 +213,10 @@ class AddNewItemView extends GetView<AddNewItemController> {
                         text: 'Preview',
                         textSize: 16.sp,
                         textColor: Colors.white,
-                        onTap: () => Get.to(PhotoPreviewView()),
+                        onTap: () => controller.captureAndGoToPreview(),
                       ),
                     ],
-                                    ),
+                    ),
                   ),
 
                 if (controller.selectedMethod[1].value)

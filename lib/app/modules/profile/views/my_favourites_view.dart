@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/profile/controllers/my_favourites_controller.dart';
 import 'package:watowear_chloe/app/modules/profile/controllers/profile_controller.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
 
+import '../../../data/model/closet_item.dart';
 import 'my_assistant_view.dart';
 
-class MyFavouritesView extends GetView<ProfileController> {
+class MyFavouritesView extends GetView<MyFavouritesController> {
   const MyFavouritesView({super.key});
   @override
   Widget build(BuildContext context) {
+    Get.put(MyFavouritesController());
+
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: AppBar(
@@ -73,31 +77,16 @@ class MyFavouritesView extends GetView<ProfileController> {
                   Wrap(
                     spacing: 29.w,
                     runSpacing: 29.h,
-                    children: [
-                      FavouritesCard(
-                        image: 'assets/images/profile/my_favourites/my_favourites_1.png',
-                        title: 'Board Meeting',
-                        subtitle: 'Professional and polished',
-                      ),
-
-                      FavouritesCard(
-                        image: 'assets/images/profile/my_favourites/my_favourites_5.png',
-                        title: 'Board Meeting',
-                        subtitle: 'Professional and polished',
-                      ),
-
-                      FavouritesCard(
-                        image: 'assets/images/profile/my_favourites/my_favourites_6.png',
-                        title: 'Board Meeting',
-                        subtitle: 'Professional and polished',
-                      ),
-
-                      FavouritesCard(
-                        image: 'assets/images/profile/my_favourites/my_favourites_4.png',
-                        title: 'Board Meeting',
-                        subtitle: 'Professional and polished',
-                      ),
-                    ],
+                    children: controller.favouriteItems.map((item) {
+                      return FavouritesItemCard(
+                        item: item,
+                        onFavouriteTap: () {
+                          if (item.id != null) {
+                            controller.toggleFavourite(item.id!); // 👈 toggle (add/remove)
+                          }
+                        },
+                      );
+                    }).toList(),
                   ),
 
                   SizedBox(height: 60.h,),
@@ -118,19 +107,11 @@ class MyFavouritesView extends GetView<ProfileController> {
                     scrollDirection: Axis.horizontal,
                     child: Row(
                       spacing: 29.w,
-                      children: [
-                        MyFavouritesCard(
-                          image: 'assets/images/profile/my_favourites/my_favourites_1.png',
-                          title: 'Board Meeting',
-                          subtitle: 'Professional and polished',
-                        ),
-
-                        MyFavouritesCard(
-                          image: 'assets/images/profile/my_favourites/my_favourites_2.png',
-                          title: 'Board Meeting',
-                          subtitle: 'Professional and polished',
-                        ),
-                      ],
+                      children: controller.recentItems.isEmpty
+                          ? []
+                          : controller.recentItems.map((item) {
+                        return RecentItemCard(item: item);
+                      }).toList(),
                     ),
                   ),
 
@@ -375,6 +356,166 @@ class FavouritesCard extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+
+class FavouritesItemCard extends StatelessWidget {
+  final ClosetItem item;
+  final VoidCallback onFavouriteTap;
+
+  const FavouritesItemCard({
+    required this.item,
+    required this.onFavouriteTap,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final title = (item.subcategory?.isNotEmpty == true)
+        ? item.subcategory!
+        : (item.category ?? 'Item');
+
+    final subtitle = item.description ?? '';
+
+    return Column(
+      spacing: 6.h,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          padding: EdgeInsets.only(
+            left: 156.w,
+            right: 10.w,
+            top: 10.h,
+            bottom: 173.h,
+          ),
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(item.imageUrl ?? ''),
+              fit: BoxFit.fill,
+            ),
+          ),
+          child: GestureDetector(
+            onTap: onFavouriteTap,
+            child: Icon(
+              (item.isFavorite ?? true)
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+              color: AppColors.textIcons,
+              size: 17.r,
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 183.w,
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: const Color(0xFF1F1F1F),
+                    fontFamily: 'Comfortaa',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 17.73.sp,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: const Color(0xFF858585),
+                    fontFamily: 'Comfortaa',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 13.3.sp,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+
+class RecentItemCard extends StatelessWidget {
+  final ClosetItem item;
+
+  const RecentItemCard({
+    required this.item,
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final String title =
+    (item.subcategory?.isNotEmpty == true)
+        ? item.subcategory!
+        : (item.category ?? 'Item');
+
+    final String subtitle = item.description ?? '';
+
+    return SizedBox(
+      width: 183.w,
+      child: Column(
+        spacing: 6.h,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(4.r),
+            child: Image.network(
+              item.imageUrl ?? '',
+              scale: 4,
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  height: 183.w,
+                  color: AppColors.secondaryBg,
+                  alignment: Alignment.center,
+                  child: Icon(
+                    Icons.broken_image,
+                    color: AppColors.textIcons,
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.w,),
+            child: Column(
+              spacing: 6.h,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(
+                    color: const Color(0xFF4A4A4A),
+                    fontFamily: 'Comfortaa',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 17.73.sp,
+                  ),
+                ),
+                Text(
+                  subtitle,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: const Color(0xFF858585),
+                    fontFamily: 'Comfortaa',
+                    fontWeight: FontWeight.w400,
+                    fontSize: 13.3.sp,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

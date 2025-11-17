@@ -111,4 +111,12 @@ class LibraryController extends GetxController {
       isLoading.value = false;
     }
   }
+
+  Future<void> recordItemView(int itemId) async {
+    try {
+      await _apiService.recordItemView(itemId);
+    } catch (e) {
+      // you can log error if you want
+    }
+  }
 }

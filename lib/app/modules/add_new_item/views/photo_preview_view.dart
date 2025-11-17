@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -6,7 +8,10 @@ import 'package:get/get.dart';
 import 'package:watowear_chloe/app/modules/add_new_item/views/auto_taggong_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 
-class PhotoPreviewView extends GetView {
+import '../controllers/add_new_item_controller.dart';
+import 'item_added_view.dart';
+
+class PhotoPreviewView extends GetView<AddNewItemController> {
   const PhotoPreviewView({super.key});
   @override
   Widget build(BuildContext context) {
@@ -32,11 +37,19 @@ class PhotoPreviewView extends GetView {
               SizedBox(
                 width: 440.w,
                 height: 588.h,
-                child: Image.asset(
-                  'assets/images/add_new_item/photo_preview.png',
-                  scale: 4,
-                  fit: BoxFit.fill,
-                ),
+                child: Obx(() {
+                  if (controller.capturedImagePath.value.isEmpty) {
+                    return Image.asset(
+                      'assets/images/add_new_item/photo_preview.png',
+                      scale: 4,
+                      fit: BoxFit.fill,
+                    );
+                  }
+                  return Image.file(
+                    File(controller.capturedImagePath.value),
+                    fit: BoxFit.cover,
+                  );
+                }),
               ),
 
               SizedBox(height: 32.h,),
@@ -49,7 +62,19 @@ class PhotoPreviewView extends GetView {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         GestureDetector(
-                          onTap: () => Get.to(AutoTaggongView()),
+                          onTap: () async {
+                            final ok = await controller.uploadCurrentPhotoAndFetchLatest();
+                            if (ok) {
+                              Get.to(const AutoTaggongView());
+                              Get.dialog(const ItemAddedView());
+                            } else {
+                              Get.snackbar(
+                                'Error',
+                                'Failed to upload item. Please try again.',
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
+                            }
+                          },
                           child: Text(
                             'Keep and continue',
                             style: TextStyle(

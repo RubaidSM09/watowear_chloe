@@ -21,8 +21,6 @@ class ProfileController extends GetxController {
   RxBool isCm = true.obs;
   RxBool isKg = true.obs;
 
-  RxBool isFavouriteEmpty = false.obs;
-
   RxBool obscureText = true.obs;
   RxBool obscureText2 = true.obs;
   RxBool obscureText3 = true.obs;

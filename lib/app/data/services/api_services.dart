@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
@@ -252,5 +253,83 @@ class ApiService {
     };
 
     return await http.get(url, headers: headers,);
+  }
+
+  Future<http.Response> addClosetItem(File imageFile) async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/closet/items/add/');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final request = http.MultipartRequest('POST', url);
+
+    // Only auth header; MultipartRequest will set proper Content-Type
+    request.headers['Authorization'] = 'Bearer $accessToken';
+
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        'images', // 👈 field name from Postman screenshot
+        imageFile.path,
+        contentType: MediaType('image', 'jpeg'), // or detect by extension if you want
+      ),
+    );
+
+    final streamedResponse = await request.send();
+    return await http.Response.fromStream(streamedResponse);
+  }
+
+  Future<http.Response> getFavoriteItems() async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/closet/items/?filter=favorites');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $accessToken",
+    };
+
+    return await http.get(url, headers: headers);
+  }
+
+  Future<http.Response> toggleFavorite(int itemId) async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/closet/items/$itemId/favorite/');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $accessToken",
+    };
+
+    // body is not needed, the endpoint toggles is_favorite
+    return await http.post(url, headers: headers);
+  }
+
+  Future<http.Response> getRecentItems() async {
+    final Uri url =
+    Uri.parse('$baseUrl/api/v1/closet/items/?filter=recent');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $accessToken",
+    };
+
+    return await http.get(url, headers: headers);
+  }
+
+  Future<http.Response> recordItemView(int itemId) async {
+    final Uri url =
+    Uri.parse('$baseUrl/api/v1/closet/items/$itemId/view/');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+      "Authorization": "Bearer $accessToken",
+    };
+
+    // body is not needed – backend just records the view
+    return await http.post(url, headers: headers);
   }
 }
