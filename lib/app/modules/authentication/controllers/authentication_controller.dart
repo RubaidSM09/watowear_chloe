@@ -141,9 +141,11 @@ class AuthenticationController extends GetxController {
         print(':::::::::accessToken:::::::::$accessToken');
         print(':::::::::refreshToken:::::::::$refreshToken');
 
+        final userId = responseBody['user']['id'].toString();
         final name = responseBody['user']['name'];
         final surname = responseBody['user']['surname'];
 
+        await _storage.write(key: 'user_id', value: userId);
         await _storage.write(key: 'name', value: name);
         await _storage.write(key: 'surname', value: surname);
 
