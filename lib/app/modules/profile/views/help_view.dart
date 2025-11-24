@@ -41,9 +41,9 @@ class HelpView extends GetView<HelpController> {
                     fontSize: 16.sp,
                   ),
                 ),
-
-                SizedBox(height: 8.h,),
-
+                SizedBox(
+                  height: 8.h,
+                ),
                 Text(
                   'We are at your disposal for any question related to WATOWEAR',
                   style: TextStyle(
@@ -53,12 +53,15 @@ class HelpView extends GetView<HelpController> {
                     fontSize: 14.sp,
                   ),
                 ),
-
-                SizedBox(height: 14.h,),
-
+                SizedBox(
+                  height: 14.h,
+                ),
                 Container(
                   width: double.infinity,
-                  padding: EdgeInsets.symmetric(horizontal: 25.w, vertical: 13.h,),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 25.w,
+                    vertical: 13.h,
+                  ),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: Colors.black.withAlpha(46),
@@ -77,7 +80,6 @@ class HelpView extends GetView<HelpController> {
                           controller: controller.textController,
                           maxLines: null,
                           maxLength: controller.maxLength,
-                          // we’ll show our own counter below
                           decoration: InputDecoration(
                             hintText: 'Message',
                             hintStyle: TextStyle(
@@ -93,7 +95,6 @@ class HelpView extends GetView<HelpController> {
                         ),
                       ),
                       const SizedBox(height: 8),
-
                       Row(
                         children: [
                           IconButton(
@@ -105,7 +106,8 @@ class HelpView extends GetView<HelpController> {
                           const Spacer(),
                           Column(
                             children: [
-                              Obx(() => Text(
+                              Obx(
+                                    () => Text(
                                   "${controller.currentLength.value}/${controller.maxLength}",
                                   style: TextStyle(
                                     color: AppColors.primary,
@@ -116,16 +118,22 @@ class HelpView extends GetView<HelpController> {
                                 ),
                               ),
                               const SizedBox(width: 16),
-                              GestureDetector(
-                                onTap: controller.onSend,
-                                child: Text(
-                                  "Send",
-                                  style: TextStyle(
-                                    color: AppColors.textIcons,
-                                    fontFamily: 'Comfortaa',
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 14.sp,
-                                    decoration: TextDecoration.underline,
+                              Obx(
+                                    () => GestureDetector(
+                                  onTap: controller.isSending.value
+                                      ? null
+                                      : controller.onSend,
+                                  child: Text(
+                                    controller.isSending.value
+                                        ? "Sending..."
+                                        : "Send",
+                                    style: TextStyle(
+                                      color: AppColors.textIcons,
+                                      fontFamily: 'Comfortaa',
+                                      fontWeight: FontWeight.w500,
+                                      fontSize: 14.sp,
+                                      decoration: TextDecoration.underline,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -136,9 +144,9 @@ class HelpView extends GetView<HelpController> {
                     ],
                   ),
                 ),
-
-                SizedBox(height: 24.h,),
-
+                SizedBox(
+                  height: 24.h,
+                ),
                 Text(
                   'Find the answers to your questions in our Frequently Asked Questions Section',
                   style: TextStyle(
@@ -148,11 +156,11 @@ class HelpView extends GetView<HelpController> {
                     fontSize: 14.sp,
                   ),
                 ),
-
-                SizedBox(height: 26.h,),
-
+                SizedBox(
+                  height: 26.h,
+                ),
                 GestureDetector(
-                  onTap: () {  },
+                  onTap: () {},
                   child: Row(
                     spacing: 2.w,
                     children: [
@@ -166,7 +174,6 @@ class HelpView extends GetView<HelpController> {
                           decoration: TextDecoration.underline,
                         ),
                       ),
-
                       Icon(
                         Icons.arrow_right_alt_sharp,
                         size: 20.r,

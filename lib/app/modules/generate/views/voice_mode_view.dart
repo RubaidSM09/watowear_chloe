@@ -81,11 +81,15 @@ class VoiceModeView extends GetView<VoiceModeController> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      // Close button = end call
+                      // Close button = end call + start outfit WS
                       GestureDetector(
                         onTap: () async {
                           await controller.endCall();
-                          // You can navigate or just stay
+                          // Show "Hold on" dialog while backend generates outfits
+                          Get.dialog(const HoldOnDialog(),
+                              barrierDismissible: false);
+                          // Start listening for outfit_suggestions over WS
+                          controller.startOutfitGeneration();
                         },
                         child: Image.asset(
                           'assets/images/generate/close_button.png',
@@ -99,7 +103,6 @@ class VoiceModeView extends GetView<VoiceModeController> {
                             ? null
                             : () {
                           controller.startCall();
-                          // Get.dialog(const HoldOnDialog());
                         },
                         child: Opacity(
                           opacity: controller.isInCall.value ? 0.5 : 1.0,

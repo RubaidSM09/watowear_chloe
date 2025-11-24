@@ -26,15 +26,14 @@ class OutfitReadyView extends GetView<OutfitReadyController> {
           spacing: 20.w,
           children: [
             GestureDetector(
-              onTap: () {  },
+              onTap: () {},
               child: Image.asset(
                 'assets/images/generate/upload.png',
                 scale: 2.5,
               ),
             ),
-
             GestureDetector(
-              onTap: () {  },
+              onTap: () {},
               child: Icon(
                 Icons.search,
                 size: 25.r,
@@ -54,7 +53,7 @@ class OutfitReadyView extends GetView<OutfitReadyController> {
                 child: Text(
                   'Your outfit is ready !',
                   style: TextStyle(
-                    color: Color(0xFF1F1F1F),
+                    color: const Color(0xFF1F1F1F),
                     fontFamily: 'Comfortaa',
                     fontWeight: FontWeight.w400,
                     fontSize: 17.sp,
@@ -62,70 +61,110 @@ class OutfitReadyView extends GetView<OutfitReadyController> {
                 ),
               ),
 
-              SizedBox(height: 49.h,),
+              SizedBox(height: 49.h),
 
-              Container(
+              // ======= TOP SET IMAGE (PageView over sets) =======
+              SizedBox(
                 width: double.infinity,
                 height: 405.h,
-                color: Color(0xFFF0F1ED),
-                child: Image.asset(
-                  'assets/images/generate/outfit_1.png',
-                  scale: 4,
-                  fit: BoxFit.contain,
-                ),
+                child: Obx(() {
+                  if (controller.setKeys.isEmpty) {
+                    return Container(
+                      color: const Color(0xFFF0F1ED),
+                      child: Center(
+                        child: Text(
+                          'No outfit suggestions yet',
+                          style: TextStyle(
+                            color: const Color(0xFF4A4A4A),
+                            fontFamily: 'Comfortaa',
+                            fontWeight: FontWeight.w400,
+                            fontSize: 16.sp,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return PageView.builder(
+                    onPageChanged: controller.changeSet,
+                    itemCount: controller.setKeys.length,
+                    itemBuilder: (context, index) {
+                      final setItems = controller.setItemsAt(index);
+                      final first = setItems.isNotEmpty ? setItems.first : null;
+                      final imageUrl =
+                      first != null ? (first['image_url'] as String?) : null;
+
+                      return Container(
+                        color: const Color(0xFFF0F1ED),
+                        child: imageUrl == null || imageUrl.isEmpty
+                            ? const SizedBox.shrink()
+                            : Image.network(
+                          imageUrl,
+                          fit: BoxFit.contain,
+                        ),
+                      );
+                    },
+                  );
+                }),
               ),
 
-              SizedBox(height: 17.h,),
+              SizedBox(height: 17.h),
 
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Text(
-                  'Outfit of 4 items',
-                  style: TextStyle(
-                    color: Color(0xFF4A4A4A),
-                    fontFamily: 'Comfortaa',
-                    fontWeight: FontWeight.w600,
-                    fontSize: 17.73.sp,
+                child: Obx(() {
+                  final count = controller.currentSetItems.length;
+                  return Text(
+                    'Outfit of $count items',
+                    style: TextStyle(
+                      color: const Color(0xFF4A4A4A),
+                      fontFamily: 'Comfortaa',
+                      fontWeight: FontWeight.w600,
+                      fontSize: 17.73.sp,
+                    ),
+                  );
+                }),
+              ),
+
+              SizedBox(height: 25.h),
+
+              // ======= CARDS OF ITEMS IN CURRENT SET =======
+              Obx(() {
+                final items = controller.currentSetItems;
+                if (items.isEmpty) {
+                  return const SizedBox.shrink();
+                }
+
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    spacing: 11.w,
+                    children: items.map((item) {
+                      final imageUrl = item['image_url'] as String? ?? '';
+                      final category =
+                          item['category']?.toString() ?? item['type']?.toString() ?? '';
+                      final colour = item['colour']?.toString() ?? '';
+                      final subtitle =
+                      colour.isNotEmpty ? colour : item['description']?.toString() ?? '';
+
+                      return OutfitItemCard(
+                        imageUrl: imageUrl,
+                        title: category,
+                        subtitle: subtitle,
+                      );
+                    }).toList(),
                   ),
-                ),
-              ),
+                );
+              }),
 
-              SizedBox(height: 25.h,),
-
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  spacing: 11.w,
-                  children: [
-                    OutfitItemCard(
-                      image: 'assets/images/generate/outfit_2.png',
-                      title: 'Board Meeting',
-                      subtitle: 'Professional and polished',
-                    ),
-
-                    OutfitItemCard(
-                      image: 'assets/images/generate/outfit_3.png',
-                      title: 'Board Meeting',
-                      subtitle: 'Professional and polished',
-                    ),
-
-                    OutfitItemCard(
-                      image: 'assets/images/generate/outfit_4.png',
-                      title: 'Board Meeting',
-                      subtitle: 'Professional and polished',
-                    ),
-                  ],
-                ),
-              ),
-
-              SizedBox(height: 150.h,),
+              SizedBox(height: 150.h),
 
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w,),
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: GestureDetector(
-                  onTap: () => Get.dialog(LoveItDialog()),
+                  onTap: () => Get.dialog(const LoveItDialog()),
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12.h,),
+                    padding: EdgeInsets.symmetric(vertical: 12.h),
                     color: AppColors.primary,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -140,7 +179,6 @@ class OutfitReadyView extends GetView<OutfitReadyController> {
                             fontSize: 16.sp,
                           ),
                         ),
-
                         Icon(
                           Icons.favorite_border,
                           size: 20.r,
@@ -153,7 +191,7 @@ class OutfitReadyView extends GetView<OutfitReadyController> {
               ),
 
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w,),
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: GestureDetector(
                   onTap: () => Get.dialog(
                     EditOutfitDialog(
@@ -162,7 +200,7 @@ class OutfitReadyView extends GetView<OutfitReadyController> {
                     ),
                   ),
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 12.h,),
+                    padding: EdgeInsets.symmetric(vertical: 12.h),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       spacing: 15.w,
@@ -170,18 +208,17 @@ class OutfitReadyView extends GetView<OutfitReadyController> {
                         Text(
                           'Edit outfit',
                           style: TextStyle(
-                            color: Color(0xFF1F1F1F),
+                            color: const Color(0xFF1F1F1F),
                             fontFamily: 'Comfortaa',
                             fontWeight: FontWeight.w400,
                             fontSize: 16.sp,
                             decoration: TextDecoration.underline,
                           ),
                         ),
-
                         Icon(
                           Icons.edit,
                           size: 20.r,
-                          color: Color(0xFF1F1F1F),
+                          color: const Color(0xFF1F1F1F),
                         )
                       ],
                     ),
@@ -189,14 +226,13 @@ class OutfitReadyView extends GetView<OutfitReadyController> {
                 ),
               ),
 
-              SizedBox(height: 100.h,),
+              SizedBox(height: 100.h),
             ],
           ),
         ),
       ),
-
       floatingActionButton: GestureDetector(
-        onTap: () => Get.to(GenerateView()),
+        onTap: () => Get.to(const GenerateView()),
         child: Image.asset(
           'assets/images/onboarding/chloe_2.png',
           scale: 10,
@@ -206,17 +242,16 @@ class OutfitReadyView extends GetView<OutfitReadyController> {
   }
 }
 
-
 class OutfitItemCard extends StatelessWidget {
-  final String image;
+  final String imageUrl;
   final String title;
   final String subtitle;
 
   const OutfitItemCard({
-    required this.image,
+    required this.imageUrl,
     required this.title,
     required this.subtitle,
-    super.key
+    super.key,
   });
 
   @override
@@ -225,15 +260,14 @@ class OutfitItemCard extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 6.h,
       children: [
-        Image.asset(
-          image,
-          scale: 4,
+        Image.network(
+          imageUrl,
           width: 183.w,
           height: 199.64.h,
+          fit: BoxFit.cover,
         ),
-
         Padding(
-          padding: EdgeInsets.symmetric(horizontal: 10.w,),
+          padding: EdgeInsets.symmetric(horizontal: 10.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: 6.h,
@@ -241,19 +275,18 @@ class OutfitItemCard extends StatelessWidget {
               Text(
                 title,
                 style: TextStyle(
-                  color: Color(0xFF4A4A4A),
+                  color: const Color(0xFF4A4A4A),
                   fontFamily: 'Comfortaa',
                   fontWeight: FontWeight.w600,
                   fontSize: 17.73.sp,
                 ),
               ),
-
               SizedBox(
                 width: 163.w,
                 child: Text(
                   subtitle,
                   style: TextStyle(
-                    color: Color(0xFF858585),
+                    color: const Color(0xFF858585),
                     fontFamily: 'Comfortaa',
                     fontWeight: FontWeight.w400,
                     fontSize: 13.3.sp,
@@ -267,6 +300,7 @@ class OutfitItemCard extends StatelessWidget {
     );
   }
 }
+
 
 
 class LoveItDialog extends StatelessWidget {

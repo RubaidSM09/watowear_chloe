@@ -332,4 +332,46 @@ class ApiService {
     // body is not needed – backend just records the view
     return await http.post(url, headers: headers);
   }
+
+
+
+  Future<http.Response> createSupportMessage(
+      String? subject,
+      String? message,
+      File? photo,
+      ) async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/support/tickets/add/');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final request = http.MultipartRequest('POST', url);
+
+    if (accessToken != null) {
+      request.headers['Authorization'] = 'Bearer $accessToken';
+    }
+
+    // subject (required by backend, but we allow null and default it)
+    final String finalSubject =
+    (subject == null || subject.trim().isEmpty)
+        ? 'Support request'
+        : subject.trim();
+    request.fields['subject'] = finalSubject;
+
+    // message
+    request.fields['message'] = message?.trim() ?? '';
+
+    // optional photo
+    if (photo != null) {
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          'photo',
+          photo.path,
+          contentType: MediaType('image', 'png'),
+        ),
+      );
+    }
+
+    final streamedResponse = await request.send();
+    return await http.Response.fromStream(streamedResponse);
+  }
 }

@@ -9,6 +9,7 @@ import 'package:record/record.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import 'package:watowear_chloe/app/secrets/secrets.dart';
+import 'package:watowear_chloe/app/modules/generate/views/outfit_ready_view.dart';
 
 class VoiceModeController extends GetxController {
   // ====== ELEVENLABS CONFIG ======
@@ -16,8 +17,12 @@ class VoiceModeController extends GetxController {
       'wss://api.elevenlabs.io/v1/convai/conversation';
 
   // from secrets.dart (you define these)
-  final String _agentId = agentId;           // e.g. public agent id
-  final String _apiKey = elevenLabsApiKey;   // for getting signed URL if private
+  final String _agentId = agentId; // e.g. public agent id
+  final String _apiKey = elevenLabsApiKey; // for getting signed URL if private
+
+  // ====== BACKEND OUTFIT WS ======
+  static const String _outfitWsUrl =
+      'ws://10.10.13.75:7887/ws/notifications/';
 
   // ====== STORAGE ======
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
@@ -25,7 +30,8 @@ class VoiceModeController extends GetxController {
   // ====== AUDIO & WS ======
   final AudioRecorder _recorder = AudioRecorder();
   final AudioPlayer _player = AudioPlayer();
-  WebSocket? _socket;
+  WebSocket? _socket; // ElevenLabs WS
+  WebSocket? _backendSocket; // Backend outfit WS
 
   StreamSubscription<Uint8List>? _audioStreamSub;
   final List<int> _audioChunks = [];
@@ -71,22 +77,24 @@ class VoiceModeController extends GetxController {
     isInCall.value = false;
   }
 
-  // ============ WEBSOCKET ============
+  /// Called after the voice conversation finishes and we want to
+  /// start waiting for outfit suggestions from the backend WS.
+  Future<void> startOutfitGeneration() async {
+    await _connectToOutfitWebSocket();
+  }
+
+  // ============ ELEVENLABS WEBSOCKET ============
 
   Future<void> _connectToAgent({String? userId}) async {
     // For PUBLIC agents you can use agent_id directly:
     final url = '$_wsBaseUrl?agent_id=$_agentId';
-
-    // For PRIVATE agents, you should build a signed URL on your backend
-    // using _apiKey and then pass that signed URL here instead of `url`.
 
     print('[VoiceMode] Connecting to: $url');
 
     try {
       _socket = await WebSocket.connect(
         url,
-        // No need to send API key header for public agents
-        // For private: use a signed URL, not raw key in headers.
+        // For private agents you’d use a signed URL, not headers with raw API key.
         // headers: { 'xi-api-key': _apiKey },
       );
 
@@ -119,7 +127,6 @@ class VoiceModeController extends GetxController {
               final eventId = res['ping_event']?['event_id'];
               final pingMs = res['ping_event']?['ping_ms'] as int?;
               if (eventId != null) {
-                // Optional: respect pingMs delay if provided
                 Future.delayed(
                   Duration(milliseconds: pingMs ?? 0),
                       () {
@@ -205,6 +212,74 @@ class VoiceModeController extends GetxController {
     _socket = null;
   }
 
+  // ============ BACKEND OUTFIT WEBSOCKET ============
+
+  Future<void> _connectToOutfitWebSocket() async {
+    // Adjust key name if needed (e.g. 'accessToken' vs 'access_token')
+    final accessToken = await _secureStorage.read(key: 'access_token');
+    if (accessToken == null || accessToken.isEmpty) {
+      print(
+          '[VoiceMode] No access token found in secure storage for outfit WS');
+      return;
+    }
+
+    try {
+      print('[VoiceMode] Connecting to outfit WS: $_outfitWsUrl');
+
+      _backendSocket = await WebSocket.connect(
+        _outfitWsUrl,
+        headers: {
+          'Authorization': 'Bearer $accessToken',
+        },
+      );
+
+      _backendSocket!.listen(
+            (dynamic event) async {
+          print('[VoiceMode] Outfit WS message: $event');
+
+          if (event is String) {
+            final decoded = jsonDecode(event);
+
+            final messageType = decoded['message'];
+            if (messageType == 'outfit_suggestions') {
+              final List<dynamic> items =
+              (decoded['data'] ?? []) as List<dynamic>;
+
+              // Close the dialog if it's open
+              if (Get.isDialogOpen ?? false) {
+                Get.back();
+              }
+
+              // Close backend socket (we already got what we want)
+              try {
+                await _backendSocket?.close();
+              } catch (_) {}
+              _backendSocket = null;
+
+              // Navigate to OutfitReadyView with the raw items
+              Get.to(
+                    () => const OutfitReadyView(),
+                arguments: items,
+              );
+            }
+          }
+        },
+        onDone: () {
+          print(
+              '[VoiceMode] Outfit WS done. code=${_backendSocket?.closeCode} reason=${_backendSocket?.closeReason}');
+          _backendSocket = null;
+        },
+        onError: (error) {
+          print('[VoiceMode] Outfit WS error: $error');
+          _backendSocket = null;
+        },
+      );
+    } catch (e, st) {
+      print('[VoiceMode] Failed to connect outfit WS: $e');
+      print(st);
+    }
+  }
+
   // ============ MIC STREAMING ============
 
   Future<void> _startRecording() async {
@@ -286,6 +361,12 @@ class VoiceModeController extends GetxController {
     await _stopRecording();
     await _stopPlaying();
     await _closeSocket();
+
+    try {
+      await _backendSocket?.close();
+    } catch (_) {}
+    _backendSocket = null;
+
     _stopTimer();
 
     _recorder.dispose();
