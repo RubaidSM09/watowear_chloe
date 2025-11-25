@@ -157,7 +157,41 @@ class OutfitReadyView extends GetView<OutfitReadyController> {
                 );
               }),
 
-              SizedBox(height: 150.h),
+              SizedBox(height: 25.h),
+
+              Obx(() {
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24.w),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Reason:',
+                        style: TextStyle(
+                          color: const Color(0xFF4A4A4A),
+                          fontFamily: 'Comfortaa',
+                          fontWeight: FontWeight.w600,
+                          fontSize: 17.73.sp,
+                        ),
+                      ),
+
+                      SizedBox(height: 8.h),
+
+                      Text(
+                        controller.currentSetReason,
+                        style: TextStyle(
+                          color: const Color(0xFF858585),
+                          fontFamily: 'Comfortaa',
+                          fontWeight: FontWeight.w400,
+                          fontSize: 13.3.sp,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }),
+
+              SizedBox(height: 25.h),
 
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),

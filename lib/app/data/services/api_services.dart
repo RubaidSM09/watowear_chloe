@@ -8,7 +8,7 @@ import 'package:http_parser/http_parser.dart';
 class ApiService {
   final FlutterSecureStorage _storage = FlutterSecureStorage();
 
-  final String baseUrl = "http://10.10.13.75:7887";
+  final String baseUrl = "https://endlessly-unified-guppy.ngrok-free.app";
 
   Future<http.Response> signUp(
     String email,

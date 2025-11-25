@@ -22,6 +22,12 @@ class OutfitReadyController extends GetxController {
     return _sets[key] ?? const [];
   }
 
+  String get currentSetReason {
+    final items = currentSetItems;
+    if (items.isEmpty) return '';
+    return items.first['reason']?.toString() ?? '';
+  }
+
   void selectEditMode (int index) {
     for (int i = 0; i < selectedEditMode.length; i++) {
       if (i == index) {
