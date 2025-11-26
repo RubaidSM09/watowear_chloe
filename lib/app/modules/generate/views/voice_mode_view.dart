@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -130,6 +132,63 @@ class VoiceModeView extends GetView<VoiceModeController> {
   }
 }
 
+class HoldOnCarouselController extends GetxController {
+  // Replace these with your actual 3 PNGs
+  final List<String> _allImages = [
+    'assets/images/generate/1.png',
+    'assets/images/generate/2.png',
+    'assets/images/generate/3.png',
+  ];
+
+  late List<String> _orderedImages;
+  Timer? _timer;
+
+  // The image that just moved from right → left (we'll disable its position animation)
+  String? _jumpImagePath;
+
+  List<String> get displayedImages => List.unmodifiable(_orderedImages);
+  String? get jumpImagePath => _jumpImagePath;
+
+  @override
+  void onInit() {
+    super.onInit();
+    _orderedImages = List<String>.from(_allImages);
+
+    // Rotate every 2 seconds
+    _timer = Timer.periodic(const Duration(seconds: 2), (_) {
+      _rotate();
+    });
+  }
+
+  void _rotate() {
+    if (_orderedImages.length < 3) return;
+
+    // Current positions
+    final left = _orderedImages[0];
+    final center = _orderedImages[1];
+    final right = _orderedImages[2];
+
+    // Desired mapping:
+    // left   -> center
+    // center -> right
+    // right  -> left  (this is the "creepy" one we want to jump)
+    _orderedImages[0] = right;   // new left
+    _orderedImages[1] = left;    // new center
+    _orderedImages[2] = center;  // new right
+
+    // Mark the image that went from right -> left
+    _jumpImagePath = right;
+
+    update();
+  }
+
+  @override
+  void onClose() {
+    _timer?.cancel();
+    super.onClose();
+  }
+}
+
 class HoldOnDialog extends StatelessWidget {
   const HoldOnDialog({super.key});
 
@@ -142,11 +201,56 @@ class HoldOnDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Image.asset(
-              'assets/images/generate/hold_on.png',
-              scale: 4,
+            // ======= Animated carousel with no animation for right -> left jump =======
+            GetBuilder<HoldOnCarouselController>(
+              init: HoldOnCarouselController(),
+              builder: (carousel) {
+                final images = carousel.displayedImages;
+                if (images.length < 3) {
+                  return SizedBox(height: 140.h);
+                }
+
+                final leftImage = images[0];
+                final centerImage = images[1];
+                final rightImage = images[2];
+
+                return SizedBox(
+                  height: 140.h,
+                  width: 260.w,
+                  child: Stack(
+                    children: [
+                      _AnimatedCarouselCard(
+                        key: ValueKey(leftImage),
+                        imagePath: leftImage,
+                        alignment: Alignment.centerLeft,
+                        isCenter: false,
+                        // 💡 if this image just went from right -> left, no position animation
+                        disablePositionAnimation:
+                        carousel.jumpImagePath == leftImage,
+                      ),
+                      _AnimatedCarouselCard(
+                        key: ValueKey(centerImage),
+                        imagePath: centerImage,
+                        alignment: Alignment.center,
+                        isCenter: true,
+                        disablePositionAnimation: false,
+                      ),
+                      _AnimatedCarouselCard(
+                        key: ValueKey(rightImage),
+                        imagePath: rightImage,
+                        alignment: Alignment.centerRight,
+                        isCenter: false,
+                        disablePositionAnimation: false,
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
+            // ====================================================================
+
             SizedBox(height: 32.h),
+
             Text(
               'Hold on...',
               style: TextStyle(
@@ -200,6 +304,47 @@ class HoldOnDialog extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AnimatedCarouselCard extends StatelessWidget {
+  final String imagePath;
+  final Alignment alignment;
+  final bool isCenter;
+  final bool disablePositionAnimation;
+
+  const _AnimatedCarouselCard({
+    super.key,
+    required this.imagePath,
+    required this.alignment,
+    required this.isCenter,
+    required this.disablePositionAnimation,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final alignDuration =
+    disablePositionAnimation ? Duration.zero : const Duration(milliseconds: 500);
+
+    return AnimatedAlign(
+      duration: alignDuration,
+      curve: Curves.easeInOut,
+      alignment: alignment,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+        margin: EdgeInsets.symmetric(
+          horizontal: 4.w,
+          vertical: isCenter ? 0 : 12.h,
+        ),
+        width: isCenter ? 90.w : 70.w,
+        height: isCenter ? 120.h : 90.h,
+        child: Image.asset(
+          imagePath,
+          fit: BoxFit.contain,
         ),
       ),
     );

@@ -22,7 +22,7 @@ class VoiceModeController extends GetxController {
 
   // ====== BACKEND OUTFIT WS ======
   static const String _outfitWsUrl =
-      'ws://10.10.13.75:7887/ws/notifications/';
+      'ws://endlessly-unified-guppy.ngrok-free.app/ws/notifications/';
 
   // ====== STORAGE ======
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
