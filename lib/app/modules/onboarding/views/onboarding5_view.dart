@@ -16,15 +16,15 @@ class Onboarding5View extends GetView {
         children: [
           Padding(
             padding: EdgeInsets.only(
-              left: 17.w,
-              right: 17.w,
+              left: 24.w,
+              right: 24.w,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Image.asset(
-                  'assets/images/onboarding/watowear_word_logo.png',
-                  scale: 6,
+                  'assets/images/onboarding/wtw_word_logo_2.png',
+                  scale: 4,
                 ),
 
                 SizedBox(height: 30.76.h,),
@@ -56,33 +56,37 @@ class Onboarding5View extends GetView {
                 Row(
                   spacing: 20.w,
                   children: [
-                    CustomButton(
-                      text: 'Create Account',
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 35.w,
-                        vertical: 12.h,
+                    Expanded(
+                      child: CustomButton(
+                        text: 'Create Account',
+                        padding: EdgeInsets.symmetric(
+                          // horizontal: 35.w,
+                          vertical: 12.h,
+                        ),
+                        textColor: AppColors.textIcons,
+                        border: Border.all(
+                          color: AppColors.primary,
+                        ),
+                        textSize: 14.sp,
+                        onTap: () => Get.to(AuthenticationView()),
                       ),
-                      textColor: AppColors.textIcons,
-                      border: Border.all(
-                        color: AppColors.primary,
-                      ),
-                      textSize: 14.sp,
-                      onTap: () => Get.to(AuthenticationView()),
                     ),
 
-                    CustomButton(
-                      text: 'Sign In',
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 65.w,
-                        vertical: 12.h,
-                      ),
-                      textColor: AppColors.bgColor,
-                      color: AppColors.primary,
-                      border: Border.all(
+                    Expanded(
+                      child: CustomButton(
+                        text: 'Sign In',
+                        padding: EdgeInsets.symmetric(
+                          // horizontal: 48.w,
+                          vertical: 12.h,
+                        ),
+                        textColor: AppColors.bgColor,
                         color: AppColors.primary,
+                        border: Border.all(
+                          color: AppColors.primary,
+                        ),
+                        textSize: 14.sp,
+                        onTap: () => Get.to(AuthenticationView()),
                       ),
-                      textSize: 14.sp,
-                      onTap: () => Get.to(AuthenticationView()),
                     ),
                   ],
                 ),

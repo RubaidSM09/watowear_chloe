@@ -68,7 +68,7 @@ class Onboarding2View extends GetView<Onboarding2Controller> {
           }),
         ),
 
-        SizedBox(height: 150.h),
+        SizedBox(height: 86.h),
 
         // Body copy
         Padding(

@@ -63,12 +63,12 @@ class OnboardingView extends GetView<OnboardingController> {
               return Positioned(
                 // left: 25.w,
                 top: 28.53.h,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      GestureDetector(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 8.h),
+                      child: GestureDetector(
                         onTap: () {
                           controller.isLanguageClicked.value = !controller.isLanguageClicked.value;
                         }, // TODO: open language picker
@@ -104,12 +104,15 @@ class OnboardingView extends GetView<OnboardingController> {
                           ],
                         ),
                       ),
+                    ),
 
-                      if (controller.isLanguageClicked.value && idx==0) SizedBox(height: 8.4.h),
+                    if (controller.isLanguageClicked.value && idx==0) SizedBox(height: 8.4.h),
 
-                      if (controller.isLanguageClicked.value && idx==0)
-                        Container(
-                          width: 364.w,
+                    if (controller.isLanguageClicked.value && idx==0)
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 13.w,),
+                        child: Container(
+                          width: 414.w,
                           // padding: EdgeInsets.symmetric(vertical: 22.h),
                           color: Colors.white,
                           child: Column(
@@ -184,18 +187,35 @@ class OnboardingView extends GetView<OnboardingController> {
                               )
                             ],
                           ),
-                        )
-                    ],
-                  ),
+                        ),
+                      )
+                  ],
                 ),
               );
             }),
 
             Obx(() {
               final idx = controller.current.value;
+              // final topColor = idx == 0 ? Colors.white : Colors.black87;
+              return (idx == 1 || idx == 2 || idx == 3) ? Positioned(
+                // left: 24.w,
+                top: 20.445.h,
+                child: TextButton(
+                  onPressed: controller.skip,
+                  child: Icon(
+                    Icons.arrow_back,
+                    color: Color(0xFF333333),
+                    size: 24.r,
+                  ),
+                ),
+              ) : SizedBox.shrink();
+            }),
+
+            Obx(() {
+              final idx = controller.current.value;
               final topColor = idx == 0 ? Colors.white : Colors.black87;
               return idx != 4 ? Positioned(
-                right: 24.w,
+                right: 12.w,
                 top: 20.445.h,
                 child: TextButton(
                   onPressed: controller.skip,

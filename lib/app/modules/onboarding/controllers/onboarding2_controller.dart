@@ -21,7 +21,7 @@ class Onboarding2Controller extends GetxController {
 
     // 👇 Closer spacing — increase viewportFraction
     pageController = PageController(
-      viewportFraction: 0.45, // try 0.80–0.85 range for your preferred look
+      viewportFraction: 0.3, // try 0.80–0.85 range for your preferred look
       initialPage: kStart,
     );
 

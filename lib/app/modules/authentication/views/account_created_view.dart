@@ -18,7 +18,7 @@ class AccountCreatedView extends GetView {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Row(
+              /*Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox.shrink(),
@@ -48,7 +48,7 @@ class AccountCreatedView extends GetView {
                 ],
               ),
           
-              SizedBox(height: 15.h,),
+              SizedBox(height: 15.h,),*/
           
               Icon(
                 Icons.check,

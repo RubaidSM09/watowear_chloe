@@ -96,6 +96,8 @@ flutter:
     - assets/images/shop/categories/
     - assets/images/editorial/
     - assets/videos/
+    - assets/images/about_yourself/body_shape/
+    - assets/images/about_yourself/skin_tone/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

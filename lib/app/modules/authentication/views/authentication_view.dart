@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:watowear_chloe/app/modules/authentication/views/account_created_view.dart';
 import 'package:watowear_chloe/app/modules/authentication/views/password_recovery_view.dart';
 import 'package:watowear_chloe/app/modules/dashboard/views/dashboard_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/privacy_policy_view.dart';
+import 'package:watowear_chloe/app/modules/profile/views/tn_c_app_features_view.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
 import 'package:watowear_chloe/common/custom_text_fields.dart';
 
@@ -41,12 +43,12 @@ class AuthenticationView extends GetView<AuthenticationController> {
             children: [
               SizedBox(height: 62.5.h,),
 
-              !controller.isSignIn.value ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              Row(
+                spacing: 16.w,
                 children: [
                   CustomButton(
                     icon: 'assets/images/authentication/google_logo.png',
-                    padding: EdgeInsets.symmetric(horizontal: 83.12.w, vertical: 13.21.h,),
+                    padding: EdgeInsets.symmetric(horizontal: 82.12.w, vertical: 13.21.h,),
                     border: Border.all(
                       color: AppColors.textIcons,
                       width: 1.04.r,
@@ -55,7 +57,7 @@ class AuthenticationView extends GetView<AuthenticationController> {
                   ),
                   CustomButton(
                     icon: 'assets/images/authentication/apple_logo.png',
-                    padding: EdgeInsets.symmetric(horizontal: 83.12.w, vertical: 13.21.h,),
+                    padding: EdgeInsets.symmetric(horizontal: 82.12.w, vertical: 13.21.h,),
                     border: Border.all(
                       color: AppColors.textIcons,
                       width: 1.04.r,
@@ -63,9 +65,9 @@ class AuthenticationView extends GetView<AuthenticationController> {
                     onTap: () {  },
                   ),
                 ],
-              ) : SizedBox.shrink(),
+              ),
 
-              !controller.isSignIn.value ? SizedBox(height: 34.h,) : SizedBox.shrink(),
+              SizedBox(height: 34.h,),
 
               Column(
                 spacing: 31.h,
@@ -247,21 +249,71 @@ class AuthenticationView extends GetView<AuthenticationController> {
                         onTap: () {
                           controller.isSelected2.value = !controller.isSelected2.value;
                         },
-                        child: Icon(
-                          controller.isSelected2.value ? Icons.check_box_rounded : Icons.check_box_outline_blank_outlined,
-                          size: 20.r,
-                          color: AppColors.black,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: controller.isSelected2.value ? 1.w : 8.w,
+                            vertical: controller.isSelected2.value ? 1.h : 8.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: controller.isSelected2.value ? Colors.black : Colors.transparent,
+                            borderRadius: BorderRadius.circular(2.r),
+                            border: Border.all(color: Colors.black, width: 0.36.r,),
+                          ),
+                          child: controller.isSelected2.value ? Icon(
+                            Icons.check,
+                            size: 16.r,
+                            color: AppColors.bgColor,
+                          ) : SizedBox.shrink(),
                         ),
                       ),
 
-                      Text(
-                        'I agree to the Terms & Conditions and Privacy Policy',
-                        style: TextStyle(
-                          color: AppColors.textIcons,
-                          fontFamily: 'Comfortaa',
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.sp,
-                        ),
+                      Wrap(
+                        children: [
+                          Text(
+                            'I agree to the ',
+                            style: TextStyle(
+                              color: AppColors.textIcons,
+                              fontFamily: 'Comfortaa',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () => Get.to(TnCAppFeaturesView()),
+                            child: Text(
+                              'Terms & Conditions',
+                              style: TextStyle(
+                                color: AppColors.textIcons,
+                                fontFamily: 'Comfortaa',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12.sp,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            ' and ',
+                            style: TextStyle(
+                              color: AppColors.textIcons,
+                              fontFamily: 'Comfortaa',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12.sp,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () => Get.to(PrivacyPolicyView()),
+                            child: Text(
+                              'Privacy Policy',
+                              style: TextStyle(
+                                color: AppColors.textIcons,
+                                fontFamily: 'Comfortaa',
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12.sp,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+                        ],
                       )
                     ],
                   ) : null,
@@ -273,10 +325,21 @@ class AuthenticationView extends GetView<AuthenticationController> {
                         onTap: () {
                           controller.isSelected3.value = !controller.isSelected3.value;
                         },
-                        child: Icon(
-                          controller.isSelected3.value ? Icons.check_box_rounded : Icons.check_box_outline_blank_outlined,
-                          size: 20.r,
-                          color: AppColors.black,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: controller.isSelected3.value ? 1.w : 8.w,
+                            vertical: controller.isSelected3.value ? 1.h : 8.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: controller.isSelected3.value ? Colors.black : Colors.transparent,
+                            borderRadius: BorderRadius.circular(2.r),
+                            border: Border.all(color: Colors.black, width: 0.36.r,),
+                          ),
+                          child: controller.isSelected3.value ? Icon(
+                            Icons.check,
+                            size: 16.r,
+                            color: AppColors.bgColor,
+                          ) : SizedBox.shrink(),
                         ),
                       ),
 
@@ -299,10 +362,21 @@ class AuthenticationView extends GetView<AuthenticationController> {
                         onTap: () {
                           controller.isSelected1.value = !controller.isSelected1.value;
                         },
-                        child: Icon(
-                          controller.isSelected1.value ? Icons.check_box_rounded : Icons.check_box_outline_blank_outlined,
-                          size: 20.r,
-                          color: AppColors.black,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: controller.isSelected1.value ? 1.w : 8.w,
+                            vertical: controller.isSelected1.value ? 1.h : 8.h,
+                          ),
+                          decoration: BoxDecoration(
+                            color: controller.isSelected1.value ? Colors.black : Colors.transparent,
+                            borderRadius: BorderRadius.circular(2.r),
+                            border: Border.all(color: Colors.black, width: 0.36.r,),
+                          ),
+                          child: controller.isSelected1.value ? Icon(
+                            Icons.check,
+                            size: 16.r,
+                            color: AppColors.bgColor,
+                          ) : SizedBox.shrink(),
                         ),
                       ),
 
@@ -332,12 +406,16 @@ class AuthenticationView extends GetView<AuthenticationController> {
                   vertical: 12.h,
                 ),
                 onTap: () {
-                  controller.signUp(
-                    controller.emailCtrl.text.trim(),
-                    controller.passwordCtrl.text.trim(),
-                    controller.nameCtrl.text.trim(),
-                    controller.surnameCtrl.text.trim(),
-                  );
+                  if (controller.isSelected2.value) {
+                    controller.signUp(
+                      controller.emailCtrl.text.trim(),
+                      controller.passwordCtrl.text.trim(),
+                      controller.nameCtrl.text.trim(),
+                      controller.surnameCtrl.text.trim(),
+                    );
+                  } else {
+                    Get.snackbar('Error', 'Please agree to the Terms & Conditions and Privacy Policy');
+                  }
                 },
               ) : CustomButton(
                 text: 'Sign In',
