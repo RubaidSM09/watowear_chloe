@@ -98,6 +98,8 @@ flutter:
     - assets/videos/
     - assets/images/about_yourself/body_shape/
     - assets/images/about_yourself/skin_tone/
+    - assets/images/about_yourself/vibes/
+    - assets/images/about_yourself/vibes/female/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

@@ -39,8 +39,45 @@ class AboutYourselfController extends GetxController {
   RxList<RxBool> selectedComfortZone = [false.obs, false.obs, false.obs].obs;
 
   // Page 4 - Colors
-  late ColorWheelController favColorsCtrl;
-  late ColorWheelController avoidColorsCtrl;
+  RxBool isLoveSelected = true.obs;
+
+  RxList<RxBool> selectedLoveColor = [
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+  ].obs;
+
+  RxList<RxBool> selectedAvoidColor = [
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+    false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs,
+  ].obs;
+
+  RxInt selectedLoveCount = 0.obs;
+  RxInt selectedAvoidCount = 0.obs;
+
+  // Vibe
+  RxList<RxBool> selectedWomenVibe = List.generate(12, (_) => false.obs).obs;
+  RxList<RxBool> selectedMenVibe = List.generate(12, (_) => false.obs).obs;
+  RxInt vibeCount = 0.obs;
 
   // Page 5 - Muses
   RxBool isMen = false.obs;
@@ -68,8 +105,6 @@ class AboutYourselfController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    favColorsCtrl = Get.put(ColorWheelController(), tag: 'fav');
-    avoidColorsCtrl = Get.put(ColorWheelController(), tag: 'avoid');
   }
 
   void onPageChanged(int i) => current.value = i;
@@ -218,6 +253,39 @@ class AboutYourselfController extends GetxController {
   void selectComfortZone(int index) {
     for (int i = 0; i < selectedComfortZone.length; i++) {
       selectedComfortZone[i].value = i == index;
+    }
+  }
+
+  void selectLoveColor (int index) {
+    selectedLoveColor[index].value = !selectedLoveColor[index].value;
+    if (selectedLoveColor[index].value) {
+      selectedLoveCount.value++;
+    } else {
+      selectedLoveCount.value--;
+    }
+  }
+
+  void selectAvoidColor (int index) {
+    selectedAvoidColor[index].value = !selectedAvoidColor[index].value;
+    if (selectedAvoidColor[index].value) {
+      selectedAvoidCount.value++;
+    } else {
+      selectedAvoidCount.value--;
+    }
+  }
+
+  void selectWomenVibe(int index) {
+    selectedWomenVibe[index].value = !selectedWomenVibe[index].value;
+    if (selectedWomenVibe[index].value) {
+      vibeCount.value++;
+    } else {
+      vibeCount.value--;
+    }
+  }
+
+  void selectMenVibe(int index) {
+    for (int i = 0; i < selectedMenVibe.length; i++) {
+      selectedMenVibe[i].value = i == index;
     }
   }
 
