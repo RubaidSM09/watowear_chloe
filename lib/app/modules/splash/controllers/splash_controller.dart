@@ -2,6 +2,7 @@ import 'package:flutter/animation.dart';
 import 'package:get/get.dart';
 import 'package:watowear_chloe/app/modules/home/views/home_view.dart';
 import 'package:watowear_chloe/app/modules/onboarding/views/onboarding_view.dart';
+import 'package:watowear_chloe/common/app_colors.dart'; // 👈 added
 
 class SplashController extends GetxController
     with GetSingleTickerProviderStateMixin {
@@ -12,30 +13,81 @@ class SplashController extends GetxController
   late final Animation<double> circleFade;
   late final Animation<double> wordFade;
 
+  // Background color animation
+  late final Animation<Color?> bgColor; // 👈 added
+
+  late final Animation<Offset> wordSlide;
+
   @override
   void onInit() {
     super.onInit();
 
     anim = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1800),
+      duration: const Duration(milliseconds: 3200),
     );
 
     // Phase 1 (0.00–0.65): scale up then down
     circleScale = TweenSequence<double>([
-      TweenSequenceItem(tween: Tween(begin: 0.85, end: 1.12).chain(CurveTween(curve: Curves.easeOut)), weight: 50),
-      TweenSequenceItem(tween: Tween(begin: 1.12, end: 0.96).chain(CurveTween(curve: Curves.easeIn)),  weight: 50),
-    ]).animate(CurvedAnimation(parent: anim, curve: const Interval(0.0, 0.65)));
+      TweenSequenceItem(
+        tween: Tween(begin: 0.85, end: 1.12)
+            .chain(CurveTween(curve: Curves.easeOut)),
+        weight: 50,
+      ),
+      TweenSequenceItem(
+        tween: Tween(begin: 1.12, end: 0.96)
+            .chain(CurveTween(curve: Curves.easeIn)),
+        weight: 50,
+      ),
+    ]).animate(
+      CurvedAnimation(parent: anim, curve: const Interval(0.0, 0.65)),
+    );
 
     // Fade the circle out (0.65–0.85)
     circleFade = Tween<double>(begin: 1, end: 0).animate(
-      CurvedAnimation(parent: anim, curve: const Interval(0.65, 0.85, curve: Curves.easeOut)),
+      CurvedAnimation(
+        parent: anim,
+        curve: const Interval(0.65, 0.85, curve: Curves.easeOut),
+      ),
     );
 
     // Phase 2 (0.75–1.00): wordmark fades in
     wordFade = CurvedAnimation(
       parent: anim,
       curve: const Interval(0.75, 1.0, curve: Curves.easeIn),
+    );
+
+    wordSlide = Tween<Offset>(
+      begin: const Offset(0.4, 0), // starts slightly right
+      end: Offset.zero,            // lands at center
+    ).animate(
+      CurvedAnimation(
+        parent: anim,
+        curve: const Interval(0.75, 1.0, curve: Curves.easeOut),
+      ),
+    );
+
+    // Background color:
+    // - Starts as bgColor
+    // - Smoothly transitions to primary while scaling up
+    // - Smoothly transitions back to bgColor while scaling down
+    bgColor = TweenSequence<Color?>([
+      TweenSequenceItem(
+        tween: ColorTween(
+          begin: AppColors.bgColor,
+          end: AppColors.primary,
+        ).chain(CurveTween(curve: Curves.easeInOut)),
+        weight: 50,
+      ),
+      TweenSequenceItem(
+        tween: ColorTween(
+          begin: AppColors.primary,
+          end: AppColors.bgColor,
+        ).chain(CurveTween(curve: Curves.easeInOut)),
+        weight: 50,
+      ),
+    ]).animate(
+      CurvedAnimation(parent: anim, curve: const Interval(0.0, 0.65)),
     );
 
     anim.addStatusListener((status) {

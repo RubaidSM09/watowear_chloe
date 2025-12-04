@@ -76,8 +76,9 @@ class AboutYourselfController extends GetxController {
 
   // Vibe
   RxList<RxBool> selectedWomenVibe = List.generate(12, (_) => false.obs).obs;
-  RxList<RxBool> selectedMenVibe = List.generate(12, (_) => false.obs).obs;
+  RxList<RxBool> selectedMenVibe = List.generate(11, (_) => false.obs).obs;
   RxInt vibeCount = 0.obs;
+  RxBool isWomenSelected = true.obs;
 
   // Page 5 - Muses
   RxBool isMen = false.obs;
@@ -284,9 +285,23 @@ class AboutYourselfController extends GetxController {
   }
 
   void selectMenVibe(int index) {
-    for (int i = 0; i < selectedMenVibe.length; i++) {
-      selectedMenVibe[i].value = i == index;
+    selectedMenVibe[index].value = !selectedMenVibe[index].value;
+    if (selectedMenVibe[index].value) {
+      vibeCount.value++;
+    } else {
+      vibeCount.value--;
     }
+  }
+
+  void refineVibe() {
+    for (int i = 0; i < selectedWomenVibe.length; i++) {
+      selectedWomenVibe[i].value = false;
+    }
+    for (int i = 0; i < selectedMenVibe.length; i++) {
+      selectedMenVibe[i].value = false;
+    }
+    vibeCount.value = 0;
+    Get.back();
   }
 
   void selectMenStyles(int index) {

@@ -11,18 +11,18 @@ class SplashView extends GetView<SplashController> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.bgColor,
-      body: SafeArea(
-        child: Center(
-          child: AnimatedBuilder(
-            animation: controller.anim,
-            builder: (_, __) {
-              return Stack(
+    return AnimatedBuilder(
+      animation: controller.anim,
+      builder: (_, __) {
+        return Scaffold(
+          backgroundColor: controller.bgColor.value ?? AppColors.bgColor,
+          body: SafeArea(
+            child: Center(
+              child: Stack(
                 alignment: Alignment.center,
                 children: [
                   // Phase 1: Circular logo (scale + fade out)
-                  /*Opacity(
+                  Opacity(
                     opacity: controller.circleFade.value,
                     child: Transform.scale(
                       scale: controller.circleScale.value,
@@ -32,23 +32,25 @@ class SplashView extends GetView<SplashController> {
                         height: 156.h,
                       ),
                     ),
-                  ),*/
+                  ),
 
                   // Phase 2: Wordmark (fade in)
                   Opacity(
                     opacity: controller.wordFade.value,
-                    child: Image.asset(
-                      'assets/images/onboarding/watowear_word_logo.png',
-                      // width/height optional; the SVG can be sized by intrinsic viewBox
-                      scale: 4,
+                    child: SlideTransition(
+                      position: controller.wordSlide,
+                      child: Image.asset(
+                        'assets/images/onboarding/watowear_word_logo.png',
+                        scale: 4,
+                      ),
                     ),
                   ),
                 ],
-              );
-            },
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
