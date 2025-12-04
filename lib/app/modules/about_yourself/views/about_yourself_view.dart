@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:watowear_chloe/app/modules/about_yourself/views/about_yourself_3_view.dart';
 import 'package:watowear_chloe/app/views/views/about_yourself_7_view.dart';
+import 'package:watowear_chloe/app/views/views/about_yourself_8_view.dart';
 import 'package:watowear_chloe/common/app_colors.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
 
@@ -57,6 +58,7 @@ class AboutYourselfView extends GetView<AboutYourselfController> {
                     AboutYourself3View(),
                     AboutYourself4View(),
                     AboutYourself7View(),
+                    AboutYourself8View(),
                     AboutYourself5View(),
                     AboutYourself6View(),
                   ],

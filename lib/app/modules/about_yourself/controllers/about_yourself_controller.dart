@@ -80,6 +80,9 @@ class AboutYourselfController extends GetxController {
   RxInt vibeCount = 0.obs;
   RxBool isWomenSelected = true.obs;
 
+  // Body Preferences
+  RxBool isHighlightSelected = true.obs;
+
   // Page 5 - Muses
   RxBool isMen = false.obs;
   RxList<RxBool> selectedMenStyles = List.generate(6, (_) => false.obs).obs;
