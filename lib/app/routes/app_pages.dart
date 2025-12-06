@@ -12,6 +12,8 @@ import '../modules/authentication/bindings/authentication_binding.dart';
 import '../modules/authentication/views/authentication_view.dart';
 import '../modules/dashboard/bindings/dashboard_binding.dart';
 import '../modules/dashboard/views/dashboard_view.dart';
+import '../modules/fashion_library/bindings/fashion_library_binding.dart';
+import '../modules/fashion_library/views/fashion_library_view.dart';
 import '../modules/generate/bindings/generate_binding.dart';
 import '../modules/generate/views/generate_view.dart';
 import '../modules/home/bindings/home_binding.dart';
@@ -110,6 +112,11 @@ class AppPages {
       name: _Paths.SHOP,
       page: () => const ShopView(),
       binding: ShopBinding(),
+    ),
+    GetPage(
+      name: _Paths.FASHION_LIBRARY,
+      page: () => const FashionLibraryView(),
+      binding: FashionLibraryBinding(),
     ),
   ];
 }

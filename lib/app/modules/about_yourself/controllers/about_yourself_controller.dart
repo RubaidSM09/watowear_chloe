@@ -82,6 +82,9 @@ class AboutYourselfController extends GetxController {
 
   // Body Preferences
   RxBool isHighlightSelected = true.obs;
+  RxList<RxBool> selectedHighlight = List.generate(8, (_) => false.obs).obs;
+  RxList<RxBool> selectedCover = List.generate(8, (_) => false.obs).obs;
+  RxBool isWomenSelected2 = true.obs;
 
   // Page 5 - Muses
   RxBool isMen = false.obs;
@@ -305,6 +308,16 @@ class AboutYourselfController extends GetxController {
     }
     vibeCount.value = 0;
     Get.back();
+  }
+
+  void selectHighlightCover(bool isHighlight, int index) {
+    if (isHighlight) {
+      selectedCover[index].value = false;
+      selectedHighlight[index].value = !selectedHighlight[index].value;
+    } else {
+      selectedHighlight[index].value = false;
+      selectedCover[index].value = !selectedCover[index].value;
+    }
   }
 
   void selectMenStyles(int index) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:watowear_chloe/app/modules/fashion_library/views/fashion_library_view.dart';
 import 'package:watowear_chloe/app/modules/generate/views/generate_view.dart';
 import 'package:watowear_chloe/app/modules/library/views/library_view.dart';
 import 'package:watowear_chloe/app/modules/menu/views/menu_view.dart';
@@ -20,7 +21,7 @@ class DashboardView extends GetView<DashboardController> {
       HomeView(),
       GenerateView(),
       MenuView(),
-      LibraryView(),
+      FashionLibraryView(),
       ProfileView(),
     ];
 

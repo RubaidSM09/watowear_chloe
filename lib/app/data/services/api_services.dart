@@ -374,4 +374,17 @@ class ApiService {
     final streamedResponse = await request.send();
     return await http.Response.fromStream(streamedResponse);
   }
+
+  Future<http.Response> getFashionLibraryItems() async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/closet/library/');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+      if (accessToken != null) "Authorization": "Bearer $accessToken",
+    };
+
+    return await http.get(url, headers: headers);
+  }
 }
