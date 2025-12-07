@@ -5,9 +5,14 @@ import 'package:get/get.dart';
 
 import '../../../../common/app_colors.dart';
 import '../../../../common/custom_button.dart';
+import '../../../data/model/closet_item.dart';
+import '../../library/controllers/library_controller.dart';
 
 class DeleteItemView extends GetView {
-  const DeleteItemView({super.key});
+  final ClosetItem? item;
+
+  const DeleteItemView({super.key, this.item});
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -57,7 +62,34 @@ class DeleteItemView extends GetView {
                     text: 'Yes Delete',
                     textSize: 16.sp,
                     textColor: Color(0xFF6F767E),
-                    onTap: () {  },
+                    onTap: () async {
+                      final itemId = item?.id;
+                      if (itemId == null) {
+                        Get.back(); // close dialog
+                        Get.snackbar('Error', 'Invalid item.');
+                        return;
+                      }
+
+                      final libraryController = Get.find<LibraryController>();
+                      final success =
+                      await libraryController.deleteClosetItem(itemId);
+
+                      Get.back(); // close dialog
+
+                      if (success) {
+                        // Also pop AutoTaggongView to go back to closet
+                        Get.back();
+                        Get.snackbar(
+                          'Deleted',
+                          'Item removed from your closet.',
+                        );
+                      } else {
+                        Get.snackbar(
+                          'Error',
+                          'Failed to delete item. Please try again.',
+                        );
+                      }
+                    },
                   ),
 
                   CustomButton(
@@ -69,7 +101,9 @@ class DeleteItemView extends GetView {
                     text: 'Cancel',
                     textSize: 16.sp,
                     textColor: Colors.white,
-                    onTap: () {  },
+                    onTap: () {
+                      Get.back(); // just close dialog
+                    },
                   ),
                 ],
               )

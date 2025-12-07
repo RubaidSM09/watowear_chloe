@@ -5,13 +5,13 @@ import 'package:get/get.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
 
 import '../../../../common/app_colors.dart';
-import '../controllers/library_controller.dart';
+import '../controllers/fashion_library_controller.dart';
 
-class FilterClosetView extends GetView<LibraryController> {
-  const FilterClosetView({super.key});
+class FilterLibraryView extends GetView<FashionLibraryController> {
+  const FilterLibraryView({super.key});
   @override
   Widget build(BuildContext context) {
-    Get.put(LibraryController());
+    Get.find<FashionLibraryController>();
 
     return Scaffold(
       backgroundColor: AppColors.bgColor,

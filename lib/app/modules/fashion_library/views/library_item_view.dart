@@ -7,6 +7,7 @@ import 'package:watowear_chloe/common/app_colors.dart';
 
 import '../../../../common/custom_button.dart';
 import '../../../data/model/models/library_item.dart';
+import '../../../data/services/api_services.dart';
 
 class LibraryItemView extends StatelessWidget {
   final LibraryItem item;
@@ -185,8 +186,31 @@ class LibraryItemView extends StatelessWidget {
                 spacing: 13.h,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      // TODO: hook to "add to closet" endpoint later if needed
+                    onTap: () async {
+                      final api = Get.find<ApiService>();
+                      final itemId = item.id;
+
+                      if (itemId == null) {
+                        Get.snackbar('Error', 'Invalid item. Please try again.');
+                        return;
+                      }
+
+                      try {
+                        final response = await api.addLibraryItemToCloset(itemId);
+                        if (response.statusCode == 200 || response.statusCode == 201) {
+                          Get.dialog(const LibraryItemAddedDialog());
+                        } else {
+                          Get.snackbar(
+                            'Error',
+                            'Failed to add this item to your closet. (${response.statusCode})',
+                          );
+                        }
+                      } catch (_) {
+                        Get.snackbar(
+                          'Error',
+                          'Something went wrong while adding the item.',
+                        );
+                      }
                     },
                     child: Container(
                       height: 50.h,
@@ -252,6 +276,47 @@ class LibraryItemView extends StatelessWidget {
             ),
 
             SizedBox(height: 20.h),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+class LibraryItemAddedDialog extends StatelessWidget {
+  const LibraryItemAddedDialog({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      backgroundColor: AppColors.bgColor,
+      child: Padding(
+        padding: EdgeInsets.symmetric(vertical: 65.h),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.check,
+              color: AppColors.textIcons,
+              size: 52.r,
+            ),
+
+            SizedBox(height: 21.h,),
+
+            SizedBox(
+              width: 325.w,
+              child: Text(
+                'All Set!\n\nAdded to your closet. Enjoy\nmixing and matching!',
+                style: TextStyle(
+                  color: Color(0xFF1F1F1F).withOpacity(0.8),
+                  fontFamily: 'Comfortaa',
+                  fontWeight: FontWeight.w400,
+                  fontSize: 18.sp,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            )
           ],
         ),
       ),

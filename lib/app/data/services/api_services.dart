@@ -8,7 +8,7 @@ import 'package:http_parser/http_parser.dart';
 class ApiService {
   final FlutterSecureStorage _storage = FlutterSecureStorage();
 
-  final String baseUrl = "https://endlessly-unified-guppy.ngrok-free.app";
+  final String baseUrl = "http://10.10.13.75:7100";
 
   Future<http.Response> signUp(
     String email,
@@ -386,5 +386,33 @@ class ApiService {
     };
 
     return await http.get(url, headers: headers);
+  }
+
+  Future<http.Response> addLibraryItemToCloset(int libraryItemId) async {
+    final Uri url = Uri.parse(
+      '$baseUrl/api/v1/closet/library/$libraryItemId/add-to-closet/',
+    );
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+      if (accessToken != null) "Authorization": "Bearer $accessToken",
+    };
+
+    return await http.post(url, headers: headers);
+  }
+
+  Future<http.Response> deleteClosetItem(int itemId) async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/closet/items/$itemId/');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+      if (accessToken != null) "Authorization": "Bearer $accessToken",
+    };
+
+    return await http.delete(url, headers: headers);
   }
 }

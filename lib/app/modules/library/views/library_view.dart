@@ -265,7 +265,7 @@ class LibraryView extends GetView<LibraryController> {
                   SizedBox(height: 43.h,),
 
                   Text(
-                    '${controller.closetItems.length} Items in your closet',
+                    '${controller.filteredClosetItems.length} Items in your closet',
                     style: TextStyle(
                       color: Colors.black,
                       fontFamily: 'Comfortaa',
@@ -279,7 +279,7 @@ class LibraryView extends GetView<LibraryController> {
                   Wrap(
                     spacing: 24.w,
                     runSpacing: 39.h,
-                    children: controller.closetItems.map((item) {
+                    children: controller.filteredClosetItems.map((item) {
                       return GestureDetector(
                         onTap: () async {
                           if (item.id != null) {

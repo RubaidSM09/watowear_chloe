@@ -48,6 +48,7 @@ class AutoTaggongView extends GetView<AddNewItemController> {
       backgroundColor: AppColors.bgColor,
       appBar: AppBar(
         backgroundColor: AppColors.bgColor,
+        scrolledUnderElevation: 0,
       ),
       body: SafeArea(
         child: Padding(
@@ -145,6 +146,19 @@ class AutoTaggongView extends GetView<AddNewItemController> {
                   textSize: 16.sp,
                   textColor: Colors.white,
                   onTap: () => Get.dialog(const ItemAddedView()),
+                ),
+
+                SizedBox(height: 13.h,),
+
+                CustomButton(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 48.w,
+                    vertical: 12.h,
+                  ),
+                  text: 'Delete',
+                  textSize: 16.sp,
+                  textColor: AppColors.textIcons,
+                  onTap: () => Get.dialog(DeleteItemView(item: closetItem)),
                 ),
 
                 SizedBox(height: 13.h,),

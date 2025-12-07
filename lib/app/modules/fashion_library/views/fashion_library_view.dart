@@ -9,6 +9,7 @@ import 'package:watowear_chloe/common/custom_button.dart';
 import '../../../../common/app_colors.dart';
 import '../../../data/model/models/library_item.dart';
 import '../controllers/fashion_library_controller.dart';
+import 'filter_library_view.dart';
 
 class FashionLibraryView extends GetView<FashionLibraryController> {
   const FashionLibraryView({super.key});
@@ -78,6 +79,7 @@ class FashionLibraryView extends GetView<FashionLibraryController> {
                 padding: EdgeInsets.symmetric(horizontal: 29.w,),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -323,7 +325,7 @@ class FashionLibraryView extends GetView<FashionLibraryController> {
                   );
                 }
 
-                if (controller.items.isEmpty) {
+                if (controller.filteredLibraryItems.isEmpty) {
                   return Padding(
                     padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 20.h),
                     child: Text(
@@ -341,8 +343,7 @@ class FashionLibraryView extends GetView<FashionLibraryController> {
                 return Wrap(
                   spacing: 29.w,
                   runSpacing: 40.h,
-                  children: controller.items.map((item) {
-                    // Build a simple title/subtitle from the metadata
+                  children: controller.filteredLibraryItems.map((item) {
                     final String title =
                     (item.subcategory?.isNotEmpty == true)
                         ? item.subcategory!
@@ -376,12 +377,44 @@ class FashionLibraryView extends GetView<FashionLibraryController> {
                   text: 'Add to my closet',
                   textColor: Colors.white,
                   textSize: 16.sp,
-                  onTap: () {  },
+                  onTap: () async {
+                    final success = await controller.addSelectedItemsToCloset();
+
+                    if (!success) {
+                      if (controller.selectedItemIds.value.isEmpty) {
+                        Get.snackbar(
+                          'No items selected',
+                          'Please select at least one item to add.',
+                        );
+                      } else {
+                        Get.snackbar(
+                          'Error',
+                          'Failed to add some items to your closet. Please try again.',
+                        );
+                      }
+                    } else {
+                      Get.dialog(const LibraryItemAddedDialog());
+                    }
+                  },
                 ),
               ),
 
               SizedBox(height: 24.h,),
             ],
+          ),
+        ),
+      ),
+
+      floatingActionButton: GestureDetector(
+        onTap: () => Get.to(FilterLibraryView()),
+        child: Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+          ),
+          child: Image.asset(
+            'assets/images/library/filter.png',
+            scale: 4,
+            fit: BoxFit.cover,
           ),
         ),
       ),
@@ -463,6 +496,8 @@ class FashionLibraryCard extends StatelessWidget {
   final RxBool isSelected;
   final LibraryItem item;
 
+  final FashionLibraryController _controller = Get.find<FashionLibraryController>();
+
   FashionLibraryCard({
     required this.image,
     required this.title,
@@ -504,6 +539,15 @@ class FashionLibraryCard extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () {
                         isSelected.value = !isSelected.value;
+
+                        // 👇 NEW: update controller with current selection state
+                        final itemId = item.id;
+                        if (itemId != null) {
+                          _controller.toggleItemSelection(
+                            itemId,
+                            isSelected.value,
+                          );
+                        }
                       },
                       child: Container(
                         width: 15.w,
