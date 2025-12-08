@@ -212,7 +212,13 @@ class EditorialSectionView extends GetView<ShopController> {
               ),
               SizedBox(height: 8.h),
               GestureDetector(
-                onTap: controller.openEditorialArticle,
+                onTap: () {
+                  if (controller.editorialArticles.isNotEmpty) {
+                    controller.openEditorialArticle(
+                      controller.editorialArticles.first.id,
+                    );
+                  }
+                },
                 child: Text(
                   'Read More',
                   style: TextStyle(
@@ -345,19 +351,37 @@ class EditorialSectionView extends GetView<ShopController> {
 
         SizedBox(height: 24.h),
 
-        // ----------------- ARTICLE CARDS -----------------
-        _ArticleCard(
-          imagePath: 'assets/images/editorial/article_1.jpg',
-          date: '22 JAN 2025',
-          title: '7 Days to rediscover Your Wardrobe',
-          onTap: controller.openEditorialArticle,
-        ),
-        _ArticleCard(
-          imagePath: 'assets/images/editorial/article_2.jpg',
-          date: '22 JAN 2025',
-          title: 'The Psychology of Getting Dressed',
-          onTap: controller.openEditorialArticle,
-        ),
+        // ----------------- ARTICLE CARDS (from API) -----------------
+        Obx(() {
+          if (controller.isLoadingEditorialList.value) {
+            return Padding(
+              padding: EdgeInsets.symmetric(vertical: 24.h),
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
+            );
+          }
+
+          if (controller.editorialArticles.isEmpty) {
+            return SizedBox.shrink();
+          }
+
+          return Column(
+            children: controller.editorialArticles.map((article) {
+              final dateText =
+              controller.formatEditorialDate(article.publishedAt);
+              final imagePath =
+                  article.imageUrl ?? 'assets/images/editorial/article_1.jpg';
+
+              return _ArticleCard(
+                imagePath: imagePath,
+                date: dateText,
+                title: article.title,
+                onTap: () => controller.openEditorialArticle(article.id),
+              );
+            }).toList(),
+          );
+        }),
 
         SizedBox(height: 16.h),
 
@@ -393,6 +417,20 @@ class EditorialSectionView extends GetView<ShopController> {
   // ARTICLE DETAIL VIEW (like the screenshot)
   // ------------------------------------------------------------
   Widget _buildArticleDetail() {
+    if (controller.isLoadingEditorialDetail.value) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    final article = controller.selectedArticle.value;
+    if (article == null) {
+      return const SizedBox(); // or a simple text: "No article selected"
+    }
+
+    final formattedCategory =
+    controller.formatEditorialCategory(article.category);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -434,7 +472,7 @@ class EditorialSectionView extends GetView<ShopController> {
                   fontFamily: 'Abhaya_Libre',
                   fontWeight: FontWeight.w700,
                   fontSize: 40.sp,
-                  color: Color(0xFF1F1F1F),
+                  color: const Color(0xFF1F1F1F),
                 ),
                 textAlign: TextAlign.center,
               ),
@@ -460,7 +498,7 @@ class EditorialSectionView extends GetView<ShopController> {
 
         SizedBox(height: 18.h),
 
-        // Article intro section title
+        // Article header (title, subline, category)
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -469,35 +507,43 @@ class EditorialSectionView extends GetView<ShopController> {
               child: Column(
                 children: [
                   Text(
-                    'Meet the Makers',
+                    article.title,
                     style: TextStyle(
                       fontFamily: 'Abhaya_Libre',
                       fontWeight: FontWeight.w400,
                       fontSize: 30.sp,
-                      color: Color(0xFF1F1F1F),
+                      color: const Color(0xFF1F1F1F),
                     ),
+                    textAlign: TextAlign.center,
                   ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    'Find your next favorite brand, chosen with care',
-                    style: TextStyle(
-                      fontFamily: 'Comfortaa',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 13.3.sp,
-                      color: AppColors.black,
+                  if (article.subline != null &&
+                      article.subline!.trim().isNotEmpty) ...[
+                    SizedBox(height: 4.h),
+                    Text(
+                      article.subline!,
+                      style: TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13.3.sp,
+                        color: AppColors.black,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    'Browse Brands',
-                    style: TextStyle(
-                      fontFamily: 'Comfortaa',
-                      fontWeight: FontWeight.w500,
-                      fontSize: 13.3.sp,
-                      color: AppColors.black,
-                      decoration: TextDecoration.underline,
+                  ],
+                  if (formattedCategory.isNotEmpty) ...[
+                    SizedBox(height: 4.h),
+                    Text(
+                      formattedCategory,
+                      style: TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13.3.sp,
+                        color: AppColors.black,
+                        decoration: TextDecoration.underline,
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                  ),
+                  ],
                 ],
               ),
             ),
@@ -506,135 +552,109 @@ class EditorialSectionView extends GetView<ShopController> {
 
         SizedBox(height: 18.h),
 
-        // Hero image of article
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: SizedBox(
-            height: 230.h,
-            width: double.infinity,
-            child: Image.asset(
-              'assets/images/editorial/color_stories_header.jpg',
-              scale: 4,
-              fit: BoxFit.fill,
+        // Hero image of article (if available)
+        if (article.imageUrl != null && article.imageUrl!.isNotEmpty)
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: 24.w),
+            child: SizedBox(
+              height: 230.h,
+              width: double.infinity,
+              child: Image.network(
+                article.imageUrl!,
+                fit: BoxFit.cover,
+              ),
             ),
           ),
-        ),
 
-        SizedBox(height: 18.h),
+        if (article.imageUrl != null && article.imageUrl!.isNotEmpty)
+          SizedBox(height: 18.h),
 
-        // Article body
+        // Article body + subsections
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 24.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'We all have colors we instinctively reach for — the jacket that makes you feel sharp, the dress that lights up your skin, or that shirt you wear when you need a confidence boost.',
-                style: TextStyle(
-                  fontFamily: 'Comfortaa',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 15.sp,
-                  color: AppColors.black,
+              if (article.description.trim().isNotEmpty) ...[
+                Text(
+                  article.description,
+                  style: TextStyle(
+                    fontFamily: 'Comfortaa',
+                    fontWeight: FontWeight.w500,
+                    fontSize: 15.sp,
+                    color: AppColors.black,
+                  ),
                 ),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                'Finding your signature color palette isn’t about trends or rules. It’s about uncovering the shades that reflect who you are — your energy, your mood, your rhythm.',
-                style: TextStyle(
-                  fontFamily: 'Comfortaa',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 15.sp,
-                  color: AppColors.black,
-                ),
-              ),
-              SizedBox(height: 18.h),
+                SizedBox(height: 18.h),
+              ],
 
-              Text(
-                'Where to Begin',
-                style: TextStyle(
-                  fontFamily: 'Abhaya_Libre',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 26.sp,
-                  color: AppColors.black,
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                'Start by opening your digital closet. Look at the pieces you love and wear the most. What colors do they share? Are they soft and muted, deep and rich, bright and joyful? These are clues.',
-                style: TextStyle(
-                  fontFamily: 'Comfortaa',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 15.sp,
-                  color: AppColors.black,
-                ),
-              ),
-              SizedBox(height: 18.h),
-            ],
-          ),
-        ),
+              // Subsections
+              ...article.subSections.expand((sub) {
+                final List<Widget> children = [];
 
-        // Mid article image + section
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: SizedBox(
-            height: 210.h,
-            width: double.infinity,
-            child: Image.asset(
-              'assets/images/editorial/article_1.jpg',
-              scale: 4,
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
+                if (sub.title.trim().isNotEmpty) {
+                  children.add(
+                    Text(
+                      sub.title,
+                      style: TextStyle(
+                        fontFamily: 'Abhaya_Libre',
+                        fontWeight: FontWeight.w600,
+                        fontSize: 26.sp,
+                        color: AppColors.black,
+                      ),
+                    ),
+                  );
+                  children.add(SizedBox(height: 8.h));
+                }
 
-        SizedBox(height: 18.h),
+                if (sub.subline != null && sub.subline!.trim().isNotEmpty) {
+                  children.add(
+                    Text(
+                      sub.subline!,
+                      style: TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14.sp,
+                        color: AppColors.textIcons,
+                      ),
+                    ),
+                  );
+                  children.add(SizedBox(height: 8.h));
+                }
 
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 24.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Feeling Seen in Color',
-                style: TextStyle(
-                  fontFamily: 'Abhaya_Libre',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 26.sp,
-                  color: AppColors.black,
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                'The shades you choose can shift how you show up in the world. A bold red might make you feel powerful; lilac, calm; crisp white, clear. When we wear tones that align with how we want to feel, we dress from the inside out.',
-                style: TextStyle(
-                  fontFamily: 'Comfortaa',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 15.sp,
-                  color: AppColors.black,
-                ),
-              ),
-              SizedBox(height: 18.h),
+                if (sub.imageUrl != null && sub.imageUrl!.isNotEmpty) {
+                  children.add(
+                    Padding(
+                      padding: EdgeInsets.only(bottom: 12.h),
+                      child: SizedBox(
+                        height: 210.h,
+                        width: double.infinity,
+                        child: Image.network(
+                          sub.imageUrl!,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  );
+                }
 
-              Text(
-                'How the App Helps',
-                style: TextStyle(
-                  fontFamily: 'Abhaya_Libre',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 26.sp,
-                  color: AppColors.black,
-                ),
-              ),
-              SizedBox(height: 8.h),
-              Text(
-                'WatoWear isn’t just here to suggest outfits — it’s here to help you discover your style language. As you tag and log colors across the app, the system starts to learn your preferences.',
-                style: TextStyle(
-                  fontFamily: 'Comfortaa',
-                  fontWeight: FontWeight.w500,
-                  fontSize: 15.sp,
-                  color: AppColors.black,
-                ),
-              ),
-              SizedBox(height: 24.h),
+                if (sub.description.trim().isNotEmpty) {
+                  children.add(
+                    Text(
+                      sub.description,
+                      style: TextStyle(
+                        fontFamily: 'Comfortaa',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 15.sp,
+                        color: AppColors.black,
+                      ),
+                    ),
+                  );
+                  children.add(SizedBox(height: 18.h));
+                }
+
+                return children;
+              }).toList(),
             ],
           ),
         ),
@@ -676,7 +696,6 @@ class EditorialSectionView extends GetView<ShopController> {
 
         SizedBox(height: 10.h),
 
-        // dots under "you may be interested"
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(4, (index) {
@@ -716,6 +735,8 @@ class _ArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isNetwork = imagePath.startsWith('http');
+
     return GestureDetector(
       onTap: onTap,
       child: Padding(
@@ -741,7 +762,12 @@ class _ArticleCard extends StatelessWidget {
                 Expanded(
                   child: SizedBox(
                     height: 180.h,
-                    child: Image.asset(
+                    child: isNetwork
+                        ? Image.network(
+                      imagePath,
+                      fit: BoxFit.cover,
+                    )
+                        : Image.asset(
                       imagePath,
                       scale: 4,
                       fit: BoxFit.fill,

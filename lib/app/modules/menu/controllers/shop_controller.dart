@@ -1,10 +1,154 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:watowear_chloe/app/data/services/api_services.dart';
+
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:video_player/video_player.dart';
 
+class EditorialSubSection {
+  final int id;
+  final String title;
+  final String? subline;
+  final String? imageUrl;
+  final String description;
+  final int order;
+
+  EditorialSubSection({
+    required this.id,
+    required this.title,
+    required this.subline,
+    required this.imageUrl,
+    required this.description,
+    required this.order,
+  });
+
+  factory EditorialSubSection.fromJson(
+      Map<String, dynamic> json,
+      String baseUrl,
+      ) {
+    final String? imagePath = json['image'] as String?;
+    String? fullImage;
+    if (imagePath != null && imagePath.isNotEmpty) {
+      fullImage = '$baseUrl$imagePath';
+    }
+
+    return EditorialSubSection(
+      id: json['id'] ?? 0,
+      title: (json['title'] ?? '').toString(),
+      subline: json['subline'],
+      imageUrl: fullImage,
+      description: (json['description'] ?? '').toString(),
+      order: json['order'] ?? 0,
+    );
+  }
+}
+
+class EditorialArticle {
+  final int id;
+  final String title;
+  final String? subline;
+  final String? imageUrl;
+  final String description;
+  final String? category;
+  final DateTime? publishedAt;
+  final List<String> tags;
+  final List<EditorialSubSection> subSections;
+
+  EditorialArticle({
+    required this.id,
+    required this.title,
+    required this.subline,
+    required this.imageUrl,
+    required this.description,
+    required this.category,
+    required this.publishedAt,
+    required this.tags,
+    required this.subSections,
+  });
+
+  factory EditorialArticle.fromListJson(
+      Map<String, dynamic> json,
+      String baseUrl,
+      ) {
+    final String? imagePath = json['image'] as String?;
+    String? fullImage;
+    if (imagePath != null && imagePath.isNotEmpty) {
+      fullImage = '$baseUrl$imagePath';
+    }
+
+    return EditorialArticle(
+      id: json['id'] ?? 0,
+      title: (json['title'] ?? '').toString(),
+      subline: json['subline'],
+      imageUrl: fullImage,
+      description: (json['description'] ?? '').toString(),
+      category: json['category'],
+      publishedAt: json['published_at'] != null
+          ? DateTime.tryParse(json['published_at'])
+          : null,
+      tags: (json['tags'] as List<dynamic>?)
+          ?.map((e) => e.toString())
+          .toList() ??
+          [],
+      subSections: const [],
+    );
+  }
+
+  factory EditorialArticle.fromDetailJson(
+      Map<String, dynamic> json,
+      String baseUrl,
+      ) {
+    final String? imagePath = json['image'] as String?;
+    String? fullImage;
+    if (imagePath != null && imagePath.isNotEmpty) {
+      fullImage = '$baseUrl$imagePath';
+    }
+
+    final List<dynamic> rawSubSections = json['sub_sections'] ?? [];
+    final sections = rawSubSections
+        .map((e) =>
+        EditorialSubSection.fromJson(e as Map<String, dynamic>, baseUrl))
+        .toList();
+
+    sections.sort((a, b) {
+      final cmp = a.order.compareTo(b.order);
+      if (cmp != 0) return cmp;
+      return a.id.compareTo(b.id);
+    });
+
+    return EditorialArticle(
+      id: json['id'] ?? 0,
+      title: (json['title'] ?? '').toString(),
+      subline: json['subline'],
+      imageUrl: fullImage,
+      description: (json['description'] ?? '').toString(),
+      category: json['category'],
+      publishedAt: json['published_at'] != null
+          ? DateTime.tryParse(json['published_at'])
+          : null,
+      tags: (json['tags'] as List<dynamic>?)
+          ?.map((e) => e.toString())
+          .toList() ??
+          [],
+      subSections: sections,
+    );
+  }
+}
+
 class ShopController extends GetxController with GetTickerProviderStateMixin {
   final currentStep = 0.obs;
   final Rxn<VideoPlayerController> player = Rxn<VideoPlayerController>();
+
+  // --- API service for editorial ---
+  final ApiService _apiService = ApiService();
+
+  // --- Editorial state ---
+  final RxList<EditorialArticle> editorialArticles = <EditorialArticle>[].obs;
+  final Rxn<EditorialArticle> selectedArticle = Rxn<EditorialArticle>();
+
+  final RxBool isLoadingEditorialList = false.obs;
+  final RxBool isLoadingEditorialDetail = false.obs;
 
   final List<String> _videos = const [
     'assets/videos/video1.mp4', // Step 1 : Choose a category
@@ -69,14 +213,6 @@ class ShopController extends GetxController with GetTickerProviderStateMixin {
   /// Whether we are showing the main magazine layout (false)
   /// or a specific editorial article (true)
   RxBool showEditorialArticle = false.obs;
-
-  void openEditorialArticle() {
-    showEditorialArticle.value = true;
-  }
-
-  void closeEditorialArticle() {
-    showEditorialArticle.value = false;
-  }
 
   final Map<String, List<Map<String, dynamic>>> brands = {
     'A': [
@@ -247,6 +383,104 @@ class ShopController extends GetxController with GetTickerProviderStateMixin {
         xOffset.value = containerWidth - (t * totalDistance);
       })
       ..repeat();
+
+    // 👉 Fetch editorial list on load
+    fetchEditorialArticles();
+  }
+
+  Future<void> fetchEditorialArticles() async {
+    try {
+      isLoadingEditorialList.value = true;
+      final http.Response response = await _apiService.getEditorialArticles();
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data =
+        jsonDecode(response.body) as Map<String, dynamic>;
+        final List<dynamic> results = data['results'] ?? [];
+
+        final List<EditorialArticle> list = results
+            .map(
+              (e) => EditorialArticle.fromListJson(
+            e as Map<String, dynamic>,
+            _apiService.baseUrl,
+          ),
+        )
+            .toList();
+
+        editorialArticles.assignAll(list);
+      } else {
+        // handle error as needed
+      }
+    } catch (_) {
+      // handle error/log
+    } finally {
+      isLoadingEditorialList.value = false;
+    }
+  }
+
+  Future<void> fetchEditorialDetail(int articleId) async {
+    try {
+      isLoadingEditorialDetail.value = true;
+      final http.Response response =
+      await _apiService.getEditorialArticleDetail(articleId);
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data =
+        jsonDecode(response.body) as Map<String, dynamic>;
+
+        final article =
+        EditorialArticle.fromDetailJson(data, _apiService.baseUrl);
+        selectedArticle.value = article;
+      } else {
+        // handle error
+      }
+    } catch (_) {
+      // handle error/log
+    } finally {
+      isLoadingEditorialDetail.value = false;
+    }
+  }
+
+  Future<void> openEditorialArticle(int articleId) async {
+    await fetchEditorialDetail(articleId);
+    showEditorialArticle.value = true;
+  }
+
+  void closeEditorialArticle() {
+    showEditorialArticle.value = false;
+    selectedArticle.value = null;
+  }
+
+  String formatEditorialDate(DateTime? date) {
+    if (date == null) return '';
+    const months = [
+      'JAN',
+      'FEB',
+      'MAR',
+      'APR',
+      'MAY',
+      'JUN',
+      'JUL',
+      'AUG',
+      'SEP',
+      'OCT',
+      'NOV',
+      'DEC',
+    ];
+    final d = date.day.toString().padLeft(2, '0');
+    final m = months[date.month - 1];
+    final y = date.year.toString();
+    return '$d $m $y';
+  }
+
+  String formatEditorialCategory(String? raw) {
+    if (raw == null || raw.isEmpty) return '';
+    final cleaned = raw.replaceAll('_', ' ').replaceAll('&', '&');
+    final words = cleaned.split(' ');
+    final capitalized = words
+        .map((w) =>
+    w.isEmpty ? '' : '${w[0].toUpperCase()}${w.substring(1).toLowerCase()}')
+        .join(' ');
+    return capitalized;
   }
 
   @override
