@@ -269,45 +269,37 @@ class FashionLibraryController extends GetxController {
 // Main apply function, called from the FilterClosetView "Apply" button
   void applyFilters() {
     List<LibraryItem> filtered = List<LibraryItem>.from(items);
-
     // ----- CATEGORY FILTER -----
     final categoryFilters = _buildCategoryFilters();
     if (categoryFilters.isNotEmpty) {
       filtered = filtered.where((item) {
         final cat = (item.category ?? '').toLowerCase();
         final sub = (item.subcategory ?? '').toLowerCase();
-
         if (cat.isEmpty && sub.isEmpty) return false;
-
         // match if any keyword appears in category or subcategory
         return categoryFilters.any(
               (f) => cat.contains(f) || sub.contains(f),
         );
       }).toList();
     }
-
     // ----- COLOR FILTER -----
     final colorFilters = _buildColorFilters();
     if (colorFilters.isNotEmpty) {
       filtered = filtered.where((item) {
         final c = (item.colour ?? '').toLowerCase();
         if (c.isEmpty) return false;
-
         return colorFilters.any((f) => c.contains(f));
       }).toList();
     }
-
     // ----- STYLE FILTER -----
     final styleFilters = _buildStyleFilters();
     if (styleFilters.isNotEmpty) {
       filtered = filtered.where((item) {
         final s = (item.style ?? '').toLowerCase();
         if (s.isEmpty) return false;
-
-        return styleFilters.any((f) => s.contains(f));
+        return styleFilters.any((f) => f.contains(s));
       }).toList();
     }
-
     // final result
     filteredLibraryItems.assignAll(filtered);
   }

@@ -416,8 +416,28 @@ class ApiService {
     return await http.delete(url, headers: headers);
   }
 
-  Future<http.Response> getEditorialArticles() async {
-    final Uri url = Uri.parse('$baseUrl/api/v1/editorial/');
+  Future<http.Response> getEditorialArticles({
+    String? category,
+    String? tag,
+  }) async {
+    Uri url;
+
+    // Build query parameters dynamically
+    final Map<String, String> queryParams = {};
+    if (category != null && category.isNotEmpty) {
+      queryParams['category'] = category;
+    }
+    if (tag != null && tag.isNotEmpty) {
+      queryParams['tag'] = tag;
+    }
+
+    if (queryParams.isEmpty) {
+      url = Uri.parse('$baseUrl/api/v1/editorial/');
+    } else {
+      url = Uri.parse('$baseUrl/api/v1/editorial/').replace(
+        queryParameters: queryParams,
+      );
+    }
 
     String? accessToken = await _storage.read(key: 'access_token');
 
@@ -431,6 +451,19 @@ class ApiService {
 
   Future<http.Response> getEditorialArticleDetail(int articleId) async {
     final Uri url = Uri.parse('$baseUrl/api/v1/editorial/$articleId/');
+
+    String? accessToken = await _storage.read(key: 'access_token');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+      if (accessToken != null) "Authorization": "Bearer $accessToken",
+    };
+
+    return await http.get(url, headers: headers);
+  }
+
+  Future<http.Response> getEditorialCarousel() async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/editorial/carousel/');
 
     String? accessToken = await _storage.read(key: 'access_token');
 

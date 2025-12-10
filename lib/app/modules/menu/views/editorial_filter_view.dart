@@ -28,7 +28,92 @@ class EditorialFilterView extends GetView<ShopController> {
             ),
 
             GestureDetector(
-              onTap: () {  },
+              onTap: () {
+                final TextEditingController textController = TextEditingController();
+
+                Get.dialog(
+                  Dialog(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.r),
+                    ),
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Search by tag',
+                            style: TextStyle(
+                              fontFamily: 'Comfortaa',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.sp,
+                              color: AppColors.black,
+                            ),
+                          ),
+                          SizedBox(height: 12.h),
+                          TextField(
+                            controller: textController,
+                            autofocus: true,
+                            decoration: InputDecoration(
+                              hintText: 'e.g. fashion, winter, style',
+                              hintStyle: TextStyle(
+                                fontFamily: 'Comfortaa',
+                                fontSize: 12.sp,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                              isDense: true,
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12.w,
+                                vertical: 10.h,
+                              ),
+                            ),
+                            onSubmitted: (value) {
+                              controller.searchEditorialByTag(value);
+                              Get.back();
+                            },
+                          ),
+                          SizedBox(height: 16.h),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              TextButton(
+                                onPressed: () => Get.back(),
+                                child: Text(
+                                  'Cancel',
+                                  style: TextStyle(
+                                    fontFamily: 'Comfortaa',
+                                    fontSize: 12.sp,
+                                    color: AppColors.textIcons,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 8.w),
+                              TextButton(
+                                onPressed: () {
+                                  controller.searchEditorialByTag(textController.text);
+                                  Get.back();
+                                },
+                                child: Text(
+                                  'Search',
+                                  style: TextStyle(
+                                    fontFamily: 'Comfortaa',
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12.sp,
+                                    color: AppColors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
               child: Icon(
                 Icons.search,
                 size: 25.r,
@@ -56,7 +141,17 @@ class EditorialFilterView extends GetView<ShopController> {
                   spacing: 50.h,
                   children: controller.editorialCategories.map((editorialCategory) {
                     return GestureDetector(
-                      onTap: () => Get.back(),
+                      onTap: () {
+                        // Map UI label -> API category slug
+                        final apiCategory =
+                        controller.editorialApiCategoryFromLabel(editorialCategory);
+
+                        // Fetch articles for that category (or all if null)
+                        controller.fetchEditorialArticles(category: apiCategory);
+
+                        // Close filter screen
+                        Get.back();
+                      },
                       child: Text(
                         editorialCategory,
                         style: TextStyle(

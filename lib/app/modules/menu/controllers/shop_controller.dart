@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:watowear_chloe/app/data/services/api_services.dart';
@@ -136,6 +137,40 @@ class EditorialArticle {
   }
 }
 
+class EditorialCarouselItem {
+  final int id;
+  final String imageUrl;
+  final int order;
+  final DateTime? createdAt;
+
+  EditorialCarouselItem({
+    required this.id,
+    required this.imageUrl,
+    required this.order,
+    required this.createdAt,
+  });
+
+  factory EditorialCarouselItem.fromJson(
+      Map<String, dynamic> json,
+      String baseUrl,
+      ) {
+    final String? imagePath = json['image'] as String?;
+    String fullImage = '';
+    if (imagePath != null && imagePath.isNotEmpty) {
+      fullImage = '$baseUrl$imagePath';
+    }
+
+    return EditorialCarouselItem(
+      id: json['id'] ?? 0,
+      imageUrl: fullImage,
+      order: json['order'] ?? 0,
+      createdAt: json['created_at'] != null
+          ? DateTime.tryParse(json['created_at'])
+          : null,
+    );
+  }
+}
+
 class ShopController extends GetxController with GetTickerProviderStateMixin {
   final currentStep = 0.obs;
   final Rxn<VideoPlayerController> player = Rxn<VideoPlayerController>();
@@ -149,6 +184,14 @@ class ShopController extends GetxController with GetTickerProviderStateMixin {
 
   final RxBool isLoadingEditorialList = false.obs;
   final RxBool isLoadingEditorialDetail = false.obs;
+
+  // --- Editorial carousel state ---
+  final RxList<EditorialCarouselItem> editorialCarouselItems =
+      <EditorialCarouselItem>[].obs;
+  final RxBool isLoadingEditorialCarousel = false.obs;
+  final RxInt editorialCarouselCurrentIndex = 0.obs;
+  late final PageController editorialCarouselPageController;
+  Timer? _editorialCarouselTimer;
 
   final List<String> _videos = const [
     'assets/videos/video1.mp4', // Step 1 : Choose a category
@@ -384,14 +427,24 @@ class ShopController extends GetxController with GetTickerProviderStateMixin {
       })
       ..repeat();
 
+    editorialCarouselPageController = PageController();
+
+    // Fetch carousel items and start auto-rotation
+    fetchEditorialCarousel();
+    _startEditorialCarouselAutoScroll();
+
     // 👉 Fetch editorial list on load
     fetchEditorialArticles();
   }
 
-  Future<void> fetchEditorialArticles() async {
+  Future<void> fetchEditorialArticles({String? category, String? tag}) async {
     try {
       isLoadingEditorialList.value = true;
-      final http.Response response = await _apiService.getEditorialArticles();
+      final http.Response response = await _apiService.getEditorialArticles(
+        category: category,
+        tag: tag,
+      );
+
       if (response.statusCode == 200) {
         final Map<String, dynamic> data =
         jsonDecode(response.body) as Map<String, dynamic>;
@@ -483,9 +536,105 @@ class ShopController extends GetxController with GetTickerProviderStateMixin {
     return capitalized;
   }
 
+  String? editorialApiCategoryFromLabel(String label) {
+    switch (label) {
+      case 'Latest':
+        return null; // no filter, show all
+      case 'Style & Self':
+        return 'STYLE_&_SELF';
+      case 'Closet Curation':
+        return 'CLOSET_CURATION';
+    // You can adjust these if your backend uses different slugs:
+      case 'Mindful Fashion & Sustainability':
+        return 'MINDFUL_FASHION_&_SUSTAINABILITY';
+      case 'Inspiration & Stories':
+        return 'INSPIRATION_&_STORIES';
+      case 'How-To & Feature Guides':
+        return 'HOW_TO_&_FEATURE_GUIDES';
+      case 'Trends & Analysis':
+        return 'TRENDS_&_ANALYSIS';
+      default:
+        return null;
+    }
+  }
+
+  Future<void> searchEditorialByTag(String tag) async {
+    final trimmed = tag.trim();
+
+    if (trimmed.isEmpty) {
+      // If user clears search, show all articles again
+      await fetchEditorialArticles();
+      return;
+    }
+
+    await fetchEditorialArticles(tag: trimmed);
+  }
+
+  Future<void> fetchEditorialCarousel() async {
+    try {
+      isLoadingEditorialCarousel.value = true;
+
+      final http.Response response = await _apiService.getEditorialCarousel();
+
+      if (response.statusCode == 200) {
+        final List<dynamic> data =
+        jsonDecode(response.body) as List<dynamic>;
+
+        final List<EditorialCarouselItem> list = data
+            .map(
+              (e) => EditorialCarouselItem.fromJson(
+            e as Map<String, dynamic>,
+            _apiService.baseUrl,
+          ),
+        )
+            .toList();
+
+        // sort by order
+        list.sort((a, b) => a.order.compareTo(b.order));
+
+        editorialCarouselItems.assignAll(list);
+        // reset index if needed
+        if (list.isNotEmpty) {
+          editorialCarouselCurrentIndex.value = 0;
+        }
+      } else {
+        // handle error if needed
+      }
+    } catch (_) {
+      // handle/log if needed
+    } finally {
+      isLoadingEditorialCarousel.value = false;
+    }
+  }
+
+  void _startEditorialCarouselAutoScroll() {
+    _editorialCarouselTimer?.cancel();
+
+    _editorialCarouselTimer =
+        Timer.periodic(const Duration(seconds: 4), (_) {
+          if (editorialCarouselItems.isEmpty) return;
+
+          final int nextIndex =
+              (editorialCarouselCurrentIndex.value + 1) %
+                  editorialCarouselItems.length;
+
+          editorialCarouselCurrentIndex.value = nextIndex;
+
+          if (editorialCarouselPageController.hasClients) {
+            editorialCarouselPageController.animateToPage(
+              nextIndex,
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+            );
+          }
+        });
+  }
+
   @override
   void onClose() {
     animationController.dispose();
+    editorialCarouselPageController.dispose();
+    _editorialCarouselTimer?.cancel();
     super.onClose();
   }
 }

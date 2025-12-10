@@ -6,7 +6,9 @@ import 'package:watowear_chloe/app/modules/add_new_item/views/crop_item_view.dar
 import 'package:watowear_chloe/common/app_colors.dart';
 import 'package:watowear_chloe/common/custom_button.dart';
 
-class ReframeView extends GetView {
+import '../controllers/add_new_item_controller.dart';
+
+class ReframeView extends GetView<AddNewItemController> {
   const ReframeView({super.key});
   @override
   Widget build(BuildContext context) {
@@ -29,41 +31,59 @@ class ReframeView extends GetView {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  spacing: 19.w,
-                  children: [
-                    GestureDetector(
-                      onTap: () => Get.to(CropItemView()),
-                      child: Container(
-                        width: 267.w,
-                        height: 329.h,
-                        color: Color(0xFFF0F1ED),
-                        child: Image.asset(
-                          'assets/images/add_new_item/reframe_1.png',
-                          scale: 4,
-                          fit: BoxFit.contain,
+              Obx(() {
+                if (controller.reframeFiles.isEmpty) {
+                  // Fallback: you can keep a placeholder if nothing selected
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      spacing: 19.w,
+                      children: [
+                        Container(
+                          width: 267.w,
+                          height: 329.h,
+                          color: const Color(0xFFF0F1ED),
+                          alignment: Alignment.center,
+                          child: Text(
+                            'No items selected',
+                            style: TextStyle(
+                              color: AppColors.textIcons,
+                              fontFamily: 'Comfortaa',
+                              fontSize: 14.sp,
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
+                  );
+                }
 
-                    GestureDetector(
-                      onTap: () => Get.to(CropItemView()),
-                      child: Container(
-                        width: 267.w,
-                        height: 329.h,
-                        color: Color(0xFFF0F1ED),
-                        child: Image.asset(
-                          'assets/images/add_new_item/reframe_2.png',
-                          scale: 4,
-                          fit: BoxFit.contain,
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    spacing: 19.w,
+                    children: List.generate(controller.reframeFiles.length, (index) {
+                      final file = controller.reframeFiles[index];
+
+                      return GestureDetector(
+                        onTap: () => Get.to(
+                              () => const CropItemView(),
+                          arguments: index,   // 👈 this index matches reframeFiles[index]
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+                        child: Container(
+                          width: 267.w,
+                          height: 329.h,
+                          color: const Color(0xFFF0F1ED),
+                          child: Image.file(
+                            file,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+                );
+              }),
 
               SizedBox(height: 15.h,),
 
@@ -87,7 +107,7 @@ class ReframeView extends GetView {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap: () {  },
+                      onTap: () => Get.dialog(const DiscardEditsDialog()),
                       child: Icon(
                         Icons.arrow_back,
                         size: 20.r,
@@ -136,7 +156,15 @@ class ReframeView extends GetView {
                       text: 'Add to closet',
                       textSize: 16.sp,
                       textColor: AppColors.bgColor,
-                      onTap: () => Get.dialog(CongratulationsDialog()),
+                      onTap: () async {
+                        final success = await controller.uploadReframeFilesToCloset();
+                        if (success) {
+                          Get.dialog(const CongratulationsDialog());
+                        } else {
+                          // Optional: show error
+                          // Get.snackbar('Error', 'Failed to add some items to closet');
+                        }
+                      },
                     ),
 
                     CustomButton(
@@ -199,6 +227,7 @@ class DiscardEditsDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CustomButton(
+                  // Discard
                   padding: EdgeInsets.symmetric(
                     horizontal: 30.w,
                     vertical: 12.h,
@@ -206,10 +235,15 @@ class DiscardEditsDialog extends StatelessWidget {
                   textSize: 16.sp,
                   textColor: AppColors.primary,
                   text: 'Discard',
-                  onTap: () {  },
+                  onTap: () {
+                    final addController = Get.find<AddNewItemController>();
+                    addController.discardSelection();
+                    Get.back(); // close dialog
+                  },
                 ),
 
                 CustomButton(
+                  // Cancel
                   padding: EdgeInsets.symmetric(
                     horizontal: 30.w,
                     vertical: 12.h,
@@ -218,7 +252,7 @@ class DiscardEditsDialog extends StatelessWidget {
                   textSize: 16.sp,
                   textColor: AppColors.bgColor,
                   text: 'Cancel',
-                  onTap: () {  },
+                  onTap: () => Get.back(),
                 ),
               ],
             )

@@ -284,37 +284,83 @@ class EditorialSectionView extends GetView<ShopController> {
             children: [
               SizedBox(height: 24.h),
 
-              // Image inside the green block
+              // Carousel image (from API, with fallback)
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: SizedBox(
                   height: 210.h,
                   width: double.infinity,
-                  child: Image.asset(
-                    'assets/images/editorial/closet_confidence.jpg',
-                    scale: 4,
-                    fit: BoxFit.fill,
-                  ),
+                  child: Obx(() {
+                    if (controller.isLoadingEditorialCarousel.value) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      );
+                    }
+
+                    // If no API items, fallback to original static asset
+                    if (controller.editorialCarouselItems.isEmpty) {
+                      return Image.asset(
+                        'assets/images/editorial/closet_confidence.jpg',
+                        scale: 4,
+                        fit: BoxFit.fill,
+                      );
+                    }
+
+                    return PageView.builder(
+                      controller:
+                      controller.editorialCarouselPageController,
+                      onPageChanged: (index) {
+                        controller.editorialCarouselCurrentIndex.value =
+                            index;
+                      },
+                      itemCount:
+                      controller.editorialCarouselItems.length,
+                      itemBuilder: (context, index) {
+                        final item =
+                        controller.editorialCarouselItems[index];
+                        return Image.network(
+                          item.imageUrl,
+                          fit: BoxFit.fill,
+                        );
+                      },
+                    );
+                  }),
                 ),
               ),
 
               SizedBox(height: 18.h),
 
-              // Dots indicator
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(5, (index) {
-                  return Container(
-                    width: index == 2 ? 7.r : 5.r,
-                    height: index == 2 ? 7.r : 5.r,
-                    margin: EdgeInsets.symmetric(horizontal: 3.w),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: index == 2 ? Colors.white : Colors.white70,
-                    ),
-                  );
-                }),
-              ),
+              // Dots indicator (auto-animated with carousel)
+              Obx(() {
+                final count = controller.editorialCarouselItems.isEmpty
+                    ? 1
+                    : controller.editorialCarouselItems.length;
+                final current = controller.editorialCarouselItems.isEmpty
+                    ? 0
+                    : controller.editorialCarouselCurrentIndex.value %
+                    count;
+
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(count, (index) {
+                    final bool active = index == current;
+                    return Container(
+                      width: active ? 7.r : 5.r,
+                      height: active ? 7.r : 5.r,
+                      margin: EdgeInsets.symmetric(horizontal: 3.w),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: active
+                            ? Colors.white
+                            : Colors.white70,
+                      ),
+                    );
+                  }),
+                );
+              }),
 
               SizedBox(height: 16.h),
 
