@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1094418162980",
+    "project_id": "watowear-app",
+    "storage_bucket": "watowear-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1094418162980:android:e1419d890ed9a0bd02ffb1",
+        "android_client_info": {
+          "package_name": "com.watowear.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1094418162980-kulljekglfjsdmn5vdmjp5ggd720e2hv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.watowear.app",
+            "certificate_hash": "2eb672641969662665dd7e2451c5f2f1543e4ca1"
+          }
+        },
+        {
+          "client_id": "1094418162980-7a4atdej0qt4hjopq7oefiq9b5tlqpqn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCD_p1RfILGFyh7UUFZ5l8uyCPhDyaGWqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1094418162980-7a4atdej0qt4hjopq7oefiq9b5tlqpqn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1094418162980-lafal245nu5eogtbodai104f7o1jb7mu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.watowear.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

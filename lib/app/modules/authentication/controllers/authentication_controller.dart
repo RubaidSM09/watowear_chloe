@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'package:watowear_chloe/app/modules/authentication/views/authentication_view.dart';
 import 'package:watowear_chloe/app/modules/dashboard/views/dashboard_view.dart';
@@ -40,6 +41,10 @@ class AuthenticationController extends GetxController {
   final ApiService _service = ApiService();
   var isLoading = false.obs;
   final FlutterSecureStorage _storage = FlutterSecureStorage();
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email'],
+  );
 
   Future<void> storeTokens(String accessToken, String refreshToken) async {
     await _storage.write(key: 'access_token', value: accessToken);
@@ -159,6 +164,90 @@ class AuthenticationController extends GetxController {
     } catch (e) {
       Get.snackbar('Error', 'An unexpected error occured');
       print('Error: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> signInWithGoogle() async {
+    isLoading.value = true;
+
+    try {
+      // 1. Trigger Google Sign-In UI
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+
+      // User cancelled the dialog
+      if (googleUser == null) {
+        isLoading.value = false;
+        return;
+      }
+
+      final String email = googleUser.email;
+      final String displayName = googleUser.displayName ?? '';
+
+      // Split display name into name + surname (basic, but works)
+      String name = '';
+      String surname = '';
+
+      if (displayName.trim().isNotEmpty) {
+        final parts = displayName.trim().split(' ');
+        name = parts.first;
+        if (parts.length > 1) {
+          surname = parts.sublist(1).join(' ');
+        }
+      }
+
+      // Fallbacks in case Google doesn’t give a displayName
+      if (name.isEmpty) name = 'User';
+      if (surname.isEmpty) surname = '';
+
+      // 2. Call your backend social auth endpoint
+      final http.Response response = await _service.socialLogin(
+        email: email,
+        name: name,
+        surname: surname,
+        signupMethod: 'google',
+        // referralCode: 'MATHIEUABC12', // optional – you can pass a real one if you have it
+      );
+
+      print(':::::::::SOCIAL RESPONSE:::::::::${response.body.toString()}');
+      print(':::::::::CODE:::::::::${response.statusCode}');
+      print(':::::::::REQUEST:::::::::${response.request}');
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final responseBody = jsonDecode(response.body);
+
+        final accessToken = responseBody['access'];
+        final refreshToken = responseBody['refresh'];
+
+        await storeTokens(accessToken, refreshToken);
+
+        final user = responseBody['user'];
+        final userId = user['id'].toString();
+        final userName = user['name'] ?? name;
+        final userSurname = user['surname'] ?? surname;
+
+        await _storage.write(key: 'user_id', value: userId);
+        await _storage.write(key: 'name', value: userName);
+        await _storage.write(key: 'surname', value: userSurname);
+
+        print(':::::::::responseBody:::::::::$responseBody');
+        print(':::::::::accessToken:::::::::$accessToken');
+        print(':::::::::refreshToken:::::::::$refreshToken');
+
+        Get.snackbar('Success', 'Signed in with Google');
+
+        Get.to(DashboardView());
+      } else {
+        final responseBody = jsonDecode(response.body);
+        Get.snackbar(
+          'Google sign-in failed',
+          responseBody['message'] ?? 'Unable to sign in with Google',
+        );
+      }
+    } catch (e) {
+      Get.snackbar('Error', 'An unexpected error occurred during Google sign-in');
+      print('Google Sign-In Error: $e');
     } finally {
       isLoading.value = false;
     }

@@ -19,6 +19,8 @@ class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
   @override
   Widget build(BuildContext context) {
+    Get.put(HomeController());
+
     return Scaffold(
       backgroundColor: AppColors.bgColor,
       appBar: AppBar(
@@ -81,15 +83,20 @@ class HomeView extends GetView<HomeController> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Hello Luna !',
-                          style: TextStyle(
-                            color: Color(0xFF1F1F1F),
-                            fontFamily: 'Comfortaa',
-                            fontWeight: FontWeight.w700,
-                            fontSize: 24.sp,
-                          ),
-                        ),
+                        Obx(() {
+                          print(controller.userFullName.value);
+                          return Text(
+                            controller.userFullName.value.isNotEmpty
+                                ? 'Hello ${controller.userFullName.value} !'
+                                : 'Hello User !',
+                            style: TextStyle(
+                              color: AppColors.textIcons,
+                              fontFamily: 'Comfortaa',
+                              fontWeight: FontWeight.w400,
+                              fontSize: 20.53.sp,
+                            ),
+                          );
+                        }),
 
                         SizedBox(height: 12.h,),
 
@@ -134,72 +141,90 @@ class HomeView extends GetView<HomeController> {
 
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 34.0.w),
-                child: Column(
-                  spacing: 11.h,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Row(
-                          spacing: 6.w,
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(10.r),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Color(0xFFFDF6EC),
-                                border: Border.all(
-                                  color: Color(0xFFCDCDC0),
-                                )
-                              ),
-                            ),
+                child: Obx(() {
+                  final isLoading = controller.isLoading.value;
+                  final myProgress = controller.myProgress.value;
 
-                            Text(
-                              'You’re a Refiner',
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontFamily: 'Comfortaa',
-                                fontWeight: FontWeight.w400,
-                                fontSize: 15.96.sp,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        Text(
-                          '60%',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontFamily: 'Comfortaa',
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14.sp,
-                          ),
-                        ),
-                      ],
-                    ),
-
-                    Container(
-                      width: 362.05.w,
-                      height: 3.h,
-                      decoration: BoxDecoration(
-                        color: AppColors.secondaryBg,
-                        borderRadius: BorderRadius.circular(100.r),
+                  // Show loader while first fetch happens
+                  if (isLoading && myProgress == null) {
+                    return SizedBox(
+                      height: 40.h,
+                      child: const Center(
+                        child: CircularProgressIndicator(strokeWidth: 2),
                       ),
-                      child: Row(
+                    );
+                  }
+
+                  final badgeLabel = controller.currentBadgeLabel;      // from MyProgress.currentBadge
+                  final percent = controller.currentProgressPercent;    // from MyProgress.progressPercentage
+                  final percentClamped = percent.clamp(0, 100);
+                  final double percentWidth = 362.05 * (percentClamped / 100.0);
+
+                  return Column(
+                    spacing: 11.h,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Container(
-                            width: (362.05*(60/100)).w,
-                            height: 3.h,
-                            decoration: BoxDecoration(
-                              color: AppColors.textIcons,
-                              borderRadius: BorderRadius.circular(100.r),
+                          Row(
+                            spacing: 6.w,
+                            children: [
+                              Container(
+                                padding: EdgeInsets.all(10.r),
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: const Color(0xFFFDF6EC),
+                                  border: Border.all(
+                                    color: const Color(0xFFCDCDC0),
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                'You’re a $badgeLabel',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'Comfortaa',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15.96.sp,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            '$percent%',
+                            style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Comfortaa',
+                              fontWeight: FontWeight.w600,
+                              fontSize: 14.sp,
                             ),
                           ),
                         ],
                       ),
-                    )
-                  ],
-                ),
+                      Container(
+                        width: 362.05.w,
+                        height: 3.h,
+                        decoration: BoxDecoration(
+                          color: AppColors.secondaryBg,
+                          borderRadius: BorderRadius.circular(100.r),
+                        ),
+                        child: Row(
+                          children: [
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              width: percentWidth.w,
+                              height: 3.h,
+                              decoration: BoxDecoration(
+                                color: AppColors.textIcons,
+                                borderRadius: BorderRadius.circular(100.r),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }),
               ),
 
               SizedBox(height: 61.87.h,),

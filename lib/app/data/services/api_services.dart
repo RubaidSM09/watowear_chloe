@@ -242,8 +242,12 @@ class ApiService {
     return await http.get(url, headers: headers,);
   }
 
-  Future<http.Response> getAllItems() async {
-    final Uri url = Uri.parse('$baseUrl/api/v1/closet/items/');
+  Future<http.Response> getAllItems({String? filter}) async {
+    String url = '$baseUrl/api/v1/closet/items/';
+
+    if (filter != null && filter.isNotEmpty) {
+      url += '?filter=$filter';
+    }
 
     String? accessToken = await _storage.read(key: 'access_token');
 
@@ -252,7 +256,7 @@ class ApiService {
       "Authorization": "Bearer $accessToken",
     };
 
-    return await http.get(url, headers: headers,);
+    return await http.get(Uri.parse(url), headers: headers,);
   }
 
   Future<http.Response> addClosetItem(File imageFile) async {
@@ -473,5 +477,37 @@ class ApiService {
     };
 
     return await http.get(url, headers: headers);
+  }
+
+  Future<http.Response> socialLogin({
+    required String email,
+    required String name,
+    required String surname,
+    String signupMethod = "google",
+    String? referralCode,
+  }) async {
+    final Uri url = Uri.parse('$baseUrl/api/v1/auth/social/');
+
+    final Map<String, String> headers = {
+      "Content-Type": "application/json",
+    };
+
+    final Map<String, dynamic> body = {
+      "email": email,
+      "name": name,
+      "surname": surname,
+      "signup_method": signupMethod,
+    };
+
+    // Optional referral_code (only send if provided)
+    if (referralCode != null && referralCode.isNotEmpty) {
+      body["referral_code"] = referralCode;
+    }
+
+    return await http.post(
+      url,
+      headers: headers,
+      body: jsonEncode(body),
+    );
   }
 }

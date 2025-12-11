@@ -25,6 +25,13 @@ class LibraryController extends GetxController {
 
   RxList<RxBool> selectedStyle = [false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs, false.obs].obs;
 
+  RxString selectedSort = 'last_added'.obs;
+
+  void setSort(String sortKey) {
+    // sortKey: "recommended", "last_added", "favorites"
+    selectedSort.value = sortKey;
+  }
+
   void selectFilter(int index) {
     for (int i = 0; i < selectedFilter.length; i++) {
       if (i == index) {
@@ -89,11 +96,26 @@ class LibraryController extends GetxController {
 
   void increment() => count.value++;
 
-  Future<void> fetchClosetItems() async {
+  Future<void> fetchClosetItems({String? sort}) async {
     try {
       isLoading.value = true;
 
-      final response = await _apiService.getAllItems();
+      // decide which sort to use
+      final String effectiveSort = sort ?? selectedSort.value;
+      selectedSort.value = effectiveSort; // keep state in sync
+
+      // map UI sort → API filter param
+      // recommended => null (no filter)
+      String? apiFilter;
+      if (effectiveSort == 'last_added') {
+        apiFilter = 'last_added';
+      } else if (effectiveSort == 'favorites') {
+        apiFilter = 'favorites';
+      } else {
+        apiFilter = null; // recommended
+      }
+
+      final response = await _apiService.getAllItems(filter: apiFilter);
 
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body) as List<dynamic>;
@@ -102,11 +124,11 @@ class LibraryController extends GetxController {
 
         closetItems.assignAll(items);
 
+        // base list for UI before extra filters
         filteredClosetItems.assignAll(items);
 
         isEmpty.value = closetItems.isEmpty;
       } else {
-        // If API fails, keep existing UI logic
         isEmpty.value = true;
       }
     } catch (e) {

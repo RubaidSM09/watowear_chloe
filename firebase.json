@@ -1,0 +1,1 @@
+{"flutter":{"platforms":{"android":{"default":{"projectId":"watowear-app","appId":"1:1094418162980:android:e1419d890ed9a0bd02ffb1","fileOutput":"android/app/google-services.json"}},"dart":{"lib/firebase_options.dart":{"projectId":"watowear-app","configurations":{"android":"1:1094418162980:android:e1419d890ed9a0bd02ffb1","ios":"1:1094418162980:ios:b0ecff0619e88e1002ffb1"}}}}}}

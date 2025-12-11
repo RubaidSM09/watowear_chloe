@@ -53,7 +53,10 @@ class AuthenticationView extends GetView<AuthenticationController> {
                       color: AppColors.textIcons,
                       width: 1.04.r,
                     ),
-                    onTap: () {  },
+                    onTap: () {
+                      final auth = Get.find<AuthenticationController>();
+                      auth.signInWithGoogle();
+                    },
                   ),
                   CustomButton(
                     icon: 'assets/images/authentication/apple_logo.png',

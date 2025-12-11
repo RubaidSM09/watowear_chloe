@@ -50,70 +50,52 @@ class FilterClosetView extends GetView<LibraryController> {
 
                       SizedBox(height: 25.h,),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            padding: EdgeInsets.all(10.r),
-                            decoration: BoxDecoration(
-                                color: AppColors.bgColor,
-                                borderRadius: BorderRadius.circular(1.r),
-                                border: Border.all(
-                                  color: AppColors.secondaryBg,
-                                )
-                            ),
-                            child: Text(
-                              'Recommended',
-                              style: TextStyle(
-                                color: AppColors.textIcons.withAlpha(179),
-                                fontFamily: 'Comfortaa',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14.sp,
-                              ),
-                            ),
-                          ),
+                      Obx(() {
+                        final sort = controller.selectedSort.value;
 
-                          Container(
-                            padding: EdgeInsets.all(10.r),
-                            decoration: BoxDecoration(
-                                color: AppColors.primary,
-                                borderRadius: BorderRadius.circular(1.r),
-                                border: Border.all(
-                                  color: AppColors.secondaryBg,
-                                )
-                            ),
-                            child: Text(
-                              'Last added',
-                              style: TextStyle(
-                                color: AppColors.bgColor,
-                                fontFamily: 'Comfortaa',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14.sp,
-                              ),
-                            ),
-                          ),
+                        Widget buildChip({
+                          required String label,
+                          required String key,
+                        }) {
+                          final bool isSelected = sort == key;
 
-                          Container(
-                            padding: EdgeInsets.all(10.r),
-                            decoration: BoxDecoration(
-                                color: AppColors.bgColor,
+                          return GestureDetector(
+                            onTap: () {
+                              controller.setSort(key);
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(10.r),
+                              decoration: BoxDecoration(
+                                color: isSelected ? AppColors.primary : AppColors.bgColor,
                                 borderRadius: BorderRadius.circular(1.r),
                                 border: Border.all(
                                   color: AppColors.secondaryBg,
-                                )
-                            ),
-                            child: Text(
-                              'Favourites',
-                              style: TextStyle(
-                                color: AppColors.textIcons.withAlpha(179),
-                                fontFamily: 'Comfortaa',
-                                fontWeight: FontWeight.w600,
-                                fontSize: 14.sp,
+                                ),
+                              ),
+                              child: Text(
+                                label,
+                                style: TextStyle(
+                                  color: isSelected
+                                      ? AppColors.bgColor
+                                      : AppColors.textIcons.withAlpha(179),
+                                  fontFamily: 'Comfortaa',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 14.sp,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
+                          );
+                        }
+
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            buildChip(label: 'Recommended', key: 'recommended'),
+                            buildChip(label: 'Last added', key: 'last_added'),
+                            buildChip(label: 'Favourites', key: 'favorites'),
+                          ],
+                        );
+                      }),
                     ],
                   ),
                 ),
@@ -1098,8 +1080,14 @@ class FilterClosetView extends GetView<LibraryController> {
                     text: 'Apply',
                     textColor: Colors.white,
                     textSize: 16.sp,
-                    onTap: () {
+                    onTap: () async {
+                      // 1) Fetch items from server according to selected sort
+                      await controller.fetchClosetItems();
+
+                      // 2) Apply category / color / style filters on top of that list
                       controller.applyFilters();
+
+                      // 3) Go back to LibraryView, which reads filteredClosetItems
                       Get.back();
                     },
                   ),
